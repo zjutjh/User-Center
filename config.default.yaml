@@ -1,0 +1,26 @@
+port: 23333
+session:
+  name: jh-ucenter-session-id
+  secret_key: qebmvxrxsalvtuhk
+db:
+  auth:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    user: user-center-auth-server
+    password: password
+    dbname: user-center-auth-db
+  resource:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    user: user-center-resource-server
+    password: password
+    dbname: user-center-resource-db
+client:
+  - id: test
+    secret: testsecret
+    name: 测试应用
+    domain: http://localhost:9094
+    scope:
+      - userinfo.avatar

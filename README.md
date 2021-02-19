@@ -14,10 +14,16 @@
 
 ## Resource Server
 
-- [ ] Data Model 和数据类型定义
-- [ ] 基本功能和接口的实现
+基本功能已经完成，暂时还有以下部分待完成
+
+- [ ] 目前只支持文本类型，多数据类型的实现和异常处理
+- [ ] 权限的完善，区分 ReadOnly 和 ReadWrite，对应数据接口的实现（POST /api/data）
+- [ ] 测试各个 API 并修改文档
 
 ## User FE
 
 后续迭代中添加
 
+## Misc
+
+- [ ] Docker 打包
