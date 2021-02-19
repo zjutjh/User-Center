@@ -5,6 +5,7 @@ import (
   "strings"
   "ucenter/db"
   "ucenter/handler/oauth2_handler"
+  "ucenter/model"
 )
 
 func GetDataHandler(ctx iris.Context) {
@@ -20,5 +21,5 @@ func GetDataHandler(ctx iris.Context) {
   for i := range scopes {
     result[scopes[i]] = db.GetDataRecordByUser(ctx.FormValue("username"), scopes[i])
   }
-  _, _ = ctx.JSON(result)
+  _, _ = ctx.JSON(model.NewResult(result, 0, "success"))
 }
