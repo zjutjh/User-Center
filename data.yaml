@@ -1,0 +1,16 @@
+data:
+  - name: userinfo
+    desc: 用户信息（包括学号、校区、头像等）
+    child:
+      - name: avatar
+        desc: 头像
+        type: text:base64
+      - name: email
+        desc: 邮箱
+        type: text
+      - name: campus
+        desc: 校区
+        type: text:option(屏峰校区,朝晖校区,莫干山)
+      - name: what
+        desc: sdxslkajkl
+        type: text
