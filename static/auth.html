@@ -1,33 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Auth</title>
-    <link
-      rel="stylesheet"
-      href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-    />
-    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="jumbotron">
-        <form action="/oauth2/auth" method="POST">
-          <h1>Authorize</h1>
-          <p>The client would like to perform actions on your behalf.</p>
-          <p>
-            <button
-              type="submit"
-              class="btn btn-primary btn-lg"
-              style="width:200px;"
-            >
-              Allow
-            </button>
-          </p>
-        </form>
-      </div>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用户中心授权界面</title>
+    <!-- <script src="Js/vue.js" type="text/javascript"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+    <div class="board">
+        <div>
+            <h1>授权</h1>
+        </div>
+        <label>{{client_id}}请求访问您的如下信息:</label>
+        <div>
+            <ul>
+                <li v-for="(item,index) in scope" :key="index">{{item}}</li>
+            </ul>
+        </div>
+        
+        <div>
+            <a class="allow" @click="allowEvent()">允许</a>
+            <a class="refuse">拒绝</a>
+        </div>
     </div>
-  </body>
+    <script>
+        var board=new Vue({
+        el:".board",
+        data:{
+            scope:[],
+            client_id:"",
+            allow:false
+        },
+        methods:{
+            allowEvent(){
+                this.allow=true;
+
+            } 
+        },
+        })
+    </script>
+</body>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    /* background: linear-gradient(#f1edf1, #962e7c); */
+    background: linear-gradient(60deg,#56abfa, #1665be, #3042db, #6ab5e0);
+}
+
+h1{
+    text-align: center;
+}
+.board{
+  width: 500px;
+  /* background-color: white; */
+  background: linear-gradient(white, rgb(66, 191, 237));
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+a{
+    position: relative;
+    padding: 1px 20px;
+    /* color:#03e9f4; */
+    text-decoration: none;
+}
+.allow:hover{
+     color: #fff;
+    border-radius: 5px;
+    background-color: #12df78;
+    box-shadow:0 0 2px #12df78,0 0 2px #12df78,0 0 2px #12df78,0 0 2px #12df78;
+    cursor:pointer;
+}
+.refuse:hover{
+     color: #fff;
+    border-radius: 5px;
+    background-color: #df3112;
+    box-shadow:0 0 2px #df3112,0 0 2px #df3112,0 0 2px #df3112,0 0 2px #df3112;
+    cursor:pointer;
+}
+</style>
 </html>

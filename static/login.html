@@ -1,29 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用户中心登陆界面</title>
+    <!-- <script src="Js/vue.js" type="text/javascript"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Login In</h1>
-        <form action="/user/login" method="POST">
-            <div class="form-group">
-                <label for="username">User Name</label>
-                <input type="text" class="form-control" name="username" required placeholder="Please enter your user name">
+    <div class="loginboard">
+        <div id="loginform" v-if="isShow">
+        <form action="/user/login" method="post" >
+            <h1>用户登录</h1>
+            <label v-show="warn" style="color:red;">用户名或密码错误</label>
+            <div class="box">
+                <input type="text" name="pid"  id="pid" v-model="user.pid" required>
+                <label v-if="ispid">用户名</label>
+                <label v-else style="color:red;">请输入用户名</label>
+            </div>  
+            <div class="box">
+                <input type="password" name="password" id="password" v-model="user.password" required>
+                <label v-if="ispassword">密码</label>
+                <label v-else style="color:red;">请输入密码</label>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Please enter your password">
+            <div>
+                <a @click="login()" class="submit" >登录</a>
             </div>
-            <button type="submit" class="btn btn-success">Login</button>
+            <!-- 忘记密码功能后期完善 -->
+            <!-- <div class="change_box">
+                <a id="change" class="change" @click="changeForm">忘记密码</a>
+            </div> -->
         </form>
     </div>
-</body>
+        <!-- <div id="changePasswordForm" v-else>
+        <form action="" method="post" >
+            <h1>修改密码</h1>
+            <div class="box">
+                <input type="text" name="pid"  id="pid" v-model="pid" required>
+                <label>用户名</label>
+            </div>  
+            <div class="box">
+                <input type="password" name="password" id="oid_password" v-model="old_password" required>
+                <label>旧密码</label>
+            </div>
+            <div class="box" >
+                <input type="password" name="password" id="new_password" v-model="new_password" required>
+                <label>新密码</label>
+            </div>
+                   
+            <div class="box" >
+                <input type="password" name="password" id="new_password2" v-model="new_password2" required>
+                <label>再次输入新密码</label><label style="color: red;" v-if="judge">两次输入不一致！</label>
+            </div>
+            <div>
+                <a @click="submitEvent" class="submit" >修改密码</a>
+            </div>
+            <div class="change_box">
+                <a id="change" class="change" @click="changeForm">登录</a>
+            </div>
+        </form>
+        </div> -->
+    </div>
+<script>
+    var app=new Vue({
+    el:".loginboard",
+    data:{
+        isShow:true,
+        user:{
+            pid:"",
+            password:""
+        },
+        ispid:true,
+        ispassword:true,
+        // old_password:"",
+        // new_password:"",
+        // new_password2:"",
+        warn:false,
+    },
+    methods:{
+        login(){
+            if (this.user.pid=== ''||this.user.pid===null) {
+                this.ispid=false;
+            } 
+            else{
+                this.ispid=true;
+            }
+            if(this.user.password===''||this.user.password===null){
+                this.ispassword=false;
+                return;
+            }
+            else{
+                this.ispassword=true;
+            }
+            var _user=this.user;
+              
 
+        },
+        // 界面切换
+        // changeForm:function(){
+        //     this.isShow=!this.isShow;
+        // },
+           
+    },
+    })
+</script>
+            
+</body>
+<style>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(#41133f, #243b55);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.loginboard{
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+  display: flex;
+  width:400px;
+  padding: 40px;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+}
+h1{
+  margin: auto;
+  color: #fff;
+  margin-bottom: 30px;
+}
+.box{
+    position: relative;
+	width: 100%;
+}
+.box input{
+    outline: none;
+    border: none;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 30px;
+    color: #fff;
+    font-size: 16px;
+    border-bottom: 1px solid #fff;
+    background-color:  transparent;
+}
+.box label{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    color: #fff;
+    pointer-events: none;
+    transition: all 0.5s;
+}
+.box input:focus + label,
+.box input:valid + label{
+    top:-20px;
+    color: #03e9f4;
+    font-size:12px;
+}
+.submit{
+    position: relative;
+    padding: 1px 20px;
+    color:#03e9f4;
+    text-decoration: none;
+    transition: all 1s;
+}
+.box input:focus{
+    border-bottom: 1px solid #03e9f4;  
+}
+.submit:hover{
+    color: #fff;
+    border-radius: 5px;
+    background-color: #03e9f4;
+    box-shadow:0 0 5px #03e9f4,0 0 25px #03e9f4,0 0 50px #03e9f4,0 0 100px #03e9f4;
+    cursor:pointer;
+}
+.change{
+    cursor: pointer;
+    color :white;   
+    text-decoration: none;
+    margin:0;
+}
+.change:hover{
+    color:#03e9f4;
+}
+
+@media only screen and (max-width: 400px) {
+    .loginboard{
+      width:300px;
+    }
+}
+</style>
 </html>
