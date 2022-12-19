@@ -1,54 +1,19 @@
 package config
 
 import (
-	"log"
-
 	"github.com/spf13/viper"
+	"log"
 )
 
-type server struct {
-	Port         string   `mapstructure:"port"`
-	AllowOrigins []string `mapstructure:"allow_origins"`
-}
-
-type db struct {
-	UserName string `mapstructure:"user_name"`
-	Password string `mapstructure:"password"`
-	Address  string `mapstructure:"address"`
-	DBName   string `mapstructure:"db_name"`
-}
-
-type jwt struct {
-	Secret  string `mapstructure:"secret"`
-	Expires uint   `mapstructure:"expires"`
-	Issuer  string `mapstructure:"issuer"`
-}
-
-type email struct {
-	Sender   string `mapstructure:"sender"`
-	Pwd      string `mapstructure:"pwd"`
-	SmtpAddr string `mapstructure:"smtpaddr"`
-	SmtpPort int    `mapstructure:"smtpport"`
-}
-
-type config struct {
-	Dev    bool   `mapstructure:"dev"`
-	Server server `mapstructure:"server"`
-	DB     db     `mapstructure:"db"`
-	Jwt    jwt    `mapstructure:"jwt"`
-	Email  email  `mapstructure:"email"`
-}
-
-var Config config
+var Config = viper.New()
 
 func InitConfig() {
-	var config = viper.New()
-	config.SetConfigName("config")
-	config.SetConfigType("yaml")
-	config.AddConfigPath(".")
-	err := config.ReadInConfig()
+	Config.SetConfigName("config")
+	Config.SetConfigType("yaml")
+	Config.AddConfigPath(".")
+	Config.WatchConfig() // 自动将配置读入Config变量
+	err := Config.ReadInConfig()
 	if err != nil {
-		log.Panicln("Config Error: ", err)
+		log.Fatal("Config not find", err)
 	}
-	config.Unmarshal(&Config)
 }

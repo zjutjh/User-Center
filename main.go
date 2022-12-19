@@ -13,7 +13,7 @@ func main() {
 	database.Init()
 	r := gin.Default()
 	r.Use(cors.Default())
-	err := r.Run(":" + config.Config.Server.Port)
+	err := r.Run(":" + config.Config.GetString("server.port"))
 	if err != nil {
 		log.Fatal("ServerStartFailed", err)
 	}

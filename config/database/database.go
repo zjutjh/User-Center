@@ -12,11 +12,15 @@ import (
 var DB *gorm.DB
 
 func Init() { // 初始化数据库
+	user := config.Config.GetString("db.user")
+	pass := config.Config.GetString("db.password")
+	port := config.Config.GetString("db.address")
+	name := config.Config.GetString("db.name")
 	dsn := fmt.Sprintf("%v:%v@tcp(%v)/%v?charset=utf8mb4&parseTime=True&loc=Local",
-		config.Config.DB.UserName,
-		config.Config.DB.Password,
-		config.Config.DB.Address,
-		config.Config.DB.DBName,
+		user,
+		pass,
+		port,
+		name,
 	)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),

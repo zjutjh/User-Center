@@ -6,10 +6,10 @@ server:
     - "http://127.0.0.1:3000"
 
 db:
-  user_name: "root"
-  password: "12345678"
+  user: "root"
+  password: "123456789"
   address: "localhost:3306"
-  db_name: "usercenter"
+  name: "usercenter"
 
 jwt:
   secret: "secretKey"
@@ -17,7 +17,7 @@ jwt:
   expires: 48
 
 email:
-  sender: "123456@qq.com"
+  sender: "12345678@qq.com"
   pwd:  "12345678"
   smtpaddr: "smtp.qq.com"
   smtpport: "465"
