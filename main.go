@@ -7,6 +7,7 @@ import (
 	"usercenter/app/midwares"
 	"usercenter/config/config"
 	"usercenter/config/database"
+	"usercenter/config/router"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 	r.Use(midwares.ErrHandler())
 	r.NoMethod(midwares.HandleNotFound)
 	r.NoRoute(midwares.HandleNotFound)
+	router.Init(r)
 	err := r.Run(":" + config.Config.GetString("server.port"))
 	if err != nil {
 		log.Fatal("ServerStartFailed", err)
