@@ -1,0 +1,24 @@
+dev: true
+
+server:
+  port: "8080"
+  allow_origins:
+    - "http://127.0.0.1:3000"
+
+db:
+  user: "root"
+  password: "123456789"
+  address: "localhost:3306"
+  name: "usercenter"
+
+jwt:
+  secret: "secretKey"
+  issuer: "issuer"
+  expires: 48
+
+email:
+  sender: "12345678@qq.com"
+  pwd:  "12345678"
+  smtpaddr: "smtp.qq.com"
+  smtpport: "465"
+
