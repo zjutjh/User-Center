@@ -20,7 +20,7 @@ email:
   sender: "12345678@qq.com"
   pwd:  "12345678"
   smtpaddr: "smtp.qq.com"
-  smtpport: "465"
+  smtpport: 465
 
 redis:
   host: "127.0.0.1"
