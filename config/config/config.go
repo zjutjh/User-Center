@@ -16,4 +16,5 @@ func InitConfig() {
 	if err != nil {
 		log.Fatal("Config not find", err)
 	}
+
 }

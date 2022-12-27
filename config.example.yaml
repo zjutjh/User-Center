@@ -1,7 +1,7 @@
 dev: true
 
 server:
-  port: "8080"
+  port: "6060"
   allow_origins:
     - "http://127.0.0.1:3000"
 
@@ -21,4 +21,12 @@ email:
   pwd:  "12345678"
   smtpaddr: "smtp.qq.com"
   smtpport: "465"
+
+redis:
+  host: "127.0.0.1"
+  port: "6379"
+  db: 0
+  password:
+
+
 

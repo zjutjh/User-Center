@@ -6,13 +6,12 @@ import (
 	"log"
 	"usercenter/app/midwares"
 	"usercenter/config/config"
-	"usercenter/config/database"
+	"usercenter/config/configStart"
 	"usercenter/config/router"
 )
 
 func main() {
-	config.InitConfig()
-	database.Init()
+	configStart.Init()
 	r := gin.Default()
 	r.Use(cors.Default())
 	r.Use(midwares.ErrHandler())
