@@ -14,7 +14,7 @@ func SendEmail(target string) string {
 	email.MailConf.Title = "您的电子邮箱验证码"
 	email.MailConf.RecipientList = []string{target}
 	var vcode string
-	for true {
+	for {
 		rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
 		vcode = fmt.Sprintf("%06v", rnd.Int31n(1000000))
 		if redisService.GetRedis(vcode) == "" {

@@ -5,18 +5,16 @@ import (
 	"usercenter/config/database"
 )
 
-func CheckStudentBYSIDAndIID(sid string, iid string) error {
+func CheckStudentBYSIDAndIID(sid string, iid string) bool {
 	student := model.Student{}
 	result := database.DB.Where(
 		&model.Student{
 			StudentId: sid,
-			Iid:       iid,
 		},
 	).First(&student)
-	println(result.Error)
-	if result.Error != nil {
-		return result.Error
+	if student.Iid != iid || result.Error != nil {
+		return false
 	} else {
-		return nil
+		return true
 	}
 }

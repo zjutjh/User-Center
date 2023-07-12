@@ -30,12 +30,13 @@ func ActivateUser(c *gin.Context) {
 		return
 	}
 	_, err = userService.GetUserByStudentId(data.StudentId)
+	log.Println(err)
 	if err == nil {
 		utility.JsonResponse(403, "该通行证已经存在，请重新输入", nil, c)
 		return
 	}
-	err = studentService.CheckStudentBYSIDAndIID(data.StudentId, data.Iid)
-	if err != nil {
+	flag := studentService.CheckStudentBYSIDAndIID(data.StudentId, data.Iid)
+	if !flag {
 		utility.JsonResponse(400, "该学号和身份证不存在或者不匹配，请重新输入", nil, c)
 		return
 	}
@@ -49,7 +50,12 @@ func ActivateUser(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
+	//var code string
+	//go func(email string) {
+	//	code = emailService.SendEmail(email)
+	//}(data.Email)
 	code := emailService.SendEmail(data.Email)
+	log.Println(code)
 	if code != "" {
 		flag := redisService.SetRedis(code, data.Email)
 		if !flag {
