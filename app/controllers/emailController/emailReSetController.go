@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"runtime"
+	"sync"
 	"usercenter/app/services/emailService"
 	"usercenter/app/services/redisService"
 	"usercenter/app/services/userService"
@@ -35,9 +37,27 @@ func EmailReset(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	code := emailService.SendEmail(data.Email)
-	if code != "" {
-		redisService.SetRedis(code, data.Email)
-	}
+	//code := emailService.SendEmail(data.Email)
+	//if code != "" {
+	//	redisService.SetRedis(code, data.Email)
+	//}
+	//高并发
+	runtime.GOMAXPROCS(3)
+	var wg sync.WaitGroup
+	wg.Add(2)
+	scr := make(chan string)
+	go func(email string) {
+		defer wg.Done()
+		scr <- emailService.SendEmail(email)
+		//scr <- code
+	}(data.Email)
+	go func() {
+		defer wg.Done()
+		code := <-scr
+		if code != "" {
+			redisService.SetRedis(code, data.Email)
+		}
+	}()
+	wg.Wait()
 	utility.JsonResponse(http.StatusOK, "OK", nil, c)
 }

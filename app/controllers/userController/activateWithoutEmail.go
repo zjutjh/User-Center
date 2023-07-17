@@ -25,8 +25,8 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		utility.JsonResponse(403, "该通行证已经存在，请重新输入", nil, c)
 		return
 	}
-	err = studentService.CheckStudentBYSIDAndIID(data.StudentId, data.Iid)
-	if err != nil {
+	flag := studentService.CheckStudentBYSIDAndIID(data.StudentId, data.Iid)
+	if !flag {
 		utility.JsonResponse(400, "该学号和身份证不存在或者不匹配，请重新输入", nil, c)
 		return
 	}
