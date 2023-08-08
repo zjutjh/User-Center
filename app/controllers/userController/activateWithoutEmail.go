@@ -16,10 +16,7 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	if len(data.StudentId) != 12 {
-		utility.JsonResponse(402, "学号格式不正确，请重新输入", nil, c)
-		return
-	}
+	
 	_, err = userService.GetUserByStudentId(data.StudentId)
 	if err == nil {
 		utility.JsonResponse(403, "该通行证已经存在，请重新输入", nil, c)
