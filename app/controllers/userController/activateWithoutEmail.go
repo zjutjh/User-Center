@@ -16,7 +16,7 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	
+
 	_, err = userService.GetUserByStudentId(data.StudentId)
 	if err == nil {
 		utility.JsonResponse(403, "该通行证已经存在，请重新输入", nil, c)
@@ -31,7 +31,7 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		utility.JsonResponse(401, "密码长度必须在6~20位之间", nil, c)
 		return
 	}
-	err = userService.CreateUserWithoutEmail(data.Password, data.Email, data.StudentId)
+	err = userService.CreateUser(data.Password, data.Email, data.StudentId)
 	if err != nil {
 		log.Println(err)
 		utility.JsonResponseInternalServerError(c)

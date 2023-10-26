@@ -1,10 +1,12 @@
 package userController
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"math/rand"
+	"time"
 	"usercenter/app/services/emailService"
-	"usercenter/app/services/redisService"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
@@ -25,6 +27,12 @@ func ActivateUser(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
+
+	if !utility.IsValidEmail(data.Email) {
+		utility.JsonResponse(405, "邮箱格式不正确", nil, c)
+		return
+	}
+
 	if len(data.StudentId) != 12 {
 		utility.JsonResponse(402, "学号格式不正确，请重新输入", nil, c)
 		return
@@ -44,24 +52,17 @@ func ActivateUser(c *gin.Context) {
 		utility.JsonResponse(401, "密码长度必须在6~20位之间", nil, c)
 		return
 	}
-	err = userService.CreateUser(data.Password, data.Email, data.StudentId)
+
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	vcode := fmt.Sprintf("%06v", rnd.Int31n(1000000))
+
+	err = userService.CreateUserInRedis(data.Password, data.Email, data.StudentId, vcode)
 	if err != nil {
-		log.Println(err)
-		utility.JsonResponseInternalServerError(c)
+		_ = c.AbortWithError(200, err)
 		return
 	}
-	//var code string
-	//go func(email string) {
-	//	code = emailService.SendEmail(email)
-	//}(data.Email)
-	code := emailService.SendEmail(data.Email)
-	log.Println(code)
-	if code != "" {
-		flag := redisService.SetRedis(code, data.Email)
-		if !flag {
-			utility.JsonResponseInternalServerError(c)
-			return
-		}
-	}
+
+	emailService.SendEmail(data.Email, vcode)
+
 	utility.JsonResponse(200, "OK", nil, c)
 }

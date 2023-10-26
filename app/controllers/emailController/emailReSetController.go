@@ -1,13 +1,13 @@
 package emailController
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"math/rand"
 	"net/http"
-	"runtime"
-	"sync"
+	"time"
 	"usercenter/app/services/emailService"
-	"usercenter/app/services/redisService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
@@ -31,33 +31,24 @@ func EmailReset(c *gin.Context) {
 		utility.JsonResponse(404, "该用户不存在", nil, c)
 		return
 	}
+
+	if !utility.IsValidEmail(data.Email) {
+		utility.JsonResponse(405, "邮箱格式不正确", nil, c)
+		return
+	}
+
 	err = userService.UpdateUserEmailByStudentId(data.StudentId, data.Email)
 	if err != nil {
 		log.Println(err)
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	//code := emailService.SendEmail(data.Email)
-	//if code != "" {
-	//	redisService.SetRedis(code, data.Email)
-	//}
-	//高并发
-	runtime.GOMAXPROCS(3)
-	var wg sync.WaitGroup
-	wg.Add(2)
-	scr := make(chan string)
-	go func(email string) {
-		defer wg.Done()
-		scr <- emailService.SendEmail(email)
-		//scr <- code
-	}(data.Email)
-	go func() {
-		defer wg.Done()
-		code := <-scr
-		if code != "" {
-			redisService.SetRedis(code, data.Email)
-		}
-	}()
-	wg.Wait()
+
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	vcode := fmt.Sprintf("%06v", rnd.Int31n(1000000))
+
+	emailService.SendEmail(data.Email, vcode)
+	userService.CreateUserInRedis("", data.Email, "", vcode)
+
 	utility.JsonResponse(http.StatusOK, "OK", nil, c)
 }

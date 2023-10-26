@@ -3,12 +3,12 @@ package emailController
 import (
 	"github.com/gin-gonic/gin"
 	"log"
-	"usercenter/app/services/redisService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
 
 type VerificationData struct {
+	Email            string `json:"email"`
 	VerificationCode string `json:"verification_code"`
 }
 
@@ -20,17 +20,12 @@ func EmailVerification(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	email := redisService.GetRedis(data.VerificationCode)
-	if email == "" {
-		utility.JsonResponse(406, "验证码错误", nil, c)
-		return
-	}
-	user, _ := userService.GetUserByEmail(email)
-	err = userService.Activate(email, user)
+
+	err = userService.CreateUserWithCode(data.Email, data.VerificationCode)
 	if err != nil {
-		log.Println(err)
-		utility.JsonResponseInternalServerError(c)
+		_ = c.AbortWithError(200, err)
 		return
 	}
+
 	utility.JsonResponse(200, "OK", nil, c)
 }
