@@ -8,5 +8,4 @@ type User struct {
 	Password   string
 	Email      string
 	CreateTime time.Time
-	Activate   int
 }

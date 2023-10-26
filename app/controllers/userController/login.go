@@ -20,8 +20,8 @@ func AuthPassword(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	user, err1 := userService.GetUserByStudentId(data.StudentId)
-	if err1 != nil || user.Activate == 0 {
+	_, err = userService.GetUserByStudentId(data.StudentId)
+	if err != nil {
 		utility.JsonResponse(404, "该用户不存在", nil, c)
 		return
 	}

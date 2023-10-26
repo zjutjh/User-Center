@@ -16,6 +16,8 @@ var (
 	RequestError    = NewError(http.StatusInternalServerError, 506, "系统异常，请稍后重试!")
 	NotFound        = NewError(http.StatusNotFound, 404, http.StatusText(http.StatusNotFound))
 	Unknown         = NewError(http.StatusInternalServerError, 300500, "系统异常，请稍后重试!")
+	EmailNotFound   = NewError(http.StatusOK, 404, "找不到对应邮箱")
+	CodeError       = NewError(http.StatusOK, 500, "验证码错误")
 )
 
 func OtherError(message string) *Error {

@@ -3,7 +3,6 @@ package userController
 import (
 	"github.com/gin-gonic/gin"
 	"log"
-	"usercenter/app/services/redisService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
@@ -22,22 +21,26 @@ func ResetPassword(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	_, err = userService.GetUserByStudentId(data.StudentId)
+
+	if len(data.Password) < 6 || len(data.Password) > 20 {
+		utility.JsonResponse(401, "密码长度必须在6~20位之间", nil, c)
+		return
+	}
+
+	user, err := userService.GetUserByStudentId(data.StudentId)
 	if err != nil {
 		log.Println(err)
 		utility.JsonResponse(404, "该用户不存在", nil, c)
 		return
 	}
-	email := redisService.GetRedis(data.Code)
-	if email == "" {
-		utility.JsonResponse(406, "验证码错误", nil, c)
+
+	_, err = userService.GetCode(user.Email, data.Code)
+	if err != nil {
+		_ = c.AbortWithError(200, err)
 		return
 	}
-	if len(data.Password) < 6 || len(data.Password) > 20 {
-		utility.JsonResponse(401, "密码长度必须在6~20位之间", nil, c)
-		return
-	}
-	err = userService.UpdateUserPasswordByStudentIdAndEmail(data.StudentId, data.Password, email)
+
+	err = userService.UpdateUserPasswordByStudentId(data.StudentId, data.Password)
 	if err != nil {
 		log.Println(err)
 		utility.JsonResponseInternalServerError(c)
