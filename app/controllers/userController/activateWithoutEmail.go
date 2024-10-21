@@ -1,7 +1,9 @@
 package userController
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"log"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
@@ -17,9 +19,12 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		return
 	}
 
-	_, err = userService.GetUserByStudentId(data.StudentId)
+	_, err = userService.GetUserByStudentIdAndSystem(data.StudentId, data.BoundSystem)
 	if err == nil {
 		utility.JsonResponse(403, "该通行证已经存在，请重新输入", nil, c)
+		return
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		_ = c.AbortWithError(200, err)
 		return
 	}
 	flag := studentService.CheckStudentBYSIDAndIID(data.StudentId, data.Iid)
@@ -31,7 +36,7 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		utility.JsonResponse(401, "密码长度必须在6~20位之间", nil, c)
 		return
 	}
-	err = userService.CreateUser(data.Password, data.Email, data.StudentId)
+	err = userService.CreateUser(data.Password, data.Email, data.StudentId, data.Type, data.BoundSystem)
 	if err != nil {
 		log.Println(err)
 		utility.JsonResponseInternalServerError(c)

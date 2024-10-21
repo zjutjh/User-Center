@@ -48,7 +48,11 @@ func EmailReset(c *gin.Context) {
 	vcode := fmt.Sprintf("%06v", rnd.Int31n(1000000))
 
 	emailService.SendEmail(data.Email, vcode)
-	userService.CreateUserInRedis("", data.Email, "", vcode)
-
+	err = userService.CreateUserInRedis("", data.Email, "", vcode, 0, 0)
+	if err != nil {
+		log.Println(err)
+		utility.JsonResponseInternalServerError(c)
+		return
+	}
 	utility.JsonResponse(http.StatusOK, "OK", nil, c)
 }
