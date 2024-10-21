@@ -1,13 +1,9 @@
 package emailController
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
-	"math/rand"
 	"net/http"
-	"time"
-	"usercenter/app/services/emailService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
@@ -44,15 +40,5 @@ func EmailReset(c *gin.Context) {
 		return
 	}
 
-	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
-	vcode := fmt.Sprintf("%06v", rnd.Int31n(1000000))
-
-	emailService.SendEmail(data.Email, vcode)
-	err = userService.CreateUserInRedis("", data.Email, "", vcode, 0, 0)
-	if err != nil {
-		log.Println(err)
-		utility.JsonResponseInternalServerError(c)
-		return
-	}
 	utility.JsonResponse(http.StatusOK, "OK", nil, c)
 }
