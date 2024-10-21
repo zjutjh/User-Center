@@ -1,7 +1,9 @@
 package userController
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"usercenter/app/apiExpection"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
@@ -9,8 +11,9 @@ import (
 )
 
 type form struct {
-	IDCard    string `json:"iid" binding:"required"`
-	StudentID string `json:"stuid" binding:"required"`
+	IDCard      string `json:"iid" binding:"required"`
+	StudentID   string `json:"stuid" binding:"required"`
+	BoundSystem uint8  `json:"bound_system"` // 0：wjh 1:foru
 }
 
 func DelAccount(c *gin.Context) {
@@ -25,12 +28,17 @@ func DelAccount(c *gin.Context) {
 		return
 	}
 
-	err = userService.DelAccount(postForm.StudentID)
-	if err != nil {
+	err = userService.DelAccount(postForm.StudentID, postForm.BoundSystem)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		utility.JsonResponse(401, "用户不存在", nil, c)
 		return
+	} else if !errors.Is(err, errors.New("系统未绑定")) {
+		utility.JsonResponse(406, err.Error(), nil, c)
+		return
+	} else if err != nil {
+		_ = c.AbortWithError(200, apiExpection.ServerError)
+		return
 	}
-
 	utility.JsonSuccessResponse(c, nil)
 
 }
