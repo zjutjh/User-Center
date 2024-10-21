@@ -5,6 +5,7 @@ import (
 	"log"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
+	"usercenter/app/utility/oauth"
 )
 
 type LoginData struct {
@@ -27,6 +28,22 @@ func AuthPassword(c *gin.Context) {
 	}
 	flag := userService.CheckUserBYStudentIdAndPassword(data.StudentId, data.Password)
 	if !flag {
+		utility.JsonResponse(405, "密码错误", nil, c)
+		return
+	}
+	utility.JsonResponse(200, "OK", nil, c)
+}
+
+func OauthPassword(c *gin.Context) {
+	var data LoginData
+	err := c.ShouldBindJSON(&data)
+	if err != nil {
+		log.Println(err)
+		utility.JsonResponseInternalServerError(c)
+		return
+	}
+	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
+		log.Println(err)
 		utility.JsonResponse(405, "密码错误", nil, c)
 		return
 	}
