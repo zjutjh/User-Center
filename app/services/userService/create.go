@@ -34,8 +34,11 @@ func CreateUser(password, email, sid string, userType uint8, bound uint8) error 
 	}
 	pass := utility.Encryrpt(password)
 	var boundSystems []model.SystemBinding
-	fmt.Println(user)
 	if err == nil {
+		flag := CheckUserBYStudentIdAndPassword(sid, password)
+		if !flag {
+			return errors.New("密码错误")
+		}
 		if err := json.Unmarshal(user.BoundSystems, &boundSystems); err != nil {
 			return err
 		}
