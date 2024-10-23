@@ -9,8 +9,9 @@ import (
 )
 
 type LoginData struct {
-	StudentId string `json:"stu_id"`
-	Password  string `json:"password"`
+	StudentId   string `json:"stu_id"`
+	Password    string `json:"password"`
+	BoundSystem uint8  `json:"bound_system"` // 0：wjh 1:foru
 }
 
 func AuthPassword(c *gin.Context) {
@@ -29,6 +30,11 @@ func AuthPassword(c *gin.Context) {
 	flag := userService.CheckUserBYStudentIdAndPassword(data.StudentId, data.Password)
 	if !flag {
 		utility.JsonResponse(405, "密码错误", nil, c)
+		return
+	}
+	err = userService.UpdateBoundSystem(data.StudentId, data.BoundSystem)
+	if err != nil {
+		utility.JsonResponseInternalServerError(c)
 		return
 	}
 	utility.JsonResponse(200, "OK", nil, c)

@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"math/big"
 	"strconv"
 )
@@ -36,7 +35,6 @@ func GetEncryptPassword(publicKey []byte, password string) (string, error) {
 	K := &RSAPublicKey{}
 	err := json.Unmarshal(publicKey, K)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
 
