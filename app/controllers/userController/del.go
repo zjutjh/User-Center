@@ -32,7 +32,7 @@ func DelAccount(c *gin.Context) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		utility.JsonResponse(401, "用户不存在", nil, c)
 		return
-	} else if !errors.Is(err, errors.New("系统未绑定")) {
+	} else if err != nil && err.Error() != "系统未绑定" {
 		utility.JsonResponse(406, err.Error(), nil, c)
 		return
 	} else if err != nil {
