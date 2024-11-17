@@ -10,7 +10,6 @@ import (
 
 func CheckUserBYStudentIdAndPassword(studentId, password string) bool {
 	pass := utility.Encryrpt(password)
-	println(pass)
 	user := model.User{}
 	result := database.DB.Where(
 		model.User{

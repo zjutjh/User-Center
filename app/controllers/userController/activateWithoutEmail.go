@@ -37,11 +37,10 @@ func ActiviteWithoutEmail(c *gin.Context) {
 		return
 	}
 	err = userService.CreateUser(data.Password, data.Email, data.StudentId, data.Type, data.BoundSystem)
-	if errors.Is(err, errors.New("密码错误")) {
+	if err != nil && err.Error() == "密码错误" {
 		utility.JsonResponse(407, "该账号已在其他系统激活，请重新输入正确密码", nil, c)
 		return
 	} else if err != nil {
-		log.Println(err)
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
