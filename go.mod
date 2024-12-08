@@ -1,11 +1,9 @@
 module usercenter
 
-go 1.23
-
-toolchain go1.23.2
+go 1.22.9
 
 require (
-	github.com/PuerkitoBio/goquery v1.10.0
+	github.com/PuerkitoBio/goquery v1.9.3
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.8.1
