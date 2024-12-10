@@ -13,6 +13,7 @@ func Init(r *gin.Engine) {
 	api := r.Group(pre)
 	{
 		api.POST("/auth", userController.AuthPassword)
+		api.POST("/oauth", userController.OauthPassword)
 		api.POST("/activation", userController.ActivateUser)
 		api.POST("/verify/email", emailController.EmailVerification)
 		api.POST("/email", emailController.EmailReset)
