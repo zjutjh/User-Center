@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"usercenter/app/apiExpection"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -19,9 +20,14 @@ func CheckByOauth(username string, password string) (string, error) {
 		return "", err
 	}
 	if len(f.Cookie) < 1 {
-		return "", err
+		return "", apiExpection.ClosedError
 	}
 	doc, _ := goquery.NewDocumentFromReader(loginHome.Body)
+	// 判断是否关闭
+	title := doc.Find("title").Text()
+	if title == "Error 403.6" {
+		return "", apiExpection.ClosedError
+	}
 	hiddenInput := doc.Find("input[type=hidden][name=execution]")
 
 	execution := hiddenInput.AttrOr("value", "")

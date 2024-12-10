@@ -1,8 +1,10 @@
 package userController
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"usercenter/app/apiExpection"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 	"usercenter/app/utility/oauth"
@@ -50,7 +52,11 @@ func OauthPassword(c *gin.Context) {
 	}
 	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
 		log.Println(err)
-		utility.JsonResponse(405, "密码错误", nil, c)
+		if errors.Is(err, apiExpection.ClosedError) {
+			utility.JsonResponse(apiExpection.ClosedError.Code, err.Error(), nil, c)
+		} else {
+			utility.JsonResponse(405, "密码错误", nil, c)
+		}
 		return
 	}
 	utility.JsonResponse(200, "OK", nil, c)
