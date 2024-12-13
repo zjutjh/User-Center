@@ -31,7 +31,7 @@ func AuthPassword(c *gin.Context) {
 	}
 	flag := userService.CheckUserBYStudentIdAndPassword(data.StudentId, data.Password)
 	if !flag {
-		utility.JsonResponse(405, "密码错误", nil, c)
+		utility.JsonResponse(409, "密码错误", nil, c)
 		return
 	}
 	err = userService.UpdateBoundSystem(data.StudentId, data.BoundSystem)
@@ -46,18 +46,20 @@ func OauthPassword(c *gin.Context) {
 	var data LoginData
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
-		log.Println(err)
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
 	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
-		log.Println(err)
-		if errors.Is(err, apiExpection.ClosedError) {
-			utility.JsonResponse(apiExpection.ClosedError.Code, err.Error(), nil, c)
-		} else {
-			utility.JsonResponse(405, "密码错误", nil, c)
+		if err != nil && err.Error() == "Wrong Password" {
+			utility.JsonResponse(409, "密码错误", nil, c)
+		} else if err != nil && err.Error() == "Get \"http://www.me.zjut.edu.cn/api/basic/info\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)" {
+			utility.JsonResponse(408, "请求超时", nil, c)
+    } else if errors.Is(err, apiExpection.ClosedError){
+    	utility.JsonResponse(apiExpection.ClosedError.Code, err.Error(), nil, c)
+    } else {
+			utility.JsonResponse(410, "系统异常", nil, c)
 		}
-		return
+    return
 	}
 	utility.JsonResponse(200, "OK", nil, c)
 }
