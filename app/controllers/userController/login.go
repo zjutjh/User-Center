@@ -1,7 +1,6 @@
 package userController
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"usercenter/app/services/userService"
@@ -49,7 +48,6 @@ func OauthPassword(c *gin.Context) {
 		return
 	}
 	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
-		fmt.Println(sid, data.StudentId, err)
 		if err != nil && err.Error() == "Wrong Password" {
 			utility.JsonResponse(409, "密码错误", nil, c)
 			return
