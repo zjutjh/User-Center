@@ -2,7 +2,6 @@ package oauth
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"net/url"
 
@@ -12,8 +11,6 @@ import (
 func CheckByOauth(username string, password string) (string, error) {
 	f := Fetch{}
 	f.Init()
-	log.Println(username)
-	log.Println(password)
 	loginHome, err := f.GetRaw(OauthLoginHome())
 	if err != nil {
 		return "", err
@@ -28,7 +25,6 @@ func CheckByOauth(username string, password string) (string, error) {
 	loginData := genOauthLoginData(username, password, execution, &f)
 
 	postRedirectUrl, err := f.PostFormRedirect(OauthLoginHome(), loginData)
-	log.Println(postRedirectUrl)
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +33,6 @@ func CheckByOauth(username string, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	log.Println(f.Cookie)
 	s, err := f.Get("http://www.me.zjut.edu.cn/api/basic/info")
 	if err != nil {
 		return "", err
