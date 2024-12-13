@@ -1,8 +1,10 @@
 package userController
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"usercenter/app/apiExpection"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 	"usercenter/app/utility/oauth"
@@ -50,14 +52,14 @@ func OauthPassword(c *gin.Context) {
 	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
 		if err != nil && err.Error() == "Wrong Password" {
 			utility.JsonResponse(409, "密码错误", nil, c)
-			return
 		} else if err != nil && err.Error() == "Get \"http://www.me.zjut.edu.cn/api/basic/info\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)" {
 			utility.JsonResponse(408, "请求超时", nil, c)
-			return
-		} else {
+    } else if errors.Is(err, apiExpection.ClosedError){
+    	utility.JsonResponse(apiExpection.ClosedError.Code, err.Error(), nil, c)
+    } else {
 			utility.JsonResponse(410, "系统异常", nil, c)
-			return
 		}
+    return
 	}
 	utility.JsonResponse(200, "OK", nil, c)
 }
