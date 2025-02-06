@@ -1,13 +1,11 @@
 package userController
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/zjutjh/WeJH-SDK/oauth"
 	"log"
-	"usercenter/app/apiExpection"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
-	"usercenter/app/utility/oauth"
 )
 
 type LoginData struct {
@@ -49,17 +47,28 @@ func OauthPassword(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
-		if err != nil && err.Error() == "Wrong Password" {
-			utility.JsonResponse(409, "密码错误", nil, c)
-		} else if err != nil && err.Error() == "Get \"http://www.me.zjut.edu.cn/api/basic/info\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)" {
-			utility.JsonResponse(408, "请求超时", nil, c)
-    } else if errors.Is(err, apiExpection.ClosedError){
-    	utility.JsonResponse(apiExpection.ClosedError.Code, err.Error(), nil, c)
-    } else {
-			utility.JsonResponse(410, "系统异常", nil, c)
+	_, err = oauth.Login(data.StudentId, data.Password)
+	if err != nil {
+		if err.Error() == "密码错误" {
+			utility.JsonResponse(409, "统一系统密码错误", nil, c)
+			return
 		}
-    return
+		if err.Error() == "统一系统在夜间关闭" {
+			utility.JsonResponse(411, "统一系统在夜间关闭", nil, c)
+			return
+		}
+		if err.Error() == "账号未激活" {
+			utility.JsonResponse(412, "统一系统账号未激活", nil, c)
+			return
+		}
+		if err.Error() == "账号错误" {
+			utility.JsonResponse(413, "统一系统账号错误", nil, c)
+			return
+		}
+		if err.Error() == "其他错误" {
+			utility.JsonResponse(499, "其他错误", nil, c)
+			return
+		}
 	}
 	utility.JsonResponse(200, "OK", nil, c)
 }
