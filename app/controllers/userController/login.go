@@ -1,9 +1,12 @@
 package userController
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/zjutjh/WeJH-SDK/oauth"
+	"github.com/zjutjh/WeJH-SDK/oauth/oauthException"
 	"log"
+	"usercenter/app/apiExpection"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
@@ -47,28 +50,21 @@ func OauthPassword(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	_, err = oauth.Login(data.StudentId, data.Password)
-	if err != nil {
-		if err.Error() == "密码错误" {
-			utility.JsonResponse(409, "统一系统密码错误", nil, c)
-			return
+	_, e := oauth.Login(data.StudentId, data.Password)
+	if e != nil {
+		switch {
+		case errors.Is(e, oauthException.ClosedError):
+			_ = c.AbortWithError(200, apiExpection.ClosedError)
+		case errors.Is(e, oauthException.WrongPassword):
+			_ = c.AbortWithError(200, apiExpection.WrongPassword)
+		case errors.Is(e, oauthException.NotActivatedError):
+			_ = c.AbortWithError(200, apiExpection.NotActivatedError)
+		case errors.Is(e, oauthException.WrongAccount):
+			_ = c.AbortWithError(200, apiExpection.WrongAccount)
+		case errors.Is(e, oauthException.OtherError):
+			_ = c.AbortWithError(200, apiExpection.OtherError("其他错误"))
 		}
-		if err.Error() == "统一系统在夜间关闭" {
-			utility.JsonResponse(411, "统一系统在夜间关闭", nil, c)
-			return
-		}
-		if err.Error() == "账号未激活" {
-			utility.JsonResponse(412, "统一系统账号未激活", nil, c)
-			return
-		}
-		if err.Error() == "账号错误" {
-			utility.JsonResponse(413, "统一系统账号错误", nil, c)
-			return
-		}
-		if err.Error() == "其他错误" {
-			utility.JsonResponse(499, "其他错误", nil, c)
-			return
-		}
+		return
 	}
-	utility.JsonResponse(200, "OK", nil, c)
+	utility.JsonSuccessResponse(c, nil)
 }
