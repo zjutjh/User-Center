@@ -3,11 +3,12 @@ package userController
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/zjutjh/WeJH-SDK/oauth"
+	"github.com/zjutjh/WeJH-SDK/oauth/oauthException"
 	"log"
 	"usercenter/app/apiExpection"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
-	"usercenter/app/utility/oauth"
 )
 
 type LoginData struct {
@@ -49,17 +50,21 @@ func OauthPassword(c *gin.Context) {
 		utility.JsonResponseInternalServerError(c)
 		return
 	}
-	if sid, err := oauth.CheckByOauth(data.StudentId, data.Password); sid != data.StudentId || err != nil {
-		if err != nil && err.Error() == "Wrong Password" {
-			utility.JsonResponse(409, "密码错误", nil, c)
-		} else if err != nil && err.Error() == "Get \"http://www.me.zjut.edu.cn/api/basic/info\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)" {
-			utility.JsonResponse(408, "请求超时", nil, c)
-    } else if errors.Is(err, apiExpection.ClosedError){
-    	utility.JsonResponse(apiExpection.ClosedError.Code, err.Error(), nil, c)
-    } else {
-			utility.JsonResponse(410, "系统异常", nil, c)
+	_, e := oauth.Login(data.StudentId, data.Password)
+	if e != nil {
+		switch {
+		case errors.Is(e, oauthException.ClosedError):
+			_ = c.AbortWithError(200, apiExpection.ClosedError)
+		case errors.Is(e, oauthException.WrongPassword):
+			_ = c.AbortWithError(200, apiExpection.WrongPassword)
+		case errors.Is(e, oauthException.NotActivatedError):
+			_ = c.AbortWithError(200, apiExpection.NotActivatedError)
+		case errors.Is(e, oauthException.WrongAccount):
+			_ = c.AbortWithError(200, apiExpection.WrongAccount)
+		case errors.Is(e, oauthException.OtherError):
+			_ = c.AbortWithError(200, apiExpection.OtherError("其他错误"))
 		}
-    return
+		return
 	}
-	utility.JsonResponse(200, "OK", nil, c)
+	utility.JsonSuccessResponse(c, nil)
 }

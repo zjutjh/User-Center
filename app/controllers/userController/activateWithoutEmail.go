@@ -10,6 +10,15 @@ import (
 	"usercenter/app/utility"
 )
 
+type RegisterData struct {
+	StudentId   string `json:"stu_id"`
+	Password    string `json:"password"`
+	Iid         string `json:"iid"`
+	Email       string `json:"email"`
+	Type        uint8  `json:"type"`         // 0: 本科生 1: 研究生
+	BoundSystem uint8  `json:"bound_system"` // 0：wjh 1:foru
+}
+
 func ActiviteWithoutEmail(c *gin.Context) {
 	var data RegisterData
 	err := c.ShouldBindJSON(&data)
