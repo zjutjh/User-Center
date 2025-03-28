@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"log"
 	"usercenter/app/apiExpection"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
@@ -12,7 +13,7 @@ import (
 
 type form struct {
 	IDCard      string `json:"iid" binding:"required"`
-	StudentID   string `json:"stuid" binding:"required"`
+	StudentID   string `json:"stu_id" binding:"required"`
 	BoundSystem uint8  `json:"bound_system"` // 0：wjh 1:foru
 }
 
@@ -20,6 +21,7 @@ func DelAccount(c *gin.Context) {
 	var postForm form
 	err := c.ShouldBindJSON(&postForm)
 	if err != nil {
+		log.Println(err)
 		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}

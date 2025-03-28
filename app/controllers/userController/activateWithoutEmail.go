@@ -5,16 +5,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
+	"usercenter/app/apiExpection"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
 
 type RegisterData struct {
-	StudentId   string `json:"stu_id"`
-	Password    string `json:"password"`
-	Iid         string `json:"iid"`
-	Email       string `json:"email"`
+	StudentId   string `json:"stu_id" binding:"required"`
+	Password    string `json:"password" binding:"required"`
+	Iid         string `json:"iid" binding:"required"`
+	Email       string `json:"email" binding:"required"`
 	Type        uint8  `json:"type"`         // 0: 本科生 1: 研究生
 	BoundSystem uint8  `json:"bound_system"` // 0：wjh 1:foru
 }
@@ -24,7 +25,7 @@ func ActiviteWithoutEmail(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		log.Println(err)
-		utility.JsonResponseInternalServerError(c)
+		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}
 

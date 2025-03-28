@@ -12,8 +12,8 @@ import (
 )
 
 type LoginData struct {
-	StudentId   string `json:"stu_id"`
-	Password    string `json:"password"`
+	StudentId   string `json:"stu_id" binding:"required"`
+	Password    string `json:"password" binding:"required"`
 	BoundSystem uint8  `json:"bound_system"` // 0：wjh 1:foru
 }
 
@@ -22,7 +22,7 @@ func AuthPassword(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		log.Println(err)
-		utility.JsonResponseInternalServerError(c)
+		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}
 	_, err = userService.GetUserByStudentId(data.StudentId)
@@ -47,7 +47,8 @@ func OauthPassword(c *gin.Context) {
 	var data LoginData
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
-		utility.JsonResponseInternalServerError(c)
+		log.Println(err)
+		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}
 	_, e := oauth.Login(data.StudentId, data.Password)

@@ -3,15 +3,16 @@ package userController
 import (
 	"github.com/gin-gonic/gin"
 	"log"
+	"usercenter/app/apiExpection"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
 )
 
 type ResetPwdForm struct {
-	IDCard    string `json:"iid"`
-	StudentId string `json:"stuid"`
-	Password  string `json:"pwd"`
+	IDCard    string `json:"iid" binding:"required"`
+	StudentId string `json:"stu_id" binding:"required"`
+	Password  string `json:"password" binding:"required"`
 }
 
 // RePass 不使用密码重置
@@ -20,7 +21,7 @@ func RePass(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		log.Println(err)
-		utility.JsonResponseInternalServerError(c)
+		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}
 
