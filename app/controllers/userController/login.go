@@ -51,7 +51,7 @@ func OauthPassword(c *gin.Context) {
 		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}
-	_, e := oauth.Login(data.StudentId, data.Password)
+	_, info, e := oauth.GetUserInfo(data.StudentId, data.Password)
 	if e != nil {
 		switch {
 		case errors.Is(e, oauthException.ClosedError):
@@ -67,5 +67,5 @@ func OauthPassword(c *gin.Context) {
 		}
 		return
 	}
-	utility.JsonSuccessResponse(c, nil)
+	utility.JsonSuccessResponse(c, info)
 }
