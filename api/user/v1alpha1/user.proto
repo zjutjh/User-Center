@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package zjut.jh.api.user.v1alpha1;
+
+option go_package = "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1;v1alpha1";
+
+message RegisterRequest {
+    string studentId = 1;
+    string password = 2;
+    string iid = 3;
+    string email = 4;
+}
+
+message LoginRequest {
+    string studentId = 1;
+    string password = 2;
+}
+
+message ResetPasswordRequest {
+    string studentId = 1;
+    string password = 2;
+    string iid = 3;
+}
+
+message DeleteRequest {
+    string studentId = 1;
+    string iid = 2;
+}

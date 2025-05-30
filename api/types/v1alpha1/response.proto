@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package zjut.jh.api.types.v1alpha1;
+
+option go_package = "github.com/zjutjh/User-Center-grpc/api/types/v1alpha1;v1alpha1";
+
+import "google/protobuf/struct.proto";
+
+message Response {
+    int32 code = 1;
+    string message = 2;
+    google.protobuf.Value data = 3;
+}

@@ -1,0 +1,12 @@
+{
+  "methodConfig": [
+    {
+      "name": [
+        {
+          "service": "google.api.serviceusage.v1beta1.ServiceUsage"
+        }
+      ],
+      "timeout": "5s"
+    }
+  ]
+}
