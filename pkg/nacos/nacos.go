@@ -42,7 +42,7 @@ func NewRunOptions() *RunOptions {
 	return Info
 }
 
-func (options *RunOptions) RegisterNacosService() {
+func (options *RunOptions) Init() {
 	serverConfigs := []constant.ServerConfig{
 		*constant.NewServerConfig(options.Host, options.Port),
 	}

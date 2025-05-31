@@ -2,8 +2,11 @@ package app
 
 import (
 	"context"
+	"log"
 	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/gogo/protobuf/version"
 	"github.com/spf13/cobra"
@@ -19,7 +22,9 @@ func NewAPIServerCommand(ctx context.Context) *cobra.Command {
 		RunE: func(c *cobra.Command, _ []string) error {
 			//nolint:context check
 			slog.Info("Running api server")
-			return Run(c.Context(), s)
+			ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+			defer stop()
+			return Run(ctx, s)
 		},
 		SilenceUsage: true,
 	}
@@ -50,6 +55,7 @@ func Run(ctx context.Context, opt *options.Options) error {
 	}
 
 	if err = apiServer.PrepareRun(ctx); err != nil {
+		log.Fatal(err)
 		return err
 	}
 	return apiServer.Run(ctx)

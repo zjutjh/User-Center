@@ -32,3 +32,4 @@ vendor/
 
 bin/
 config.yaml
+api/assets/

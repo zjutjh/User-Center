@@ -9,7 +9,6 @@ import (
 	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 
 	"github.com/zjutjh/User-Center-grpc/pkg/apiserver"
@@ -38,26 +37,33 @@ func NewAPIServerRunOptions() *Options {
 }
 
 func (o *Options) NewAPIServer() (*apiserver.APIServer, error) {
-	o.NacosRunOptions.RegisterNacosService()
 	o.DatabaseRunOptions.Init()
 	o.RedisRunOptions.Init()
+	o.NacosRunOptions.Init()
 
 	apiServer := &apiserver.APIServer{
 		Debug: o.Debug,
 	}
 
-	// Create the main listener.
-	address := fmt.Sprintf("%s:%d", o.ServerRunOptions.BindAddress, o.ServerRunOptions.InsecurePort)
-	l, err := net.Listen("tcp", address)
+	// 创建 gRPC Listener
+	grpcAddress := fmt.Sprintf("%s:%d", o.ServerRunOptions.BindAddress, o.ServerRunOptions.GRPCPort)
+	grpcListener, err := net.Listen("tcp", grpcAddress)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create gRPC listener: %w", err)
 	}
-	// Create a cmux.
-	apiServer.CMux = cmux.New(l)
+	// 创建 HTTP Listener
+	httpAddress := fmt.Sprintf("%s:%d", o.ServerRunOptions.BindAddress, o.ServerRunOptions.HttpPort)
+	httpListener, err := net.Listen("tcp", httpAddress)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create HTTP listener: %w", err)
+	}
+	// 保存 Listener
+	apiServer.GrpcListener = grpcListener
+	apiServer.HttpListener = httpListener
 
 	// Create your protocol servers.
 	apiServer.Server = &http.Server{
-		Addr:              address,
+		Addr:              httpAddress,
 		ReadHeaderTimeout: 60 * time.Second,
 	}
 
