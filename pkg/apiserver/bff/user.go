@@ -6,9 +6,7 @@ import (
 
 	"gorm.io/gorm"
 
-	typev1 "github.com/zjutjh/User-Center-grpc/api/types/v1alpha1"
 	userv1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	apiv1 "github.com/zjutjh/User-Center-grpc/api/v1"
 	"github.com/zjutjh/User-Center-grpc/pkg/apiExpection"
 	"github.com/zjutjh/User-Center-grpc/pkg/services/user"
 	"github.com/zjutjh/User-Center-grpc/pkg/util"
@@ -17,14 +15,14 @@ import (
 )
 
 type UserHandler struct {
-	apiv1.UnimplementedUserServer
+	userv1.UnimplementedUserServer
 }
 
 func NewUserHandler() *UserHandler {
 	return &UserHandler{}
 }
 
-func (u *UserHandler) Register(ctx context.Context, req *userv1.RegisterRequest) (*typev1.Response, error) {
+func (u *UserHandler) Register(ctx context.Context, req *userv1.RegisterRequest) (*userv1.Response, error) {
 	if err := userService.CheckStudentBySIDAndIID(req.StudentId, req.Iid); err != nil {
 		return apiExpection.UserNotFound.ToResponse()
 	}
@@ -37,7 +35,7 @@ func (u *UserHandler) Register(ctx context.Context, req *userv1.RegisterRequest)
 	return util.ResponseSuccess(nil)
 }
 
-func (u *UserHandler) Login(ctx context.Context, req *userv1.LoginRequest) (*typev1.Response, error) {
+func (u *UserHandler) Login(ctx context.Context, req *userv1.LoginRequest) (*userv1.Response, error) {
 	user, err := userService.GetUserByStudentId(req.StudentId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -51,7 +49,7 @@ func (u *UserHandler) Login(ctx context.Context, req *userv1.LoginRequest) (*typ
 	return util.ResponseSuccess(nil)
 }
 
-func (u *UserHandler) ResetPassword(ctx context.Context, req *userv1.ResetPasswordRequest) (*typev1.Response, error) {
+func (u *UserHandler) ResetPassword(ctx context.Context, req *userv1.ResetPasswordRequest) (*userv1.Response, error) {
 	if err := userService.CheckStudentBySIDAndIID(req.StudentId, req.Iid); err != nil {
 		return apiExpection.UserNotFound.ToResponse()
 	}
@@ -64,7 +62,7 @@ func (u *UserHandler) ResetPassword(ctx context.Context, req *userv1.ResetPasswo
 	return util.ResponseSuccess(nil)
 }
 
-func (u *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*typev1.Response, error) {
+func (u *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*userv1.Response, error) {
 	if err := userService.CheckStudentBySIDAndIID(req.StudentId, req.Iid); err != nil {
 		return apiExpection.UserNotFound.ToResponse()
 	}
@@ -77,7 +75,7 @@ func (u *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*t
 	return util.ResponseSuccess(nil)
 }
 
-func (u *UserHandler) OauthLogin(ctx context.Context, req *userv1.LoginRequest) (*typev1.Response, error) {
+func (u *UserHandler) OauthLogin(ctx context.Context, req *userv1.LoginRequest) (*userv1.Response, error) {
 	_, err := oauth.Login(req.StudentId, req.Password)
 	if err != nil {
 		switch {

@@ -11,25 +11,24 @@ import (
 	"google.golang.org/grpc"
 
 	userv1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	serverv1 "github.com/zjutjh/User-Center-grpc/api/v1"
 )
 
 // 2. Test the gRPC SayHello method
-func TestSayHello(t *testing.T) {
-	conn, err := grpc.Dial(":8000", grpc.WithInsecure(), grpc.WithBlock())
+func TestLogin(t *testing.T) {
+	conn, err := grpc.Dial("127.0.0.1:8080", grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := serverv1.NewUserClient(conn)
+	c := userv1.NewUserClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	r, err := c.Hello(ctx, &userv1.HelloRequest{Name: "World"})
+	r, err := c.Login(ctx, &userv1.LoginRequest{StudentId: "202203150201", Password: "123456"})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
 	fmt.Println(r.GetMessage())
-	assert.Equal(t, "Hello World", r.GetMessage())
+	assert.Equal(t, "success", r.GetMessage())
 }

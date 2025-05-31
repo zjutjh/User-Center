@@ -7,7 +7,7 @@ set -o pipefail
 # This script holds common bash variables and utility functions.
 
 function util::get_api_dirs {
-  dirs=("types" "v1" "user")
+  dirs=("user")
   echo "${dirs[@]}"
   return $?
 }

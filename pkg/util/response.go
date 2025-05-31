@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/structpb"
 
-	typev1 "github.com/zjutjh/User-Center-grpc/api/types/v1alpha1"
+	typev1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
 	"github.com/zjutjh/User-Center-grpc/pkg/apiExpection"
 )
 

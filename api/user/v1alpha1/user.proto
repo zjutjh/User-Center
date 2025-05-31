@@ -4,25 +4,67 @@ package zjut.jh.api.user.v1alpha1;
 
 option go_package = "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1;v1alpha1";
 
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+
+message Response {
+    int32 code                 = 1;
+    string message             = 2;
+    google.protobuf.Value data = 3;
+}
+
 message RegisterRequest {
     string studentId = 1;
-    string password = 2;
-    string iid = 3;
-    string email = 4;
+    string password  = 2;
+    string iid       = 3;
+    string email     = 4;
 }
 
 message LoginRequest {
     string studentId = 1;
-    string password = 2;
+    string password  = 2;
 }
 
 message ResetPasswordRequest {
     string studentId = 1;
-    string password = 2;
-    string iid = 3;
+    string password  = 2;
+    string iid       = 3;
 }
 
 message DeleteRequest {
     string studentId = 1;
-    string iid = 2;
+    string iid       = 2;
+}
+
+service User {
+    rpc Register(RegisterRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/register"
+            body: "*"
+        };
+    }
+    rpc Login(LoginRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/auth"
+            body: "*"
+        };
+    }
+    rpc ResetPassword(ResetPasswordRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/repass"
+            body: "*"
+        };
+    }
+    rpc Delete(DeleteRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/del"
+            body: "*"
+        };
+    }
+    rpc OauthLogin(LoginRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/oauth"
+            body: "*"
+        };
+    }
 }

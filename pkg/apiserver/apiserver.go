@@ -10,7 +10,7 @@ import (
 	"net"
 	"net/http"
 
-	serverapi "github.com/zjutjh/User-Center-grpc/api/v1"
+	serverapi "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
 	"github.com/zjutjh/User-Center-grpc/pkg/apiserver/bff"
 	"github.com/zjutjh/User-Center-grpc/pkg/middleware"
 )

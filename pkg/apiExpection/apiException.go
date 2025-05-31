@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	typev1 "github.com/zjutjh/User-Center-grpc/api/types/v1alpha1"
+	typev1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
 )
 
 type Error struct {
