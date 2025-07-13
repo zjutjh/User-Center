@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/gogo/protobuf/version"
 	"github.com/spf13/cobra"
 
 	"github.com/zjutjh/User-Center-grpc/cmd/apiserver/app/options"
@@ -29,21 +28,11 @@ func NewAPIServerCommand(ctx context.Context) *cobra.Command {
 		SilenceUsage: true,
 	}
 	cmd.SetContext(ctx)
-	versionCmd := &cobra.Command{
-		Use:   "version",
-		Short: "Print the version of user-center-grpc",
-		Run: func(cmd *cobra.Command, _ []string) {
-			cmd.Println(version.Get())
-		},
-	}
-
-	cmd.AddCommand(versionCmd)
 	return cmd
 }
 
 func Run(ctx context.Context, opt *options.Options) error {
 	// To help debugging, immediately log version
-	slog.Debug("Version: %+v", version.Get())
 	slog.Debug("Golang settings",
 		"GOGC", os.Getenv("GOGC"),
 		"GOMAXPROCS", os.Getenv("GOMAXPROCS"),
