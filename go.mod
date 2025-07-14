@@ -3,7 +3,6 @@ module github.com/zjutjh/User-Center-grpc
 go 1.24.1
 
 require (
-	github.com/gogo/protobuf v1.3.2
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
