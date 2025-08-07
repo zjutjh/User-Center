@@ -13,7 +13,7 @@ require (
 	github.com/spf13/viper v1.20.0
 	github.com/stretchr/testify v1.10.0
 	github.com/zjutjh/User-Center-grpc/api v0.0.0-00010101000000-000000000000
-	github.com/zjutjh/WeJH-SDK v0.2.2
+	github.com/zjutjh/WeJH-SDK v0.2.3
 	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.5
 	gorm.io/driver/mysql v1.5.7
