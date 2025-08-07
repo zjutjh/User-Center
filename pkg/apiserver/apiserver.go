@@ -2,13 +2,14 @@ package apiserver
 
 import (
 	"context"
+	"log/slog"
+	"net"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log/slog"
-	"net"
-	"net/http"
 
 	serverapi "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
 	"github.com/zjutjh/User-Center-grpc/pkg/apiserver/bff"
@@ -42,8 +43,8 @@ func (s *APIServer) registerGrpcServices(ctx context.Context) error {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
-	serverapi.RegisterUserServer(s.GrpcServer, bff.NewUserHandler())
-	if err := serverapi.RegisterUserHandlerFromEndpoint(ctx, s.GatewayServerMux, s.GrpcListener.Addr().String(), opts); err != nil {
+	serverapi.RegisterUserCenterServiceServer(s.GrpcServer, bff.NewUserHandler())
+	if err := serverapi.RegisterUserCenterServiceHandlerFromEndpoint(ctx, s.GatewayServerMux, s.GrpcListener.Addr().String(), opts); err != nil {
 		return err
 	}
 	s.router.PathPrefix("/api").Handler(s.GatewayServerMux)
