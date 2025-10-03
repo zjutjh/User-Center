@@ -35,7 +35,7 @@ var (
 	_ = metadata.Join
 )
 
-func request_User_Register_0(ctx context.Context, marshaler runtime.Marshaler, client UserClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserCenterService_Register_0(ctx context.Context, marshaler runtime.Marshaler, client UserCenterServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq RegisterRequest
 		metadata runtime.ServerMetadata
@@ -47,7 +47,7 @@ func request_User_Register_0(ctx context.Context, marshaler runtime.Marshaler, c
 	return msg, metadata, err
 }
 
-func local_request_User_Register_0(ctx context.Context, marshaler runtime.Marshaler, server UserServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserCenterService_Register_0(ctx context.Context, marshaler runtime.Marshaler, server UserCenterServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq RegisterRequest
 		metadata runtime.ServerMetadata
@@ -59,7 +59,7 @@ func local_request_User_Register_0(ctx context.Context, marshaler runtime.Marsha
 	return msg, metadata, err
 }
 
-func request_User_Login_0(ctx context.Context, marshaler runtime.Marshaler, client UserClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserCenterService_Login_0(ctx context.Context, marshaler runtime.Marshaler, client UserCenterServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq LoginRequest
 		metadata runtime.ServerMetadata
@@ -71,7 +71,7 @@ func request_User_Login_0(ctx context.Context, marshaler runtime.Marshaler, clie
 	return msg, metadata, err
 }
 
-func local_request_User_Login_0(ctx context.Context, marshaler runtime.Marshaler, server UserServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserCenterService_Login_0(ctx context.Context, marshaler runtime.Marshaler, server UserCenterServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq LoginRequest
 		metadata runtime.ServerMetadata
@@ -83,7 +83,7 @@ func local_request_User_Login_0(ctx context.Context, marshaler runtime.Marshaler
 	return msg, metadata, err
 }
 
-func request_User_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, client UserClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserCenterService_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, client UserCenterServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ResetPasswordRequest
 		metadata runtime.ServerMetadata
@@ -95,7 +95,7 @@ func request_User_ResetPassword_0(ctx context.Context, marshaler runtime.Marshal
 	return msg, metadata, err
 }
 
-func local_request_User_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, server UserServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserCenterService_ResetPassword_0(ctx context.Context, marshaler runtime.Marshaler, server UserCenterServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ResetPasswordRequest
 		metadata runtime.ServerMetadata
@@ -107,7 +107,7 @@ func local_request_User_ResetPassword_0(ctx context.Context, marshaler runtime.M
 	return msg, metadata, err
 }
 
-func request_User_Delete_0(ctx context.Context, marshaler runtime.Marshaler, client UserClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserCenterService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, client UserCenterServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteRequest
 		metadata runtime.ServerMetadata
@@ -119,7 +119,7 @@ func request_User_Delete_0(ctx context.Context, marshaler runtime.Marshaler, cli
 	return msg, metadata, err
 }
 
-func local_request_User_Delete_0(ctx context.Context, marshaler runtime.Marshaler, server UserServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserCenterService_Delete_0(ctx context.Context, marshaler runtime.Marshaler, server UserCenterServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteRequest
 		metadata runtime.ServerMetadata
@@ -131,7 +131,7 @@ func local_request_User_Delete_0(ctx context.Context, marshaler runtime.Marshale
 	return msg, metadata, err
 }
 
-func request_User_OauthLogin_0(ctx context.Context, marshaler runtime.Marshaler, client UserClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_UserCenterService_OauthLogin_0(ctx context.Context, marshaler runtime.Marshaler, client UserCenterServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq LoginRequest
 		metadata runtime.ServerMetadata
@@ -143,7 +143,7 @@ func request_User_OauthLogin_0(ctx context.Context, marshaler runtime.Marshaler,
 	return msg, metadata, err
 }
 
-func local_request_User_OauthLogin_0(ctx context.Context, marshaler runtime.Marshaler, server UserServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_UserCenterService_OauthLogin_0(ctx context.Context, marshaler runtime.Marshaler, server UserCenterServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq LoginRequest
 		metadata runtime.ServerMetadata
@@ -155,119 +155,119 @@ func local_request_User_OauthLogin_0(ctx context.Context, marshaler runtime.Mars
 	return msg, metadata, err
 }
 
-// RegisterUserHandlerServer registers the http handlers for service User to "mux".
-// UnaryRPC     :call UserServer directly.
+// RegisterUserCenterServiceHandlerServer registers the http handlers for service UserCenterService to "mux".
+// UnaryRPC     :call UserCenterServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterUserHandlerFromEndpoint instead.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterUserCenterServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterUserHandlerServer(ctx context.Context, mux *runtime.ServeMux, server UserServer) error {
-	mux.Handle(http.MethodPost, pattern_User_Register_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+func RegisterUserCenterServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server UserCenterServiceServer) error {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_Register_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/Register", runtime.WithHTTPPathPattern("/api/register"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/Register", runtime.WithHTTPPathPattern("/api/register"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_User_Register_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_UserCenterService_Register_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_Register_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_Register_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/Login", runtime.WithHTTPPathPattern("/api/auth"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/Login", runtime.WithHTTPPathPattern("/api/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_User_Login_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_UserCenterService_Login_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_Login_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_Login_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_ResetPassword_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_ResetPassword_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/ResetPassword", runtime.WithHTTPPathPattern("/api/repass"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/ResetPassword", runtime.WithHTTPPathPattern("/api/repass"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_User_ResetPassword_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_UserCenterService_ResetPassword_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_ResetPassword_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_ResetPassword_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/Delete", runtime.WithHTTPPathPattern("/api/del"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/Delete", runtime.WithHTTPPathPattern("/api/del"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_User_Delete_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_UserCenterService_Delete_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_Delete_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_Delete_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_OauthLogin_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_OauthLogin_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/OauthLogin", runtime.WithHTTPPathPattern("/api/oauth"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/OauthLogin", runtime.WithHTTPPathPattern("/api/oauth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_User_OauthLogin_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_UserCenterService_OauthLogin_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_OauthLogin_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_OauthLogin_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
 }
 
-// RegisterUserHandlerFromEndpoint is same as RegisterUserHandler but
+// RegisterUserCenterServiceHandlerFromEndpoint is same as RegisterUserCenterServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterUserHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterUserCenterServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
@@ -286,121 +286,121 @@ func RegisterUserHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux,
 			}
 		}()
 	}()
-	return RegisterUserHandler(ctx, mux, conn)
+	return RegisterUserCenterServiceHandler(ctx, mux, conn)
 }
 
-// RegisterUserHandler registers the http handlers for service User to "mux".
+// RegisterUserCenterServiceHandler registers the http handlers for service UserCenterService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterUserHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterUserHandlerClient(ctx, mux, NewUserClient(conn))
+func RegisterUserCenterServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterUserCenterServiceHandlerClient(ctx, mux, NewUserCenterServiceClient(conn))
 }
 
-// RegisterUserHandlerClient registers the http handlers for service User
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "UserClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "UserClient"
+// RegisterUserCenterServiceHandlerClient registers the http handlers for service UserCenterService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "UserCenterServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "UserCenterServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "UserClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterUserHandlerClient(ctx context.Context, mux *runtime.ServeMux, client UserClient) error {
-	mux.Handle(http.MethodPost, pattern_User_Register_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+// "UserCenterServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterUserCenterServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client UserCenterServiceClient) error {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_Register_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/Register", runtime.WithHTTPPathPattern("/api/register"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/Register", runtime.WithHTTPPathPattern("/api/register"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_User_Register_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_UserCenterService_Register_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_Register_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_Register_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/Login", runtime.WithHTTPPathPattern("/api/auth"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/Login", runtime.WithHTTPPathPattern("/api/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_User_Login_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_UserCenterService_Login_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_Login_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_Login_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_ResetPassword_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_ResetPassword_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/ResetPassword", runtime.WithHTTPPathPattern("/api/repass"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/ResetPassword", runtime.WithHTTPPathPattern("/api/repass"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_User_ResetPassword_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_UserCenterService_ResetPassword_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_ResetPassword_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_ResetPassword_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_Delete_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/Delete", runtime.WithHTTPPathPattern("/api/del"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/Delete", runtime.WithHTTPPathPattern("/api/del"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_User_Delete_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_UserCenterService_Delete_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_Delete_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_Delete_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_User_OauthLogin_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_UserCenterService_OauthLogin_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.User/OauthLogin", runtime.WithHTTPPathPattern("/api/oauth"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/zjut.jh.api.user.v1alpha1.UserCenterService/OauthLogin", runtime.WithHTTPPathPattern("/api/oauth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_User_OauthLogin_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_UserCenterService_OauthLogin_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_User_OauthLogin_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UserCenterService_OauthLogin_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_User_Register_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "register"}, ""))
-	pattern_User_Login_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "auth"}, ""))
-	pattern_User_ResetPassword_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "repass"}, ""))
-	pattern_User_Delete_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "del"}, ""))
-	pattern_User_OauthLogin_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "oauth"}, ""))
+	pattern_UserCenterService_Register_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "register"}, ""))
+	pattern_UserCenterService_Login_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "auth"}, ""))
+	pattern_UserCenterService_ResetPassword_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "repass"}, ""))
+	pattern_UserCenterService_Delete_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "del"}, ""))
+	pattern_UserCenterService_OauthLogin_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "oauth"}, ""))
 )
 
 var (
-	forward_User_Register_0      = runtime.ForwardResponseMessage
-	forward_User_Login_0         = runtime.ForwardResponseMessage
-	forward_User_ResetPassword_0 = runtime.ForwardResponseMessage
-	forward_User_Delete_0        = runtime.ForwardResponseMessage
-	forward_User_OauthLogin_0    = runtime.ForwardResponseMessage
+	forward_UserCenterService_Register_0      = runtime.ForwardResponseMessage
+	forward_UserCenterService_Login_0         = runtime.ForwardResponseMessage
+	forward_UserCenterService_ResetPassword_0 = runtime.ForwardResponseMessage
+	forward_UserCenterService_Delete_0        = runtime.ForwardResponseMessage
+	forward_UserCenterService_OauthLogin_0    = runtime.ForwardResponseMessage
 )

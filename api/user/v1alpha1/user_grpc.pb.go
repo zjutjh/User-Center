@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	User_Register_FullMethodName      = "/zjut.jh.api.user.v1alpha1.User/Register"
-	User_Login_FullMethodName         = "/zjut.jh.api.user.v1alpha1.User/Login"
-	User_ResetPassword_FullMethodName = "/zjut.jh.api.user.v1alpha1.User/ResetPassword"
-	User_Delete_FullMethodName        = "/zjut.jh.api.user.v1alpha1.User/Delete"
-	User_OauthLogin_FullMethodName    = "/zjut.jh.api.user.v1alpha1.User/OauthLogin"
+	UserCenterService_Register_FullMethodName      = "/zjut.jh.api.user.v1alpha1.UserCenterService/Register"
+	UserCenterService_Login_FullMethodName         = "/zjut.jh.api.user.v1alpha1.UserCenterService/Login"
+	UserCenterService_ResetPassword_FullMethodName = "/zjut.jh.api.user.v1alpha1.UserCenterService/ResetPassword"
+	UserCenterService_Delete_FullMethodName        = "/zjut.jh.api.user.v1alpha1.UserCenterService/Delete"
+	UserCenterService_OauthLogin_FullMethodName    = "/zjut.jh.api.user.v1alpha1.UserCenterService/OauthLogin"
 )
 
-// UserClient is the client API for User service.
+// UserCenterServiceClient is the client API for UserCenterService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserClient interface {
+type UserCenterServiceClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Response, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*Response, error)
@@ -37,235 +37,235 @@ type UserClient interface {
 	OauthLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
-type userClient struct {
+type userCenterServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserClient(cc grpc.ClientConnInterface) UserClient {
-	return &userClient{cc}
+func NewUserCenterServiceClient(cc grpc.ClientConnInterface) UserCenterServiceClient {
+	return &userCenterServiceClient{cc}
 }
 
-func (c *userClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userCenterServiceClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, User_Register_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserCenterService_Register_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userCenterServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, User_Login_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserCenterService_Login_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userCenterServiceClient) ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, User_ResetPassword_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserCenterService_ResetPassword_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userCenterServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, User_Delete_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserCenterService_Delete_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userClient) OauthLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *userCenterServiceClient) OauthLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Response)
-	err := c.cc.Invoke(ctx, User_OauthLogin_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserCenterService_OauthLogin_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// UserServer is the server API for User service.
-// All implementations must embed UnimplementedUserServer
+// UserCenterServiceServer is the server API for UserCenterService service.
+// All implementations must embed UnimplementedUserCenterServiceServer
 // for forward compatibility.
-type UserServer interface {
+type UserCenterServiceServer interface {
 	Register(context.Context, *RegisterRequest) (*Response, error)
 	Login(context.Context, *LoginRequest) (*Response, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*Response, error)
 	Delete(context.Context, *DeleteRequest) (*Response, error)
 	OauthLogin(context.Context, *LoginRequest) (*Response, error)
-	mustEmbedUnimplementedUserServer()
+	mustEmbedUnimplementedUserCenterServiceServer()
 }
 
-// UnimplementedUserServer must be embedded to have
+// UnimplementedUserCenterServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedUserServer struct{}
+type UnimplementedUserCenterServiceServer struct{}
 
-func (UnimplementedUserServer) Register(context.Context, *RegisterRequest) (*Response, error) {
+func (UnimplementedUserCenterServiceServer) Register(context.Context, *RegisterRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedUserServer) Login(context.Context, *LoginRequest) (*Response, error) {
+func (UnimplementedUserCenterServiceServer) Login(context.Context, *LoginRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedUserServer) ResetPassword(context.Context, *ResetPasswordRequest) (*Response, error) {
+func (UnimplementedUserCenterServiceServer) ResetPassword(context.Context, *ResetPasswordRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetPassword not implemented")
 }
-func (UnimplementedUserServer) Delete(context.Context, *DeleteRequest) (*Response, error) {
+func (UnimplementedUserCenterServiceServer) Delete(context.Context, *DeleteRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedUserServer) OauthLogin(context.Context, *LoginRequest) (*Response, error) {
+func (UnimplementedUserCenterServiceServer) OauthLogin(context.Context, *LoginRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OauthLogin not implemented")
 }
-func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
-func (UnimplementedUserServer) testEmbeddedByValue()              {}
+func (UnimplementedUserCenterServiceServer) mustEmbedUnimplementedUserCenterServiceServer() {}
+func (UnimplementedUserCenterServiceServer) testEmbeddedByValue()                           {}
 
-// UnsafeUserServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserServer will
+// UnsafeUserCenterServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserCenterServiceServer will
 // result in compilation errors.
-type UnsafeUserServer interface {
-	mustEmbedUnimplementedUserServer()
+type UnsafeUserCenterServiceServer interface {
+	mustEmbedUnimplementedUserCenterServiceServer()
 }
 
-func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
-	// If the following call pancis, it indicates UnimplementedUserServer was
+func RegisterUserCenterServiceServer(s grpc.ServiceRegistrar, srv UserCenterServiceServer) {
+	// If the following call pancis, it indicates UnimplementedUserCenterServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&User_ServiceDesc, srv)
+	s.RegisterService(&UserCenterService_ServiceDesc, srv)
 }
 
-func _User_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserCenterService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).Register(ctx, in)
+		return srv.(UserCenterServiceServer).Register(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_Register_FullMethodName,
+		FullMethod: UserCenterService_Register_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).Register(ctx, req.(*RegisterRequest))
+		return srv.(UserCenterServiceServer).Register(ctx, req.(*RegisterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserCenterService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).Login(ctx, in)
+		return srv.(UserCenterServiceServer).Login(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_Login_FullMethodName,
+		FullMethod: UserCenterService_Login_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).Login(ctx, req.(*LoginRequest))
+		return srv.(UserCenterServiceServer).Login(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_ResetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserCenterService_ResetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetPasswordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).ResetPassword(ctx, in)
+		return srv.(UserCenterServiceServer).ResetPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_ResetPassword_FullMethodName,
+		FullMethod: UserCenterService_ResetPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).ResetPassword(ctx, req.(*ResetPasswordRequest))
+		return srv.(UserCenterServiceServer).ResetPassword(ctx, req.(*ResetPasswordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserCenterService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).Delete(ctx, in)
+		return srv.(UserCenterServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_Delete_FullMethodName,
+		FullMethod: UserCenterService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).Delete(ctx, req.(*DeleteRequest))
+		return srv.(UserCenterServiceServer).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_OauthLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserCenterService_OauthLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).OauthLogin(ctx, in)
+		return srv.(UserCenterServiceServer).OauthLogin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_OauthLogin_FullMethodName,
+		FullMethod: UserCenterService_OauthLogin_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).OauthLogin(ctx, req.(*LoginRequest))
+		return srv.(UserCenterServiceServer).OauthLogin(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// User_ServiceDesc is the grpc.ServiceDesc for User service.
+// UserCenterService_ServiceDesc is the grpc.ServiceDesc for UserCenterService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var User_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "zjut.jh.api.user.v1alpha1.User",
-	HandlerType: (*UserServer)(nil),
+var UserCenterService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "zjut.jh.api.user.v1alpha1.UserCenterService",
+	HandlerType: (*UserCenterServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Register",
-			Handler:    _User_Register_Handler,
+			Handler:    _UserCenterService_Register_Handler,
 		},
 		{
 			MethodName: "Login",
-			Handler:    _User_Login_Handler,
+			Handler:    _UserCenterService_Login_Handler,
 		},
 		{
 			MethodName: "ResetPassword",
-			Handler:    _User_ResetPassword_Handler,
+			Handler:    _UserCenterService_ResetPassword_Handler,
 		},
 		{
 			MethodName: "Delete",
-			Handler:    _User_Delete_Handler,
+			Handler:    _UserCenterService_Delete_Handler,
 		},
 		{
 			MethodName: "OauthLogin",
-			Handler:    _User_OauthLogin_Handler,
+			Handler:    _UserCenterService_OauthLogin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

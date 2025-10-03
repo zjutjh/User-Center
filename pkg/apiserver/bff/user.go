@@ -15,7 +15,7 @@ import (
 )
 
 type UserHandler struct {
-	userv1.UnimplementedUserServer
+	userv1.UnimplementedUserCenterServiceServer
 }
 
 func NewUserHandler() *UserHandler {
@@ -76,7 +76,7 @@ func (u *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*u
 }
 
 func (u *UserHandler) OauthLogin(ctx context.Context, req *userv1.LoginRequest) (*userv1.Response, error) {
-	_, err := oauth.Login(req.StudentId, req.Password)
+	_, userInfo, err := oauth.GetUserInfo(req.StudentId, req.Password)
 	if err != nil {
 		switch {
 		case errors.Is(err, oauthException.ClosedError):
@@ -91,5 +91,12 @@ func (u *UserHandler) OauthLogin(ctx context.Context, req *userv1.LoginRequest) 
 			return apiExpection.Unknown.ToResponse()
 		}
 	}
-	return util.ResponseSuccess(nil)
+	return util.ResponseSuccess(map[string]interface{}{
+		"name":         userInfo.Name,
+		"studentId":    userInfo.StudentID,
+		"userType":     userInfo.UserType,
+		"userTypeDesc": userInfo.UserTypeDesc,
+		"gender":       userInfo.Gender,
+		"avatar":       userInfo.Avatar,
+	})
 }
