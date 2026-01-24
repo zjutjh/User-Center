@@ -19,5 +19,4 @@ install_grpc_dep:
     	github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     	google.golang.org/protobuf/cmd/protoc-gen-go \
     	google.golang.org/grpc/cmd/protoc-gen-go-grpc && \
-	go install github.com/golang/protobuf/protoc-gen-go@v1.5.4 && \
-	go install github.com/grpc-ecosystem/protoc-gen-grpc-gateway-ts@v1.1.2
+	go install github.com/golang/protobuf/protoc-gen-go@v1.5.4

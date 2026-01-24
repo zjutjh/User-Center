@@ -31,7 +31,6 @@ do
       --go_out=. --go_opt=paths=source_relative \
       --go-grpc_out=. --go-grpc_opt=paths=source_relative \
       --grpc-gateway_out=logtostderr=true,allow_delete_body=true:. --grpc-gateway_opt=paths=source_relative \
-      --grpc-gateway-ts_out=$GRPC_GATEWAY_TS_OUT \
       "${var}";
     done
   # fi

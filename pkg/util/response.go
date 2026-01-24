@@ -6,7 +6,7 @@ import (
 	"google.golang.org/protobuf/types/known/structpb"
 
 	typev1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	"github.com/zjutjh/User-Center-grpc/pkg/apiExpection"
+	"github.com/zjutjh/User-Center-grpc/pkg/expection"
 )
 
 func ResponseSuccess(data interface{}) (*typev1.Response, error) {
@@ -19,7 +19,7 @@ func ResponseSuccess(data interface{}) (*typev1.Response, error) {
 	value, err := structpb.NewValue(data)
 	if err != nil {
 		slog.Error("failed to convert data to protobuf Value: %v", err)
-		return nil, apiExpection.ServerError
+		return nil, expection.ServerError
 	}
 	return &typev1.Response{
 		Code:    200,

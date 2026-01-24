@@ -1,4 +1,4 @@
-package apiExpection
+package expection
 
 import (
 	"net/http"

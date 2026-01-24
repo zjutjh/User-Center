@@ -7,9 +7,9 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/zjutjh/User-Center-grpc/pkg/apiExpection"
+	"github.com/zjutjh/User-Center-grpc/dao/model"
 	"github.com/zjutjh/User-Center-grpc/pkg/database"
-	"github.com/zjutjh/User-Center-grpc/pkg/model"
+	"github.com/zjutjh/User-Center-grpc/pkg/expection"
 	"github.com/zjutjh/User-Center-grpc/pkg/util"
 )
 
@@ -21,7 +21,7 @@ func CheckStudentBySIDAndIID(sid string, iid string) error {
 		},
 	).First(&student)
 	if student.Iid != iid || result.Error != nil {
-		return apiExpection.UserNotFound
+		return expection.UserNotFound
 	}
 	return nil
 }
@@ -29,10 +29,10 @@ func CheckStudentBySIDAndIID(sid string, iid string) error {
 func CreateUser(password, email, sid string) error {
 	_, err := GetUserByStudentId(sid)
 	if err == nil {
-		return apiExpection.UserAlreadyExit
+		return expection.UserAlreadyExit
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		slog.Error("failed to get user by student id: %v", err)
-		return apiExpection.Unknown
+		return expection.Unknown
 	}
 	pass := util.Encryrpt(password)
 	user := &model.User{

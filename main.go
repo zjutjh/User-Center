@@ -1,20 +1,27 @@
-package app
+package main
 
 import (
 	"context"
+	"fmt"
+	"github.com/spf13/cobra"
+	"github.com/zjutjh/User-Center-grpc/pkg/apiserver"
 	"log"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
-
-	"github.com/spf13/cobra"
-
-	"github.com/zjutjh/User-Center-grpc/cmd/apiserver/app/options"
 )
 
+func main() {
+	cmd := NewAPIServerCommand(context.Background())
+	if err := cmd.Execute(); err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(1)
+	}
+}
+
 func NewAPIServerCommand(ctx context.Context) *cobra.Command {
-	s := options.NewAPIServerRunOptions()
+	option := apiserver.NewAPIServerRunOptions()
 	cmd := &cobra.Command{
 		Use:  "apiserver",
 		Long: `The User-Center API server.`,
@@ -23,7 +30,7 @@ func NewAPIServerCommand(ctx context.Context) *cobra.Command {
 			slog.Info("Running api server")
 			ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 			defer stop()
-			return Run(ctx, s)
+			return Run(ctx, option)
 		},
 		SilenceUsage: true,
 	}
@@ -31,14 +38,8 @@ func NewAPIServerCommand(ctx context.Context) *cobra.Command {
 	return cmd
 }
 
-func Run(ctx context.Context, opt *options.Options) error {
-	// To help debugging, immediately log version
-	slog.Debug("Golang settings",
-		"GOGC", os.Getenv("GOGC"),
-		"GOMAXPROCS", os.Getenv("GOMAXPROCS"),
-		"GOTRACEBACK", os.Getenv("GOTRACEBACK"))
-
-	apiServer, err := opt.NewAPIServer()
+func Run(ctx context.Context, opt *apiserver.APIServerRunOptions) error {
+	apiServer, err := opt.BuildAPIServer()
 	if err != nil {
 		return err
 	}

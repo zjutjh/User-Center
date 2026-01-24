@@ -1,31 +1,81 @@
 package apiserver
 
-import "github.com/zjutjh/User-Center-grpc/pkg/viper"
+import (
+	"fmt"
+	"net"
+	"net/http"
+	"time"
 
-type ServerRunOptions struct {
-	// server bind address
-	BindAddress string
-	// insecure grpc port number
-	GRPCPort int
-	HttpPort int
+	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+
+	"github.com/zjutjh/User-Center-grpc/pkg/database"
+	"github.com/zjutjh/User-Center-grpc/pkg/redis"
+	"github.com/zjutjh/User-Center-grpc/pkg/viper"
+)
+
+type APIServerRunOptions struct {
+	ServerRunOptions   *ServerRunOptions
+	DatabaseRunOptions *database.RunOptions
+	RedisRunOptions    *redis.RunOptions
+	Debug              bool
 }
 
-func NewServerRunOptions() *ServerRunOptions {
-	// create default server run options
-	Info := ServerRunOptions{
-		BindAddress: "0.0.0.0",
-		GRPCPort:    8000,
-		HttpPort:    8001,
+func NewAPIServerRunOptions() *APIServerRunOptions {
+	viper.InitViper()
+	return &APIServerRunOptions{
+		ServerRunOptions:   NewServerRunOptions(),
+		DatabaseRunOptions: database.NewRunOptions(),
+		RedisRunOptions:    redis.NewRunOptions(),
+	}
+}
+
+func (o *APIServerRunOptions) BuildAPIServer() (*APIServer, error) {
+	o.DatabaseRunOptions.Init()
+	o.RedisRunOptions.Init()
+
+	apiServer := &APIServer{
+		Debug: o.Debug,
 	}
 
-	if viper.Config.IsSet("server.address") {
-		Info.BindAddress = viper.Config.GetString("server.address")
+	// 创建 gRPC Listener
+	grpcAddress := fmt.Sprintf("%s:%d", o.ServerRunOptions.BindAddress, o.ServerRunOptions.GRPCPort)
+	grpcListener, err := net.Listen("tcp", grpcAddress)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create gRPC listener: %w", err)
 	}
-	if viper.Config.IsSet("server.port.grpc") {
-		Info.GRPCPort = viper.Config.GetInt("server.port.grpc")
+	// 创建 HTTP Listener
+	httpAddress := fmt.Sprintf("%s:%d", o.ServerRunOptions.BindAddress, o.ServerRunOptions.HttpPort)
+	httpListener, err := net.Listen("tcp", httpAddress)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create HTTP listener: %w", err)
 	}
-	if viper.Config.IsSet("server.port.http") {
-		Info.HttpPort = viper.Config.GetInt("server.port.http")
+	// 保存 Listener
+	apiServer.GrpcListener = grpcListener
+	apiServer.HttpListener = httpListener
+
+	// Create your protocol servers.
+	apiServer.Server = &http.Server{
+		Addr:              httpAddress,
+		ReadHeaderTimeout: 60 * time.Second,
 	}
-	return &Info
+
+	apiServer.GrpcServer = grpc.NewServer(
+		grpc.StreamInterceptor(grpcmiddleware.ChainStreamServer(
+			grpcrecovery.StreamServerInterceptor(),
+		)),
+		grpc.UnaryInterceptor(grpcmiddleware.ChainUnaryServer(
+			grpcrecovery.UnaryServerInterceptor(),
+		)))
+
+	marshaler := &runtime.JSONPb{}
+	marshaler.UseProtoNames = false
+	marshaler.EmitUnpopulated = true
+	apiServer.GatewayServerMux = runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, marshaler),
+	)
+
+	return apiServer, nil
 }

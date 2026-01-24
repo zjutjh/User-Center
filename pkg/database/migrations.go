@@ -3,7 +3,7 @@ package database
 import (
 	"gorm.io/gorm"
 
-	"github.com/zjutjh/User-Center-grpc/pkg/model"
+	"github.com/zjutjh/User-Center-grpc/dao/model"
 )
 
 func autoMigrate(db *gorm.DB) error {

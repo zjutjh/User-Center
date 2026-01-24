@@ -8,11 +8,11 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/zjutjh/User-Center-grpc/handler"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
 	serverapi "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	"github.com/zjutjh/User-Center-grpc/pkg/apiserver/bff"
 	"github.com/zjutjh/User-Center-grpc/pkg/middleware"
 )
 
@@ -43,7 +43,7 @@ func (s *APIServer) registerGrpcServices(ctx context.Context) error {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
-	serverapi.RegisterUserCenterServiceServer(s.GrpcServer, bff.NewUserHandler())
+	serverapi.RegisterUserCenterServiceServer(s.GrpcServer, handler.NewUserHandler())
 	if err := serverapi.RegisterUserCenterServiceHandlerFromEndpoint(ctx, s.GatewayServerMux, s.GrpcListener.Addr().String(), opts); err != nil {
 		return err
 	}

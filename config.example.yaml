@@ -17,9 +17,3 @@ redis:
   port: "6379"
   db: 0
   password:
-
-nacos:
-  host: "127.0.0.1"
-  port: 8848
-  username: "nacos"
-  password: "nacos"
