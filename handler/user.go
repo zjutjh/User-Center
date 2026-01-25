@@ -23,10 +23,10 @@ func NewUserHandler() *UserHandler {
 }
 
 func (u *UserHandler) Register(ctx context.Context, req *userv1.RegisterRequest) (*userv1.Response, error) {
-	if err := userService.CheckStudentBySIDAndIID(req.StudentId, req.Iid); err != nil {
+	if err := userService.CheckStudentBySIDAndIID(ctx, req.StudentId, req.Iid); err != nil {
 		return expection.UserNotFound.ToResponse()
 	}
-	if err := userService.CreateUser(req.Password, req.Email, req.StudentId); err != nil {
+	if err := userService.CreateUser(ctx, req.Password, req.Email, req.StudentId); err != nil {
 		if errors.Is(err, expection.UserAlreadyExit) {
 			return expection.UserAlreadyExit.ToResponse()
 		}
@@ -36,24 +36,18 @@ func (u *UserHandler) Register(ctx context.Context, req *userv1.RegisterRequest)
 }
 
 func (u *UserHandler) Login(ctx context.Context, req *userv1.LoginRequest) (*userv1.Response, error) {
-	user, err := userService.GetUserByStudentId(req.StudentId)
+	_, err := userService.Login(ctx, req.StudentId, req.Password)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return expection.UserNotExit.ToResponse()
-		}
 		return expection.Unknown.ToResponse()
-	}
-	if user.Password != util.Encryrpt(req.Password) {
-		return expection.AuthError.ToResponse()
 	}
 	return util.ResponseSuccess(nil)
 }
 
 func (u *UserHandler) ResetPassword(ctx context.Context, req *userv1.ResetPasswordRequest) (*userv1.Response, error) {
-	if err := userService.CheckStudentBySIDAndIID(req.StudentId, req.Iid); err != nil {
+	if err := userService.CheckStudentBySIDAndIID(ctx, req.StudentId, req.Iid); err != nil {
 		return expection.UserNotFound.ToResponse()
 	}
-	if err := userService.UpdateUserPassword(req.StudentId, req.Password); err != nil {
+	if err := userService.UpdateUserPassword(ctx, req.StudentId, req.Password); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return expection.UserNotExit.ToResponse()
 		}
@@ -63,10 +57,10 @@ func (u *UserHandler) ResetPassword(ctx context.Context, req *userv1.ResetPasswo
 }
 
 func (u *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*userv1.Response, error) {
-	if err := userService.CheckStudentBySIDAndIID(req.StudentId, req.Iid); err != nil {
+	if err := userService.CheckStudentBySIDAndIID(ctx, req.StudentId, req.Iid); err != nil {
 		return expection.UserNotFound.ToResponse()
 	}
-	if err := userService.Delete(req.StudentId); err != nil {
+	if err := userService.Delete(ctx, req.StudentId); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return expection.UserNotExit.ToResponse()
 		}

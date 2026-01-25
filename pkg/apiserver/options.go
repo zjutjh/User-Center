@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"fmt"
+	"github.com/zjutjh/User-Center-grpc/dao/query"
 	"net"
 	"net/http"
 	"time"
@@ -34,6 +35,7 @@ func NewAPIServerRunOptions() *APIServerRunOptions {
 
 func (o *APIServerRunOptions) BuildAPIServer() (*APIServer, error) {
 	o.DatabaseRunOptions.Init()
+	query.Use(database.DB)
 	o.RedisRunOptions.Init()
 
 	apiServer := &APIServer{

@@ -1,6 +1,3 @@
-# Global variables
-include version.mk
-
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 

@@ -3,13 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/spf13/cobra"
-	"github.com/zjutjh/User-Center-grpc/pkg/apiserver"
 	"log"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/spf13/cobra"
+
+	"github.com/zjutjh/User-Center-grpc/pkg/apiserver"
 )
 
 func main() {

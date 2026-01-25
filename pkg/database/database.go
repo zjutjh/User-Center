@@ -37,13 +37,10 @@ func (options *RunOptions) Init() { // 初始化数据库
 	)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
+		log.Println("Failed to connect to database dsn: ", dsn)
 		log.Panicln("Database Error: ", err)
 	} else {
 		fmt.Printf("database start")
-	}
-	err = autoMigrate(db)
-	if err != nil {
-		log.Fatal("DatabaseMigrateFailed", err)
 	}
 	DB = db
 }

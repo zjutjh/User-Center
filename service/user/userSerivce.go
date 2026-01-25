@@ -1,86 +1,73 @@
 package userService
 
 import (
+	"context"
 	"errors"
+	"github.com/zjutjh/User-Center-grpc/dao"
 	"log/slog"
 	"time"
 
 	"gorm.io/gorm"
 
 	"github.com/zjutjh/User-Center-grpc/dao/model"
-	"github.com/zjutjh/User-Center-grpc/pkg/database"
 	"github.com/zjutjh/User-Center-grpc/pkg/expection"
 	"github.com/zjutjh/User-Center-grpc/pkg/util"
 )
 
-func CheckStudentBySIDAndIID(sid string, iid string) error {
-	student := model.Student{}
-	result := database.DB.Where(
-		&model.Student{
-			StudentId: sid,
-		},
-	).First(&student)
-	if student.Iid != iid || result.Error != nil {
+func CheckStudentBySIDAndIID(ctx context.Context, studentID string, iid string) error {
+	student, err := dao.GetStudentByStudentID(ctx, studentID)
+	if err != nil || student.IDCard != iid {
 		return expection.UserNotFound
 	}
 	return nil
 }
 
-func CreateUser(password, email, sid string) error {
-	_, err := GetUserByStudentId(sid)
-	if err == nil {
+func CreateUser(ctx context.Context, password, email, sid string) error {
+	user, err := dao.GetUserByStudentId(ctx, sid)
+	if user != nil {
 		return expection.UserAlreadyExit
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		slog.Error("failed to get user by student id: %v", err)
 		return expection.Unknown
 	}
 	pass := util.Encryrpt(password)
-	user := &model.User{
+	user = &model.User{
 		Password:   pass,
-		StudentId:  sid,
+		StudentID:  sid,
 		Email:      email,
 		CreateTime: time.Now(),
 	}
-	return database.DB.Create(user).Error
+	return dao.CreateUser(ctx, user)
 }
 
-func GetUserByStudentId(studentId string) (*model.User, error) {
-	user := model.User{}
-	result := database.DB.Where(
-		&model.User{
-			StudentId: studentId,
-		}).First(&user)
-	return &user, result.Error
-}
-
-func GetUserId(id int) (*model.User, error) {
-	user := model.User{}
-	result := database.DB.Where(
-		&model.User{
-			UserId: id,
-		},
-	).First(&user)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return &user, nil
-}
-
-func UpdateUserPassword(studentId, password string) error {
-	user, _ := GetUserByStudentId(studentId)
-	pass := util.Encryrpt(password)
-	user.Password = pass
-	return database.DB.Model(model.User{}).Where(
-		model.User{
-			StudentId: user.StudentId,
-		}).Updates(user).Error
-}
-
-func Delete(stuID string) error {
-	user, err := GetUserByStudentId(stuID)
+func UpdateUserPassword(ctx context.Context, studentId, password string) error {
+	user, err := dao.GetUserByStudentId(ctx, studentId)
 	if err != nil {
 		return err
 	}
-	return database.DB.Delete(user).Error
+	pass := util.Encryrpt(password)
+	user.Password = pass
+	return dao.UpdateUserPassword(ctx, user)
+}
+
+func Delete(ctx context.Context, stuID string) error {
+	user, err := dao.GetUserByStudentId(ctx, stuID)
+	if err != nil {
+		return err
+	}
+	return dao.DeleteUserByStudentId(ctx, user.StudentID)
+}
+
+func Login(ctx context.Context, studentID, password string) (*model.User, error) {
+	user, err := dao.GetUserByStudentId(ctx, studentID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, expection.UserNotExit
+		}
+		return nil, expection.Unknown
+	}
+	if user.Password != util.Encryrpt(password) {
+		return nil, expection.AuthError
+	}
+	return user, nil
 }
