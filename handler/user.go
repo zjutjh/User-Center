@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+
 	userv1 "github.com/zjutjh/User-Center/api/user/v1alpha1"
 	userService "github.com/zjutjh/User-Center/service/user"
 )
@@ -35,8 +36,4 @@ func (h *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*u
 
 func (h *UserHandler) OauthLogin(ctx context.Context, req *userv1.LoginRequest) (*userv1.Response, error) {
 	return h.userService.OauthLogin(ctx, req)
-}
-
-func (h *UserHandler) HealthyCheck(ctx context.Context, req *userv1.HealthyCheckRequest) (*userv1.Response, error) {
-	return h.userService.HealthyCheck(ctx, req)
 }

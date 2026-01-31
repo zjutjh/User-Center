@@ -1,0 +1,26 @@
+version: v2
+plugins:
+  # Go code generation
+  - remote: buf.build/protocolbuffers/go
+    out: .
+    opt:
+      - paths=source_relative
+
+  # Go gRPC code generation
+  - remote: buf.build/grpc/go
+    out: .
+    opt:
+      - paths=source_relative
+
+  # gRPC Gateway code generation
+  - remote: buf.build/grpc-ecosystem/gateway
+    out: .
+    opt:
+      - paths=source_relative
+
+  # gRPC Gateway OpenAPI/Swagger documentation
+  - remote: buf.build/grpc-ecosystem/openapiv2
+    out: openapi
+
+inputs:
+  - directory: .

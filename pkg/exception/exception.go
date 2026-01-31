@@ -1,4 +1,4 @@
-package expection
+package exception
 
 import (
 	"net/http"

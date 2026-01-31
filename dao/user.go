@@ -5,14 +5,14 @@ import (
 
 	"github.com/zjutjh/User-Center/dao/model"
 	"github.com/zjutjh/User-Center/dao/query"
-	"github.com/zjutjh/User-Center/pkg/expection"
+	"github.com/zjutjh/User-Center/pkg/exception"
 )
 
 func GetUserByStudentId(ctx context.Context, studentId string) (*model.User, error) {
 	q := query.User
 	user, err := q.WithContext(ctx).Where(q.StudentID.Eq(studentId)).First()
 	if err != nil {
-		return nil, expection.UserNotFound
+		return nil, exception.UserNotFound
 	}
 	return user, nil
 }

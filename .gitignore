@@ -33,3 +33,5 @@ vendor/
 bin/
 config.yaml
 api/assets/
+
+api/openapi

@@ -1,28 +1,17 @@
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 
-# Build
 .PHONY: build
 build:
 	go build  -o bin/usercenter main.go
 
-# generate code
-.PHONY: genproto
-genproto:
-	cd ./api/ && $(MAKE) genproto
+.PHONY: generate
+generate: ## Run buf generate including code and swagger generate.
+	cd api && buf generate
 
-# generate code
-.PHONY: install
-install:
-	cd ./api/ && $(MAKE) install_grpc_dep
-
-.PHONY: genswagger
-genswagger:
-	cd ./api/ && $(MAKE)  genswagger
-
-.PHONY: gen-code-gen
-gen-code-gen:
-	cd ./api/ && $(MAKE) gen-code-gen
+.PHONY: configure
+configure: ## Run configure
+	cd api && buf dep update
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
