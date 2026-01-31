@@ -24,7 +24,6 @@ const (
 	UserCenterService_ResetPassword_FullMethodName = "/zjut.jh.api.user.v1alpha1.UserCenterService/ResetPassword"
 	UserCenterService_Delete_FullMethodName        = "/zjut.jh.api.user.v1alpha1.UserCenterService/Delete"
 	UserCenterService_OauthLogin_FullMethodName    = "/zjut.jh.api.user.v1alpha1.UserCenterService/OauthLogin"
-	UserCenterService_HealthyCheck_FullMethodName  = "/zjut.jh.api.user.v1alpha1.UserCenterService/HealthyCheck"
 )
 
 // UserCenterServiceClient is the client API for UserCenterService service.
@@ -36,7 +35,6 @@ type UserCenterServiceClient interface {
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*Response, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*Response, error)
 	OauthLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Response, error)
-	HealthyCheck(ctx context.Context, in *HealthyCheckRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
 type userCenterServiceClient struct {
@@ -97,16 +95,6 @@ func (c *userCenterServiceClient) OauthLogin(ctx context.Context, in *LoginReque
 	return out, nil
 }
 
-func (c *userCenterServiceClient) HealthyCheck(ctx context.Context, in *HealthyCheckRequest, opts ...grpc.CallOption) (*Response, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
-	err := c.cc.Invoke(ctx, UserCenterService_HealthyCheck_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // UserCenterServiceServer is the server API for UserCenterService service.
 // All implementations must embed UnimplementedUserCenterServiceServer
 // for forward compatibility.
@@ -116,7 +104,6 @@ type UserCenterServiceServer interface {
 	ResetPassword(context.Context, *ResetPasswordRequest) (*Response, error)
 	Delete(context.Context, *DeleteRequest) (*Response, error)
 	OauthLogin(context.Context, *LoginRequest) (*Response, error)
-	HealthyCheck(context.Context, *HealthyCheckRequest) (*Response, error)
 	mustEmbedUnimplementedUserCenterServiceServer()
 }
 
@@ -141,9 +128,6 @@ func (UnimplementedUserCenterServiceServer) Delete(context.Context, *DeleteReque
 }
 func (UnimplementedUserCenterServiceServer) OauthLogin(context.Context, *LoginRequest) (*Response, error) {
 	return nil, status.Error(codes.Unimplemented, "method OauthLogin not implemented")
-}
-func (UnimplementedUserCenterServiceServer) HealthyCheck(context.Context, *HealthyCheckRequest) (*Response, error) {
-	return nil, status.Error(codes.Unimplemented, "method HealthyCheck not implemented")
 }
 func (UnimplementedUserCenterServiceServer) mustEmbedUnimplementedUserCenterServiceServer() {}
 func (UnimplementedUserCenterServiceServer) testEmbeddedByValue()                           {}
@@ -256,24 +240,6 @@ func _UserCenterService_OauthLogin_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserCenterService_HealthyCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HealthyCheckRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserCenterServiceServer).HealthyCheck(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserCenterService_HealthyCheck_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserCenterServiceServer).HealthyCheck(ctx, req.(*HealthyCheckRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // UserCenterService_ServiceDesc is the grpc.ServiceDesc for UserCenterService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -300,10 +266,6 @@ var UserCenterService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OauthLogin",
 			Handler:    _UserCenterService_OauthLogin_Handler,
-		},
-		{
-			MethodName: "HealthyCheck",
-			Handler:    _UserCenterService_HealthyCheck_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

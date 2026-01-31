@@ -72,10 +72,4 @@ service UserCenterService {
             body: "*"
         };
     }
-    rpc HealthyCheck(HealthyCheckRequest) returns (Response) {
-        option (google.api.http) = {
-            post: "/api/healthy"
-            body: "*"
-        };
-    }
 }
