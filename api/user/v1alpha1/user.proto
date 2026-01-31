@@ -37,6 +37,10 @@ message DeleteRequest {
     string iid       = 2;
 }
 
+message HealthyCheckRequest {
+    string studentId = 1;
+}
+
 service UserCenterService {
     rpc Register(RegisterRequest) returns (Response) {
         option (google.api.http) = {
@@ -65,6 +69,12 @@ service UserCenterService {
     rpc OauthLogin(LoginRequest) returns (Response) {
         option (google.api.http) = {
             post: "/api/oauth"
+            body: "*"
+        };
+    }
+    rpc HealthyCheck(HealthyCheckRequest) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/healthy"
             body: "*"
         };
     }

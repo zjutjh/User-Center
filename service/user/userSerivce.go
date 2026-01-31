@@ -126,3 +126,9 @@ func (u *UserService) checkStudentBySIDAndIID(ctx context.Context, studentID str
 	}
 	return nil
 }
+
+func (u *UserService) HealthyCheck(ctx context.Context, req *userv1.HealthyCheckRequest) (*userv1.Response, error) {
+	return util.ResponseSuccess(map[string]interface{}{
+		"studentID": req.StudentId,
+	})
+}

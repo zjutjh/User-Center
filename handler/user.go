@@ -36,3 +36,7 @@ func (h *UserHandler) Delete(ctx context.Context, req *userv1.DeleteRequest) (*u
 func (h *UserHandler) OauthLogin(ctx context.Context, req *userv1.LoginRequest) (*userv1.Response, error) {
 	return h.userService.OauthLogin(ctx, req)
 }
+
+func (h *UserHandler) HealthyCheck(ctx context.Context, req *userv1.HealthyCheckRequest) (*userv1.Response, error) {
+	return h.userService.HealthyCheck(ctx, req)
+}

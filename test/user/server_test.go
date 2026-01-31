@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"testing"
 	"time"
@@ -26,10 +25,10 @@ func TestLogin(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	r, err := c.Login(ctx, &userv1.LoginRequest{StudentId: "202203150201", Password: "123456"})
+	r, err := c.HealthyCheck(ctx, &userv1.HealthyCheckRequest{StudentId: "202203150201"})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	fmt.Println(r.GetMessage())
+	log.Println(r.GetData())
 	assert.Equal(t, "success", r.GetMessage())
 }
