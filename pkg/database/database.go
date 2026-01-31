@@ -40,7 +40,7 @@ func (options *RunOptions) Init() { // 初始化数据库
 		log.Println("Failed to connect to database dsn: ", dsn)
 		log.Panicln("Database Error: ", err)
 	} else {
-		fmt.Printf("database start")
+		log.Println("database start")
 	}
 	DB = db
 }
