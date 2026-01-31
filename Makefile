@@ -16,6 +16,7 @@ configure: ## Run configure
 .PHONY: fmt
 fmt: ## Run go fmt against code.
 	go fmt ./...
+	clang-format -i $$(find . -name '*.proto') --style="{BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0, AlignConsecutiveAssignments: true}"
 
 .PHONY: vet
 vet: ## Run go vet against code.
