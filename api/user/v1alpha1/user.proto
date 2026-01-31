@@ -37,10 +37,6 @@ message DeleteRequest {
     string iid       = 2;
 }
 
-message HealthyCheckRequest {
-    string studentId = 1;
-}
-
 service UserCenterService {
     rpc Register(RegisterRequest) returns (Response) {
         option (google.api.http) = {
