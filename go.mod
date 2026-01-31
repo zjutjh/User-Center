@@ -4,6 +4,8 @@ go 1.24.7
 
 toolchain go1.24.12
 
+replace github.com/zjutjh/User-Center/api => ./api
+
 require (
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
@@ -58,5 +60,3 @@ require (
 	gorm.io/datatypes v1.2.4 // indirect
 	gorm.io/hints v1.1.0 // indirect
 )
-
-replace github.com/zjutjh/User-Center/api => ./api
