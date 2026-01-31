@@ -1,6 +1,6 @@
 package apiserver
 
-import "github.com/zjutjh/User-Center-grpc/pkg/viper"
+import "github.com/zjutjh/User-Center/pkg/viper"
 
 type ServerRunOptions struct {
 	// server bind address

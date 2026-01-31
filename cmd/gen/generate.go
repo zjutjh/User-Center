@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/zjutjh/User-Center-grpc/pkg/database"
-	"github.com/zjutjh/User-Center-grpc/pkg/viper"
+	"github.com/zjutjh/User-Center/pkg/database"
+	"github.com/zjutjh/User-Center/pkg/viper"
 	"gorm.io/gen"
 	"gorm.io/gen/field"
 	"gorm.io/gorm"

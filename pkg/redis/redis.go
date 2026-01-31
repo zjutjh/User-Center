@@ -2,7 +2,7 @@ package redis
 
 import (
 	"github.com/redis/go-redis/v9"
-	"github.com/zjutjh/User-Center-grpc/pkg/viper"
+	"github.com/zjutjh/User-Center/pkg/viper"
 )
 
 var RedisClient *redis.Client

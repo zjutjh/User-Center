@@ -8,12 +8,12 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/zjutjh/User-Center-grpc/handler"
+	"github.com/zjutjh/User-Center/handler"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	serverapi "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	"github.com/zjutjh/User-Center-grpc/pkg/middleware"
+	serverapi "github.com/zjutjh/User-Center/api/user/v1alpha1"
+	"github.com/zjutjh/User-Center/pkg/middleware"
 )
 
 type APIServer struct {

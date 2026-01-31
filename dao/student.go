@@ -2,9 +2,10 @@ package dao
 
 import (
 	"context"
-	"github.com/zjutjh/User-Center-grpc/dao/model"
-	"github.com/zjutjh/User-Center-grpc/dao/query"
-	"github.com/zjutjh/User-Center-grpc/pkg/expection"
+
+	"github.com/zjutjh/User-Center/dao/model"
+	"github.com/zjutjh/User-Center/dao/query"
+	"github.com/zjutjh/User-Center/pkg/expection"
 )
 
 func GetStudentByStudentID(ctx context.Context, studentID string) (*model.Student, error) {

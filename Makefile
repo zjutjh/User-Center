@@ -2,8 +2,8 @@ GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 
 # Build
-.PHONY: apiserver
-apiserver:
+.PHONY: build
+build:
 	go build  -o bin/usercenter main.go
 
 # generate code

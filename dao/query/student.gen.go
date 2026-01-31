@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/zjutjh/User-Center-grpc/dao/model"
+	"github.com/zjutjh/User-Center/dao/model"
 )
 
 func newStudent(db *gorm.DB, opts ...gen.DOOption) student {

@@ -7,7 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"github.com/zjutjh/User-Center-grpc/pkg/viper"
+	"github.com/zjutjh/User-Center/pkg/viper"
 )
 
 var DB *gorm.DB

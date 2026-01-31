@@ -3,14 +3,15 @@ package user
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+
 	"google.golang.org/grpc"
 
-	userv1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
+	userv1 "github.com/zjutjh/User-Center/api/user/v1alpha1"
 )
 
 // 2. Test the gRPC SayHello method
@@ -20,7 +21,7 @@ func TestLogin(t *testing.T) {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := userv1.NewUserClient(conn)
+	c := userv1.NewUserCenterServiceClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()

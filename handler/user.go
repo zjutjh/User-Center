@@ -6,10 +6,10 @@ import (
 
 	"gorm.io/gorm"
 
-	userv1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	"github.com/zjutjh/User-Center-grpc/pkg/expection"
-	"github.com/zjutjh/User-Center-grpc/pkg/util"
-	userService "github.com/zjutjh/User-Center-grpc/service/user"
+	userv1 "github.com/zjutjh/User-Center/api/user/v1alpha1"
+	"github.com/zjutjh/User-Center/pkg/expection"
+	"github.com/zjutjh/User-Center/pkg/util"
+	userService "github.com/zjutjh/User-Center/service/user"
 	"github.com/zjutjh/WeJH-SDK/oauth"
 	"github.com/zjutjh/WeJH-SDK/oauth/oauthException"
 )

@@ -2,19 +2,20 @@ package apiserver
 
 import (
 	"fmt"
-	"github.com/zjutjh/User-Center-grpc/dao/query"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/zjutjh/User-Center/dao/query"
 
 	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
-	"github.com/zjutjh/User-Center-grpc/pkg/database"
-	"github.com/zjutjh/User-Center-grpc/pkg/redis"
-	"github.com/zjutjh/User-Center-grpc/pkg/viper"
+	"github.com/zjutjh/User-Center/pkg/database"
+	"github.com/zjutjh/User-Center/pkg/redis"
+	"github.com/zjutjh/User-Center/pkg/viper"
 )
 
 type APIServerRunOptions struct {

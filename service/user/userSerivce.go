@@ -3,15 +3,16 @@ package userService
 import (
 	"context"
 	"errors"
-	"github.com/zjutjh/User-Center-grpc/dao"
 	"log/slog"
 	"time"
 
+	"github.com/zjutjh/User-Center/dao"
+
 	"gorm.io/gorm"
 
-	"github.com/zjutjh/User-Center-grpc/dao/model"
-	"github.com/zjutjh/User-Center-grpc/pkg/expection"
-	"github.com/zjutjh/User-Center-grpc/pkg/util"
+	"github.com/zjutjh/User-Center/dao/model"
+	"github.com/zjutjh/User-Center/pkg/expection"
+	"github.com/zjutjh/User-Center/pkg/util"
 )
 
 func CheckStudentBySIDAndIID(ctx context.Context, studentID string, iid string) error {

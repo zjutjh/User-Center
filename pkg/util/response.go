@@ -5,8 +5,8 @@ import (
 
 	"google.golang.org/protobuf/types/known/structpb"
 
-	typev1 "github.com/zjutjh/User-Center-grpc/api/user/v1alpha1"
-	"github.com/zjutjh/User-Center-grpc/pkg/expection"
+	typev1 "github.com/zjutjh/User-Center/api/user/v1alpha1"
+	"github.com/zjutjh/User-Center/pkg/expection"
 )
 
 func ResponseSuccess(data interface{}) (*typev1.Response, error) {

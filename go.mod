@@ -1,4 +1,4 @@
-module github.com/zjutjh/User-Center-grpc
+module github.com/zjutjh/User-Center
 
 go 1.24.7
 
@@ -13,13 +13,14 @@ require (
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	github.com/zjutjh/User-Center-grpc/api v0.0.0-00010101000000-000000000000
+	github.com/zjutjh/User-Center/api v0.0.0-00010101000000-000000000000
 	github.com/zjutjh/WeJH-SDK v0.2.3
 	google.golang.org/grpc v1.74.2
 	google.golang.org/protobuf v1.36.10
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gen v0.3.27
 	gorm.io/gorm v1.31.0
+	gorm.io/plugin/dbresolver v1.6.2
 )
 
 require (
@@ -56,7 +57,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/datatypes v1.2.4 // indirect
 	gorm.io/hints v1.1.0 // indirect
-	gorm.io/plugin/dbresolver v1.6.2 // indirect
 )
 
-replace github.com/zjutjh/User-Center-grpc/api => ./api
+replace github.com/zjutjh/User-Center/api => ./api
