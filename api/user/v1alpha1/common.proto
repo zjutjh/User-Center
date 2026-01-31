@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package zjut.jh.common.exception.v1alpha1;
+
+option go_package = "github.com/zjutjh/User-Center/api/user/v1alpha1;v1alpha1";
+
+// 业务错误码枚举
+enum BizCode {
+    // 通用
+    OK           = 0;
+    UnknownError = 500;  // 系统异常，请稍后重试!
+    ParamError   = 501;  // 参数错误
+
+    // 用户相关
+    PasswordLengthError    = 401;  // 密码长度不符合要求
+    WrongAccountOrPassword = 402;  // 账号或密码错误
+    NotActivated           = 403;  // 账号未激活
+    UserNotExist           = 404;  // 用户不存在
+    ClosedError            = 405;  // 统一身份认证夜间不对外开放
+    UserExisted            = 406;  // 用户已经存在
+}

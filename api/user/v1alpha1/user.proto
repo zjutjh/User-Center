@@ -8,11 +8,12 @@ option java_package        = "org.jh.usercenter.api";
 
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
+import "user/v1alpha1/common.proto";
 
 message Response {
-    int32 code                 = 1;
-    string message             = 2;
-    google.protobuf.Value data = 3;
+    common.exception.v1alpha1.BizCode code = 1;
+    string message                         = 2;
+    google.protobuf.Value data             = 3;
 }
 
 message RegisterRequest {

@@ -25,7 +25,7 @@ const (
 
 type Response struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Code          BizCode                `protobuf:"varint,1,opt,name=code,proto3,enum=zjut.jh.common.exception.v1alpha1.BizCode" json:"code,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	Data          *structpb.Value        `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -62,11 +62,11 @@ func (*Response) Descriptor() ([]byte, []int) {
 	return file_user_v1alpha1_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Response) GetCode() int32 {
+func (x *Response) GetCode() BizCode {
 	if x != nil {
 		return x.Code
 	}
-	return 0
+	return BizCode_OK
 }
 
 func (x *Response) GetMessage() string {
@@ -315,13 +315,57 @@ func (x *DeleteRequest) GetIid() string {
 	return ""
 }
 
+type HealthyCheckRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StudentId     string                 `protobuf:"bytes,1,opt,name=studentId,proto3" json:"studentId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HealthyCheckRequest) Reset() {
+	*x = HealthyCheckRequest{}
+	mi := &file_user_v1alpha1_user_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HealthyCheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthyCheckRequest) ProtoMessage() {}
+
+func (x *HealthyCheckRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1alpha1_user_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthyCheckRequest.ProtoReflect.Descriptor instead.
+func (*HealthyCheckRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1alpha1_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *HealthyCheckRequest) GetStudentId() string {
+	if x != nil {
+		return x.StudentId
+	}
+	return ""
+}
+
 var File_user_v1alpha1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1alpha1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x18user/v1alpha1/user.proto\x12\x19zjut.jh.api.user.v1alpha1\x1a\x1cgoogle/api/annotations.proto\x1a\x1cgoogle/protobuf/struct.proto\"d\n" +
-	"\bResponse\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\x18user/v1alpha1/user.proto\x12\x19zjut.jh.api.user.v1alpha1\x1a\x1cgoogle/api/annotations.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1auser/v1alpha1/common.proto\"\x90\x01\n" +
+	"\bResponse\x12>\n" +
+	"\x04code\x18\x01 \x01(\x0e2*.zjut.jh.common.exception.v1alpha1.BizCodeR\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12*\n" +
 	"\x04data\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x04data\"s\n" +
 	"\x0fRegisterRequest\x12\x1c\n" +
@@ -338,7 +382,9 @@ const file_user_v1alpha1_user_proto_rawDesc = "" +
 	"\x03iid\x18\x03 \x01(\tR\x03iid\"?\n" +
 	"\rDeleteRequest\x12\x1c\n" +
 	"\tstudentId\x18\x01 \x01(\tR\tstudentId\x12\x10\n" +
-	"\x03iid\x18\x02 \x01(\tR\x03iid2\xd7\x04\n" +
+	"\x03iid\x18\x02 \x01(\tR\x03iid\"3\n" +
+	"\x13HealthyCheckRequest\x12\x1c\n" +
+	"\tstudentId\x18\x01 \x01(\tR\tstudentId2\xd5\x05\n" +
 	"\x11UserCenterService\x12u\n" +
 	"\bRegister\x12*.zjut.jh.api.user.v1alpha1.RegisterRequest\x1a#.zjut.jh.api.user.v1alpha1.Response\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/api/register\x12k\n" +
 	"\x05Login\x12'.zjut.jh.api.user.v1alpha1.LoginRequest\x1a#.zjut.jh.api.user.v1alpha1.Response\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/api/auth\x12}\n" +
@@ -346,7 +392,8 @@ const file_user_v1alpha1_user_proto_rawDesc = "" +
 	"\x06Delete\x12(.zjut.jh.api.user.v1alpha1.DeleteRequest\x1a#.zjut.jh.api.user.v1alpha1.Response\"\x13\x82\xd3\xe4\x93\x02\r:\x01*\"\b/api/del\x12q\n" +
 	"\n" +
 	"OauthLogin\x12'.zjut.jh.api.user.v1alpha1.LoginRequest\x1a#.zjut.jh.api.user.v1alpha1.Response\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
-	"/api/oauthBS\n" +
+	"/api/oauth\x12|\n" +
+	"\fHealthyCheck\x12..zjut.jh.api.user.v1alpha1.HealthyCheckRequest\x1a#.zjut.jh.api.user.v1alpha1.Response\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/api/healthyBS\n" +
 	"\x15org.jh.usercenter.apiP\x01Z8github.com/zjutjh/User-Center/api/user/v1alpha1;v1alpha1b\x06proto3"
 
 var (
@@ -361,32 +408,37 @@ func file_user_v1alpha1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1alpha1_user_proto_rawDescData
 }
 
-var file_user_v1alpha1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_user_v1alpha1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_user_v1alpha1_user_proto_goTypes = []any{
 	(*Response)(nil),             // 0: zjut.jh.api.user.v1alpha1.Response
 	(*RegisterRequest)(nil),      // 1: zjut.jh.api.user.v1alpha1.RegisterRequest
 	(*LoginRequest)(nil),         // 2: zjut.jh.api.user.v1alpha1.LoginRequest
 	(*ResetPasswordRequest)(nil), // 3: zjut.jh.api.user.v1alpha1.ResetPasswordRequest
 	(*DeleteRequest)(nil),        // 4: zjut.jh.api.user.v1alpha1.DeleteRequest
-	(*structpb.Value)(nil),       // 5: google.protobuf.Value
+	(*HealthyCheckRequest)(nil),  // 5: zjut.jh.api.user.v1alpha1.HealthyCheckRequest
+	(BizCode)(0),                 // 6: zjut.jh.common.exception.v1alpha1.BizCode
+	(*structpb.Value)(nil),       // 7: google.protobuf.Value
 }
 var file_user_v1alpha1_user_proto_depIdxs = []int32{
-	5, // 0: zjut.jh.api.user.v1alpha1.Response.data:type_name -> google.protobuf.Value
-	1, // 1: zjut.jh.api.user.v1alpha1.UserCenterService.Register:input_type -> zjut.jh.api.user.v1alpha1.RegisterRequest
-	2, // 2: zjut.jh.api.user.v1alpha1.UserCenterService.Login:input_type -> zjut.jh.api.user.v1alpha1.LoginRequest
-	3, // 3: zjut.jh.api.user.v1alpha1.UserCenterService.ResetPassword:input_type -> zjut.jh.api.user.v1alpha1.ResetPasswordRequest
-	4, // 4: zjut.jh.api.user.v1alpha1.UserCenterService.Delete:input_type -> zjut.jh.api.user.v1alpha1.DeleteRequest
-	2, // 5: zjut.jh.api.user.v1alpha1.UserCenterService.OauthLogin:input_type -> zjut.jh.api.user.v1alpha1.LoginRequest
-	0, // 6: zjut.jh.api.user.v1alpha1.UserCenterService.Register:output_type -> zjut.jh.api.user.v1alpha1.Response
-	0, // 7: zjut.jh.api.user.v1alpha1.UserCenterService.Login:output_type -> zjut.jh.api.user.v1alpha1.Response
-	0, // 8: zjut.jh.api.user.v1alpha1.UserCenterService.ResetPassword:output_type -> zjut.jh.api.user.v1alpha1.Response
-	0, // 9: zjut.jh.api.user.v1alpha1.UserCenterService.Delete:output_type -> zjut.jh.api.user.v1alpha1.Response
-	0, // 10: zjut.jh.api.user.v1alpha1.UserCenterService.OauthLogin:output_type -> zjut.jh.api.user.v1alpha1.Response
-	6, // [6:11] is the sub-list for method output_type
-	1, // [1:6] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	6, // 0: zjut.jh.api.user.v1alpha1.Response.code:type_name -> zjut.jh.common.exception.v1alpha1.BizCode
+	7, // 1: zjut.jh.api.user.v1alpha1.Response.data:type_name -> google.protobuf.Value
+	1, // 2: zjut.jh.api.user.v1alpha1.UserCenterService.Register:input_type -> zjut.jh.api.user.v1alpha1.RegisterRequest
+	2, // 3: zjut.jh.api.user.v1alpha1.UserCenterService.Login:input_type -> zjut.jh.api.user.v1alpha1.LoginRequest
+	3, // 4: zjut.jh.api.user.v1alpha1.UserCenterService.ResetPassword:input_type -> zjut.jh.api.user.v1alpha1.ResetPasswordRequest
+	4, // 5: zjut.jh.api.user.v1alpha1.UserCenterService.Delete:input_type -> zjut.jh.api.user.v1alpha1.DeleteRequest
+	2, // 6: zjut.jh.api.user.v1alpha1.UserCenterService.OauthLogin:input_type -> zjut.jh.api.user.v1alpha1.LoginRequest
+	5, // 7: zjut.jh.api.user.v1alpha1.UserCenterService.HealthyCheck:input_type -> zjut.jh.api.user.v1alpha1.HealthyCheckRequest
+	0, // 8: zjut.jh.api.user.v1alpha1.UserCenterService.Register:output_type -> zjut.jh.api.user.v1alpha1.Response
+	0, // 9: zjut.jh.api.user.v1alpha1.UserCenterService.Login:output_type -> zjut.jh.api.user.v1alpha1.Response
+	0, // 10: zjut.jh.api.user.v1alpha1.UserCenterService.ResetPassword:output_type -> zjut.jh.api.user.v1alpha1.Response
+	0, // 11: zjut.jh.api.user.v1alpha1.UserCenterService.Delete:output_type -> zjut.jh.api.user.v1alpha1.Response
+	0, // 12: zjut.jh.api.user.v1alpha1.UserCenterService.OauthLogin:output_type -> zjut.jh.api.user.v1alpha1.Response
+	0, // 13: zjut.jh.api.user.v1alpha1.UserCenterService.HealthyCheck:output_type -> zjut.jh.api.user.v1alpha1.Response
+	8, // [8:14] is the sub-list for method output_type
+	2, // [2:8] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_user_v1alpha1_user_proto_init() }
@@ -394,13 +446,14 @@ func file_user_v1alpha1_user_proto_init() {
 	if File_user_v1alpha1_user_proto != nil {
 		return
 	}
+	file_user_v1alpha1_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1alpha1_user_proto_rawDesc), len(file_user_v1alpha1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

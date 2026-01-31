@@ -11,7 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/zjutjh/User-Center/pkg/apiserver"
+	"github.com/zjutjh/User-Center/biz/apiserver"
 )
 
 func main() {
