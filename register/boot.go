@@ -1,6 +1,7 @@
 package register
 
 import (
+	"github.com/zjutjh/mygo/feishu"
 	"github.com/zjutjh/mygo/foundation/kernel"
 	"github.com/zjutjh/mygo/ndb"
 	"github.com/zjutjh/mygo/nedis"
@@ -11,13 +12,13 @@ import (
 
 func Boot() kernel.BootList {
 	return kernel.BootList{
+		feishu.Boot(),
 		// 基础引导器
-		nlog.Boot(), // 业务日志
+		nlog.Boot(),
 
 		// Client引导器
-		ndb.Boot(),   // DB
-		nedis.Boot(), // Redis
-
+		ndb.Boot(),
+		nedis.Boot(),
 		// 业务引导器
 		InitQueryBoot(), // 初始化 gen query
 	}

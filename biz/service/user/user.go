@@ -9,8 +9,8 @@ import (
 
 	"github.com/zjutjh/User-Center/biz/dao"
 	"github.com/zjutjh/User-Center/biz/dao/model"
-	"github.com/zjutjh/User-Center/biz/util/response"
-	"github.com/zjutjh/User-Center/biz/util/security"
+	"github.com/zjutjh/User-Center/biz/utils/response"
+	"github.com/zjutjh/User-Center/biz/utils/security"
 	"gorm.io/gorm"
 
 	userv1 "github.com/zjutjh/User-Center/api/user/v1alpha1"

@@ -13,7 +13,7 @@ import (
 
 // 2. Test the gRPC SayHello method
 func TestLogin(t *testing.T) {
-	conn, err := grpc.Dial("127.0.0.1:8080", grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.NewClient("127.0.0.1:8080", grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
