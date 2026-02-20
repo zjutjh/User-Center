@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"log/slog"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/zjutjh/mygo/nlog"
 )
 
 type ResponseWriter struct {
@@ -39,12 +40,12 @@ func LogRequestAndResponse(handler http.Handler) http.Handler {
 		r.Header.Set("Grpc-Metadata-X-Request-URI", RequestURI)
 		r.Header.Set("Grpc-Metadata-X-Request-URL", r.URL.Path)
 		handler.ServeHTTP(ws, r)
-		slog.Info("[kantaloupe]", "time",
+		nlog.Pick().Infof("[kantaloupe] time=%s code=%d cost=%s ip=%s method=%s uri=%s",
 			time.Now().Format("2006/01/02 - 15:04:05"),
-			"code", ws.StatusCode, "cost",
-			time.Since(start).String(), "ip",
+			ws.StatusCode,
+			time.Since(start).String(),
 			IPAddress,
-			"method", r.Method, "uri",
+			r.Method,
 			r.URL.Path)
 	})
 }

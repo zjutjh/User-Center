@@ -1,11 +1,14 @@
 package main
 
 import (
-	"github.com/zjutjh/User-Center/biz/database"
-	"github.com/zjutjh/User-Center/biz/viper"
+	"github.com/spf13/cobra"
+	"github.com/zjutjh/mygo/foundation/command"
+	"github.com/zjutjh/mygo/ndb"
 	"gorm.io/gen"
 	"gorm.io/gen/field"
 	"gorm.io/gorm"
+
+	"github.com/zjutjh/User-Center/register"
 )
 
 var tables = []string{
@@ -16,13 +19,17 @@ var tables = []string{
 }
 
 func main() {
-	viper.InitViper()
+	command.Execute(
+		register.Boot,
+		func(c *cobra.Command) {},
+		func(cmd *cobra.Command, args []string) error { return nil },
+	)
+
 	g := gen.NewGenerator(gen.Config{
-		OutPath: "./dao/query",
+		OutPath: "./biz/dao/query",
 		Mode:    gen.WithDefaultQuery | gen.WithQueryInterface,
 	})
-	database.NewRunOptions().Init()
-	g.UseDB(database.DB)
+	g.UseDB(ndb.Pick())
 
 	m := map[string]func(columnType gorm.ColumnType) (dataType string){
 		"tinyint": func(columnType gorm.ColumnType) (dataType string) {

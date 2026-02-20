@@ -3,8 +3,9 @@ package userService
 import (
 	"context"
 	"errors"
-	"log/slog"
 	"time"
+
+	"github.com/zjutjh/mygo/nlog"
 
 	"github.com/zjutjh/User-Center/biz/dao"
 	"github.com/zjutjh/User-Center/biz/dao/model"
@@ -16,7 +17,7 @@ import (
 	"github.com/zjutjh/WeJH-SDK/oauth"
 	"github.com/zjutjh/WeJH-SDK/oauth/oauthException"
 
-	"github.com/zjutjh/User-Center/biz/err"
+	bizerr "github.com/zjutjh/User-Center/biz/err"
 )
 
 type UserService struct {
@@ -35,7 +36,7 @@ func (u *UserService) Register(ctx context.Context, req *userv1.RegisterRequest)
 		return response.Error(bizerr.UserExisted)
 	}
 	if err != nil {
-		slog.Error("failed to get user by student id: %v", err)
+		nlog.Pick().Errorf("failed to get user by student id: %v", err)
 		return response.Error(bizerr.UnknownError)
 	}
 	pass := security.Encrypt(req.Password)
@@ -46,7 +47,7 @@ func (u *UserService) Register(ctx context.Context, req *userv1.RegisterRequest)
 		CreateTime: time.Now(),
 	}
 	if err := dao.CreateUser(ctx, user); err != nil {
-		slog.Error("failed to create user by student id: %v", err)
+		nlog.Pick().Errorf("failed to create user by student id: %v", err)
 		return response.Error(bizerr.UnknownError)
 	}
 	return response.Success(nil)
@@ -79,7 +80,7 @@ func (u *UserService) ResetPassword(ctx context.Context, req *userv1.ResetPasswo
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return response.Error(bizerr.UserNotExist)
 		}
-		slog.Error("failed to update user password: %v", err)
+		nlog.Pick().Errorf("failed to update user password: %v", err)
 		return response.Error(bizerr.UnknownError)
 	}
 	return response.Success(nil)

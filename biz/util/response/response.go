@@ -2,18 +2,18 @@ package response
 
 import (
 	"errors"
-	"log/slog"
 
+	"github.com/zjutjh/mygo/nlog"
 	"google.golang.org/protobuf/types/known/structpb"
 
 	typev1 "github.com/zjutjh/User-Center/api/user/v1alpha1"
-	"github.com/zjutjh/User-Center/biz/err"
+	bizerr "github.com/zjutjh/User-Center/biz/err"
 )
 
 func Success(data interface{}) (*typev1.Response, error) {
 	value, err := structpb.NewValue(data)
 	if err != nil {
-		slog.Error("failed to convert data to protobuf Value: %v", err)
+		nlog.Pick().Errorf("failed to convert data to protobuf Value: %v", err)
 		return nil, bizerr.UnknownError
 	}
 	return &typev1.Response{
@@ -39,7 +39,7 @@ func ErrorExtra(err error, extra string) (*typev1.Response, error) {
 			Message: extra,
 		}, nil
 	}
-	slog.Error("unknown error: %v", err)
+	nlog.Pick().Errorf("unknown error: %v", err)
 	return &typev1.Response{
 		Code:    typev1.BizCode_UnknownError,
 		Message: extra,
