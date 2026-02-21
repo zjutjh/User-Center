@@ -7,11 +7,11 @@ build:
 
 .PHONY: generate
 generate: ## Run buf generate including code and swagger generate.
-	cd api && buf generate
+	cd idl && buf generate
 
 .PHONY: configure
 configure: ## Run configure
-	cd api && buf dep update
+	cd idl && buf dep update
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
