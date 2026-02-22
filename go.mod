@@ -2,13 +2,15 @@ module github.com/zjutjh/User-Center
 
 go 1.25.0
 
-replace github.com/zjutjh/User-Center/idl => ./idl
+replace (
+	github.com/zjutjh/User-Center/idl => ./idl
+	github.com/zjutjh/mygo => ../mygo
+)
 
 require (
 	github.com/gin-gonic/gin v1.11.0
 	github.com/spf13/cobra v1.10.2
-	github.com/zjutjh/User-Center/idl v0.0.0-00010101000000-000000000000
-	github.com/zjutjh/WeJH-SDK v0.2.6
+	github.com/zjutjh/User-Center/idl v0.0.0
 	github.com/zjutjh/mygo v1.6.5
 	google.golang.org/grpc v1.79.1
 	gorm.io/gen v0.3.27
@@ -18,8 +20,6 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/PuerkitoBio/goquery v1.9.3 // indirect
-	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -27,6 +27,7 @@ require (
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
+	github.com/gin-contrib/cors v1.7.6 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect

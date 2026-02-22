@@ -4,7 +4,7 @@ import (
 	"errors"
 	"reflect"
 
-	"github.com/zjutjh/User-Center/comm/bizerr"
+	"github.com/zjutjh/User-Center/comm"
 	pb "github.com/zjutjh/User-Center/idl/user/v1alpha1"
 	"github.com/zjutjh/mygo/nlog"
 )
@@ -20,7 +20,7 @@ func OK[T any]() (*T, error) {
 }
 
 func Error[T any](err error) (*T, error) {
-	var bizErr *bizerr.BizStatusError
+	var bizErr *comm.BizStatusError
 	if errors.As(err, &bizErr) {
 		return New[T](bizErr.BizCode())
 	}

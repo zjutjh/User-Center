@@ -1,8 +1,11 @@
 package main
 
 import (
+	"sync"
+
 	"github.com/spf13/cobra"
 	"github.com/zjutjh/mygo/foundation/command"
+	"github.com/zjutjh/mygo/foundation/httpserver"
 
 	"github.com/zjutjh/User-Center/register"
 )
@@ -12,8 +15,23 @@ func main() {
 		register.Boot,    // 应用引导注册器
 		register.Command, // 应用命令注册器
 		func(cmd *cobra.Command, args []string) error {
-			// 启动 gRPC
-			return register.RunGRPCServer()
+			wg := &sync.WaitGroup{}
+			// 启动 gRPC Server
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				register.StartGrpcServer()
+			}()
+
+			// 启动HTTP Server
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				httpserver.StartHTTPServer(register.Route)
+			}()
+
+			wg.Wait()
+			return nil
 		},
 	)
 }

@@ -1,15 +1,22 @@
 # 应用基础配置
 app:
-  name: "user-center" # 应用名称
+  name: "app" # 应用名称
   env: "dev" # 应用环境 dev|test|prod
 
 # gRPC 服务配置
 grpc_server:
   addr: ":8080"
 
-# HTTP Gateway 服务配置
+# HTTP 服务配置
 http_server:
   addr: ":8081"
+  log:
+  # 仅在本地开发调试时打开
+  # access_filename: "/dev/stdout"
+  # error_filename: "/dev/stderr"
+
+# 业务私有配置
+biz:
 
 # 应用业务日志配置
 log:
@@ -17,17 +24,51 @@ log:
   # 仅在本地开发调试时打开
   # filename: "/dev/stdout"
 
+# HTTP Client 配置
+resty:
+  timeout: "5s"
+
+# 跨域中间件配置
+mid_cors:
+  allow_origins: [
+    # 本地/测试等环境配置 正式环境须去除
+    "*",
+    "https://test.*.com",
+
+    # 生产环境配置
+    "https://prod.*.com",
+  ]
+
 # 数据库配置
 db:
   host: "127.0.0.1"
   port: 3306
-  username: "root"
-  password: "123456"
-  database: "user_center"
+  username: "jh_user"
+  password: "jh_pass"
+  database: "jh_db"
 
-# Redis 配置
-redis:
-  addrs:
-    - "127.0.0.1:6379"
-  db: 0
-  password: ""
+# # Redis 配置 开启前请在 register/boot.go 中进行 nedis.Boot()
+# redis:
+#   addrs:
+#     - "127.0.0.1:6379"
+#   db: 0
+#   password: "jh_pass"
+
+# 飞书告警配置
+feishu:
+  enable: false
+  notice_webhook: ""
+  notice_secret: ""
+
+# session 配置
+session:
+  driver: memory
+  name: "session"
+  secret: "secret"
+  redis: ""
+  path: "/"
+  domain: ""
+  max_age: 604800
+  secure: false
+  http_only: true
+  same_site: 0

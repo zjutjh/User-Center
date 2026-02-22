@@ -8,14 +8,13 @@ option go_package = "github.com/zjutjh/User-Center/idl/user/v1alpha1;v1alpha1";
 enum BizCode {
     // 通用
     OK           = 0;
-    UnknownError = 500;  // 系统异常，请稍后重试!
-    ParamError   = 501;  // 参数错误
+    UnknownError = 10000;  // 系统异常，请稍后重试!
 
     // 用户相关
-    PasswordLengthError    = 401;  // 密码长度不符合要求
-    WrongAccountOrPassword = 402;  // 账号或密码错误
-    NotActivated           = 403;  // 账号未激活
-    UserNotExist           = 404;  // 用户不存在
-    ClosedError            = 405;  // 统一身份认证夜间不对外开放
-    UserExisted            = 406;  // 用户已经存在
+    PasswordLengthError    = 40001;  // 密码长度不符合要求
+    WrongAccountOrPassword = 40002;  // 账号或密码错误
+    NotActivated           = 40003;  // 账号未激活
+    UserNotExist           = 40004;  // 用户不存在
+    ClosedError            = 40005;  // 统一身份认证夜间不对外开放
+    UserExisted            = 40006;  // 用户已经存在
 }

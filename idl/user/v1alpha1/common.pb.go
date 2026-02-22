@@ -27,40 +27,37 @@ type BizCode int32
 const (
 	// 通用
 	BizCode_OK           BizCode = 0
-	BizCode_UnknownError BizCode = 500 // 系统异常，请稍后重试!
-	BizCode_ParamError   BizCode = 501 // 参数错误
+	BizCode_UnknownError BizCode = 10000 // 系统异常，请稍后重试!
 	// 用户相关
-	BizCode_PasswordLengthError    BizCode = 401 // 密码长度不符合要求
-	BizCode_WrongAccountOrPassword BizCode = 402 // 账号或密码错误
-	BizCode_NotActivated           BizCode = 403 // 账号未激活
-	BizCode_UserNotExist           BizCode = 404 // 用户不存在
-	BizCode_ClosedError            BizCode = 405 // 统一身份认证夜间不对外开放
-	BizCode_UserExisted            BizCode = 406 // 用户已经存在
+	BizCode_PasswordLengthError    BizCode = 40001 // 密码长度不符合要求
+	BizCode_WrongAccountOrPassword BizCode = 40002 // 账号或密码错误
+	BizCode_NotActivated           BizCode = 40003 // 账号未激活
+	BizCode_UserNotExist           BizCode = 40004 // 用户不存在
+	BizCode_ClosedError            BizCode = 40005 // 统一身份认证夜间不对外开放
+	BizCode_UserExisted            BizCode = 40006 // 用户已经存在
 )
 
 // Enum value maps for BizCode.
 var (
 	BizCode_name = map[int32]string{
-		0:   "OK",
-		500: "UnknownError",
-		501: "ParamError",
-		401: "PasswordLengthError",
-		402: "WrongAccountOrPassword",
-		403: "NotActivated",
-		404: "UserNotExist",
-		405: "ClosedError",
-		406: "UserExisted",
+		0:     "OK",
+		10000: "UnknownError",
+		40001: "PasswordLengthError",
+		40002: "WrongAccountOrPassword",
+		40003: "NotActivated",
+		40004: "UserNotExist",
+		40005: "ClosedError",
+		40006: "UserExisted",
 	}
 	BizCode_value = map[string]int32{
 		"OK":                     0,
-		"UnknownError":           500,
-		"ParamError":             501,
-		"PasswordLengthError":    401,
-		"WrongAccountOrPassword": 402,
-		"NotActivated":           403,
-		"UserNotExist":           404,
-		"ClosedError":            405,
-		"UserExisted":            406,
+		"UnknownError":           10000,
+		"PasswordLengthError":    40001,
+		"WrongAccountOrPassword": 40002,
+		"NotActivated":           40003,
+		"UserNotExist":           40004,
+		"ClosedError":            40005,
+		"UserExisted":            40006,
 	}
 )
 
@@ -95,18 +92,16 @@ var File_user_v1alpha1_common_proto protoreflect.FileDescriptor
 
 const file_user_v1alpha1_common_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/v1alpha1/common.proto\x12\x1bzjut.jh.usercenter.v1alpha1*\xb6\x01\n" +
+	"\x1auser/v1alpha1/common.proto\x12\x1bzjut.jh.usercenter.v1alpha1*\xab\x01\n" +
 	"\aBizCode\x12\x06\n" +
 	"\x02OK\x10\x00\x12\x11\n" +
-	"\fUnknownError\x10\xf4\x03\x12\x0f\n" +
-	"\n" +
-	"ParamError\x10\xf5\x03\x12\x18\n" +
-	"\x13PasswordLengthError\x10\x91\x03\x12\x1b\n" +
-	"\x16WrongAccountOrPassword\x10\x92\x03\x12\x11\n" +
-	"\fNotActivated\x10\x93\x03\x12\x11\n" +
-	"\fUserNotExist\x10\x94\x03\x12\x10\n" +
-	"\vClosedError\x10\x95\x03\x12\x10\n" +
-	"\vUserExisted\x10\x96\x03B:Z8github.com/zjutjh/User-Center/idl/user/v1alpha1;v1alpha1b\x06proto3"
+	"\fUnknownError\x10\x90N\x12\x19\n" +
+	"\x13PasswordLengthError\x10\xc1\xb8\x02\x12\x1c\n" +
+	"\x16WrongAccountOrPassword\x10¸\x02\x12\x12\n" +
+	"\fNotActivated\x10ø\x02\x12\x12\n" +
+	"\fUserNotExist\x10ĸ\x02\x12\x11\n" +
+	"\vClosedError\x10Ÿ\x02\x12\x11\n" +
+	"\vUserExisted\x10Ƹ\x02B:Z8github.com/zjutjh/User-Center/idl/user/v1alpha1;v1alpha1b\x06proto3"
 
 var (
 	file_user_v1alpha1_common_proto_rawDescOnce sync.Once

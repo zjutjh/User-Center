@@ -5,8 +5,8 @@ import (
 	"github.com/zjutjh/mygo/feishu"
 	"github.com/zjutjh/mygo/foundation/kernel"
 	"github.com/zjutjh/mygo/ndb"
-	"github.com/zjutjh/mygo/nedis"
 	"github.com/zjutjh/mygo/nlog"
+	"github.com/zjutjh/mygo/usercenter"
 )
 
 func Boot() kernel.BootList {
@@ -17,8 +17,9 @@ func Boot() kernel.BootList {
 
 		// Client引导器
 		ndb.Boot(),
-		nedis.Boot(),
+		//nedis.Boot(),
 		// 业务引导器
+		usercenter.Boot(),
 		InitQueryBoot(), // 初始化 gen query
 	}
 }

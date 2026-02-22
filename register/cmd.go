@@ -7,5 +7,5 @@ import (
 
 func Command(root *cobra.Command) {
 	// 业务命令
-	command.Add("server", GRPCServerCommandRegister())
+	command.Add("server", GrpcServerCommandRegister())
 }

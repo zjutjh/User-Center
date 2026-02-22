@@ -77,6 +77,7 @@ func (x *LoginRequest) GetPassword() string {
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          BizCode                `protobuf:"varint,1,opt,name=code,proto3,enum=zjut.jh.usercenter.v1alpha1.BizCode" json:"code,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=userId,proto3" json:"userId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -118,11 +119,18 @@ func (x *LoginResponse) GetCode() BizCode {
 	return BizCode_OK
 }
 
+func (x *LoginResponse) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
 type RegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StudentId     string                 `protobuf:"bytes,1,opt,name=studentId,proto3" json:"studentId,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	Iid           string                 `protobuf:"bytes,3,opt,name=iid,proto3" json:"iid,omitempty"`
+	CardId        string                 `protobuf:"bytes,3,opt,name=cardId,proto3" json:"cardId,omitempty"`
 	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -172,9 +180,9 @@ func (x *RegisterRequest) GetPassword() string {
 	return ""
 }
 
-func (x *RegisterRequest) GetIid() string {
+func (x *RegisterRequest) GetCardId() string {
 	if x != nil {
-		return x.Iid
+		return x.CardId
 	}
 	return ""
 }
@@ -617,13 +625,14 @@ const file_user_v1alpha1_user_proto_rawDesc = "" +
 	"\x18user/v1alpha1/user.proto\x12\x1bzjut.jh.usercenter.v1alpha1\x1a\x1cgoogle/api/annotations.proto\x1a\x1auser/v1alpha1/common.proto\"H\n" +
 	"\fLoginRequest\x12\x1c\n" +
 	"\tstudentId\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"I\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"a\n" +
 	"\rLoginResponse\x128\n" +
-	"\x04code\x18\x01 \x01(\x0e2$.zjut.jh.usercenter.v1alpha1.BizCodeR\x04code\"s\n" +
+	"\x04code\x18\x01 \x01(\x0e2$.zjut.jh.usercenter.v1alpha1.BizCodeR\x04code\x12\x16\n" +
+	"\x06userId\x18\x02 \x01(\x03R\x06userId\"y\n" +
 	"\x0fRegisterRequest\x12\x1c\n" +
 	"\tstudentId\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x10\n" +
-	"\x03iid\x18\x03 \x01(\tR\x03iid\x12\x14\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x16\n" +
+	"\x06cardId\x18\x03 \x01(\tR\x06cardId\x12\x14\n" +
 	"\x05email\x18\x04 \x01(\tR\x05email\"b\n" +
 	"\x14ResetPasswordRequest\x12\x1c\n" +
 	"\tstudentId\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +

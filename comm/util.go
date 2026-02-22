@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-func Encrypt(password string) string {
+func Sha256Hash(password string) string {
 	h := sha256.New()
 	h.Write([]byte(password))
 	pass := hex.EncodeToString(h.Sum(nil))
