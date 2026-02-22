@@ -2,11 +2,11 @@ package register
 
 import (
 	"github.com/zjutjh/User-Center/dao/query"
+	usercenter "github.com/zjutjh/User-Center/mygo_plugin"
 	"github.com/zjutjh/mygo/feishu"
 	"github.com/zjutjh/mygo/foundation/kernel"
 	"github.com/zjutjh/mygo/ndb"
 	"github.com/zjutjh/mygo/nlog"
-	"github.com/zjutjh/mygo/usercenter"
 )
 
 func Boot() kernel.BootList {

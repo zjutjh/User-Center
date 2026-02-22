@@ -3,17 +3,16 @@ package user
 import (
 	"reflect"
 	"runtime"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/zjutjh/User-Center/comm"
 	pb "github.com/zjutjh/User-Center/idl/user/v1alpha1"
+	usercenter "github.com/zjutjh/User-Center/mygo_plugin"
 	"github.com/zjutjh/mygo/foundation/reply"
 	"github.com/zjutjh/mygo/kit"
 	"github.com/zjutjh/mygo/nlog"
 	"github.com/zjutjh/mygo/session"
 	"github.com/zjutjh/mygo/swagger"
-	"github.com/zjutjh/mygo/usercenter"
 )
 
 // LoginHandler API router注册点
@@ -55,7 +54,7 @@ func (u *LoginApi) Run(ctx *gin.Context) kit.Code {
 		return comm.CodeThirdServiceError
 	}
 	if resp.Code == pb.BizCode_OK {
-		if err := session.SetUid(ctx, strconv.FormatInt(resp.UserId, 10)); err != nil {
+		if err := session.SetIdentity(ctx, resp.UserId); err != nil {
 			nlog.Pick().WithContext(ctx).WithError(err).Error("设置 session 失败")
 			return comm.CodeMiddlewareServiceError
 		}
