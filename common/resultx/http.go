@@ -1,0 +1,39 @@
+package resultx
+
+import (
+	"context"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
+	"github.com/zjutjh/User-Center/common/errorsx"
+)
+
+type Response struct {
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
+	Data any    `json:"data"`
+}
+
+func InstallHTTPHandlers() {
+	httpx.SetOkHandler(func(_ context.Context, v any) any {
+		return Success(v)
+	})
+	httpx.SetErrorHandlerCtx(func(_ context.Context, err error) (int, any) {
+		code, msg := errorsx.CodeOf(err)
+		return errorsx.HTTPStatus(err), Response{
+			Code: code,
+			Msg:  msg,
+			Data: struct{}{},
+		}
+	})
+}
+
+func Success(v any) Response {
+	if v == nil {
+		v = struct{}{}
+	}
+	return Response{
+		Code: errorsx.CodeOK,
+		Msg:  "ok",
+		Data: v,
+	}
+}

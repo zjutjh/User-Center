@@ -1,35 +1,43 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/zjutjh/mygo/foundation/command"
-	"github.com/zjutjh/mygo/ndb"
+	"flag"
+
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zjutjh/User-Center/common/dbx"
+	"gorm.io/driver/mysql"
 	"gorm.io/gen"
 	"gorm.io/gen/field"
 	"gorm.io/gorm"
-
-	"github.com/zjutjh/User-Center/register"
 )
 
-var tables = []string{
-	"user",
-	"student",
-	"college",
-	"mini_program_user",
+type rootConfig struct {
+	UserRPC struct {
+		Mysql dbx.MysqlConf
+	}
 }
 
+var (
+	configFile = flag.String("f", "config.yaml", "the config file")
+	tables     = []string{"user", "student", "college", "mini_program_user"}
+)
+
 func main() {
-	command.Execute(
-		register.Boot,
-		func(c *cobra.Command) {},
-		func(cmd *cobra.Command, args []string) error { return nil },
-	)
+	flag.Parse()
+
+	var c rootConfig
+	conf.MustLoad(*configFile, &c)
+
+	db, err := gorm.Open(mysql.Open(c.UserRPC.Mysql.DSN()), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 
 	g := gen.NewGenerator(gen.Config{
-		OutPath: "./dao/query",
+		OutPath: "./apps/user-rpc/internal/dao/query",
 		Mode:    gen.WithDefaultQuery | gen.WithQueryInterface,
 	})
-	g.UseDB(ndb.Pick())
+	g.UseDB(db)
 
 	m := map[string]func(columnType gorm.ColumnType) (dataType string){
 		"tinyint": func(columnType gorm.ColumnType) (dataType string) {

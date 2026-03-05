@@ -1,0 +1,66 @@
+syntax = "v1"
+
+info (
+	title:  "精弘用户中心"
+	desc:   "精弘用户中心 powered by go-zero"
+	author: "MangoGovo"
+	email:  "1749100231@qq.com"
+)
+
+type (
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	LoginResp {
+		UserId int64 `json:"userId"`
+	}
+	RegisterReq {
+		StudentId string `json:"studentId"`
+		Password  string `json:"password"`
+		CardId    string `json:"cardId"`
+		Email     string `json:"email"`
+	}
+	RegisterResp  {}
+	BindReq {
+		Type          string `json:"type"`
+		DeviceId      string `json:"deviceId,optional"`
+		YxyUid        string `json:"yxyUid,optional"`
+		ZfPassword    string `json:"zfPassword,optional"`
+		OauthPassword string `json:"oauthPassword,optional"`
+	}
+	BindResp  {}
+	MeResp {
+		UserId int64 `json:"userId"`
+	}
+)
+
+@server (
+	group:  user
+	prefix: /api/v1/users
+)
+service user-api {
+	@doc "用户登录"
+	@handler Login
+	post /login (LoginReq) returns (LoginResp)
+
+	@doc "用户注册"
+	@handler Register
+	post /register (RegisterReq) returns (RegisterResp)
+}
+
+@server (
+	group:      user
+	prefix:     /api/v1/users
+	middleware: UserAuth
+)
+service user-api {
+	@doc "当前登录用户"
+	@handler Me
+	get /me returns (MeResp)
+
+	@doc "绑定外部系统"
+	@handler Bind
+	post /bind (BindReq) returns (BindResp)
+}
+

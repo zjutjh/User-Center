@@ -47,3 +47,5 @@ idl/openapi
 
 .DS_Store
 
+config.yaml
+

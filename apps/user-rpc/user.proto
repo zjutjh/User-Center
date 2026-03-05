@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./pb";
+
+enum BindType {
+    BIND_TYPE_OAUTH = 0;
+    BIND_TYPE_ZF = 1;
+    BIND_TYPE_YXY = 2;
+}
+
+message LoginRequest {
+    string studentId = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    int64 userId = 1;
+}
+
+message RegisterRequest {
+    string studentId = 1;
+    string password = 2;
+    string cardId = 3;
+    string email = 4;
+}
+
+message RegisterResponse {
+}
+
+message BindRequest {
+    int64 userId = 1;
+    BindType type = 2;
+    string device_id = 3;
+    string yxy_uid = 4;
+    string zf_password = 5;
+    string oauth_password = 6;
+}
+
+message BindResponse {
+}
+
+message GetUserPasswordRequest {
+    int64 userId = 1;
+}
+
+message GetUserPasswordResponse {
+    string student_id = 1;
+    string device_id = 2;
+    string yxy_uid = 3;
+    string zf_password = 4;
+    string oauth_password = 5;
+}
+
+message HealthyCheckRequest {
+    string studentId = 1;
+}
+
+message HealthyCheckResponse {
+}
+
+service UserCenterService {
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc Bind(BindRequest) returns (BindResponse);
+    rpc GetUserPassword(GetUserPasswordRequest) returns (GetUserPasswordResponse);
+    rpc HealthyCheck(HealthyCheckRequest) returns (HealthyCheckResponse);
+}
