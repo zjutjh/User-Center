@@ -28,9 +28,9 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	studentID := strings.TrimSpace(in.StudentId)
+	studentID := normalizeStudentID(in.StudentId)
 	password := strings.TrimSpace(in.Password)
-	cardID := strings.TrimSpace(in.CardId)
+	cardID := normalizeCardID(in.CardId)
 	email := strings.TrimSpace(in.Email)
 
 	if studentID == "" || password == "" || cardID == "" {
@@ -64,7 +64,7 @@ func (l *RegisterLogic) Register(in *pb.RegisterRequest) (*pb.RegisterResponse, 
 		l.Errorf("查询学生信息失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
-	if student.IDCard != cardID {
+	if !strings.EqualFold(student.IDCard, cardID) {
 		return nil, errorsx.ErrUserNotExist
 	}
 

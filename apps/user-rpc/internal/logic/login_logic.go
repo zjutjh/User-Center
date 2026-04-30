@@ -29,12 +29,15 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(in *pb.LoginRequest) (*pb.LoginResponse, error) {
-	if strings.TrimSpace(in.StudentId) == "" || strings.TrimSpace(in.Password) == "" {
+	studentID := normalizeStudentID(in.StudentId)
+	password := strings.TrimSpace(in.Password)
+
+	if studentID == "" || password == "" {
 		return nil, errorsx.ErrWrongAccountOrPassword
 	}
 
 	user, err := l.svcCtx.Query.User.WithContext(l.ctx).
-		Where(l.svcCtx.Query.User.StudentID.Eq(in.StudentId)).
+		Where(l.svcCtx.Query.User.StudentID.Eq(studentID)).
 		First()
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errorsx.ErrUserNotExist
@@ -43,12 +46,19 @@ func (l *LoginLogic) Login(in *pb.LoginRequest) (*pb.LoginResponse, error) {
 		l.Errorf("根据学号查询用户失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
-	if user.Password != hashPassword(in.Password) {
+	if user.Password != hashPassword(password) {
 		return nil, errorsx.ErrWrongAccountOrPassword
 	}
 
+	session, err := l.svcCtx.Session.Encode(user.ID)
+	if err != nil {
+		l.Errorf("生成登录 session 失败: %v", err)
+		return nil, errorsx.ErrUnknown
+	}
+
 	return &pb.LoginResponse{
-		UserId: user.ID,
+		UserId:  user.ID,
+		Session: session,
 	}, nil
 }
 

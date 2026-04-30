@@ -13,7 +13,7 @@ import (
 )
 
 // 密码登录
-func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func LoginByPasswordHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.LoginReq
 		if err := httpx.Parse(r, &req); err != nil {

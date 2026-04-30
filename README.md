@@ -56,3 +56,4 @@ go run ./cmd/gen
 - `UserAPI` 和 `UserRPC` 配置已经合并到根目录 `config.yaml`，各服务只读取自己的配置段。
 - `UserRPC.Mysql` 已展开为独立字段，运行时会自动拼成 DSN。
 - 会话实现默认使用签名 Cookie；如需切换服务端 Session，可参考 [sql/session.sql](/Users/mgg/Project/Golang/User-Center/sql/session.sql)。
+- `UserAPI.Session` 和 `UserRPC.Session` 需要保持一致，这样 RPC 返回的 session 字符串才能被 HTTP 层直接写入 Cookie 并通过鉴权中间件校验。

@@ -6,6 +6,7 @@ package handler
 import (
 	"net/http"
 
+	bind "github.com/zjutjh/User-Center/apps/user-api/internal/handler/bind"
 	user "github.com/zjutjh/User-Center/apps/user-api/internal/handler/user"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 
@@ -14,21 +15,48 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.UserAuth},
+			[]rest.Route{
+				{
+					// 绑定统一认证密码
+					Method:  http.MethodPost,
+					Path:    "/bind/oauth",
+					Handler: bind.BindOauthHandler(serverCtx),
+				},
+				{
+					// 绑定易校园账号
+					Method:  http.MethodPost,
+					Path:    "/bind/yxy",
+					Handler: bind.BindYxyHandler(serverCtx),
+				},
+				{
+					// 绑定正方密码
+					Method:  http.MethodPost,
+					Path:    "/bind/zf",
+					Handler: bind.BindZfHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/user"),
+	)
+
+	server.AddRoutes(
 		[]rest.Route{
 			{
-				// 用户登录
+				// 创建学生账号
 				Method:  http.MethodPost,
-				Path:    "/login",
-				Handler: user.LoginHandler(serverCtx),
+				Path:    "/create/student",
+				Handler: user.CreateStudentHandler(serverCtx),
 			},
 			{
-				// 用户注册
+				// 密码登录
 				Method:  http.MethodPost,
-				Path:    "/register",
-				Handler: user.RegisterHandler(serverCtx),
+				Path:    "/login",
+				Handler: user.LoginByPasswordHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/api/v1/users"),
+		rest.WithPrefix("/api/user"),
 	)
 
 	server.AddRoutes(
@@ -36,19 +64,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.UserAuth},
 			[]rest.Route{
 				{
-					// 绑定外部系统
+					// 注销账号
 					Method:  http.MethodPost,
-					Path:    "/bind",
-					Handler: user.BindHandler(serverCtx),
+					Path:    "/del",
+					Handler: user.DelHandler(serverCtx),
 				},
 				{
-					// 当前登录用户
-					Method:  http.MethodGet,
-					Path:    "/me",
-					Handler: user.MeHandler(serverCtx),
+					// 用户信息
+					Method:  http.MethodPost,
+					Path:    "/info",
+					Handler: user.InfoHandler(serverCtx),
+				},
+				{
+					// 重置密码
+					Method:  http.MethodPost,
+					Path:    "/repass",
+					Handler: user.RepassHandler(serverCtx),
 				},
 			}...,
 		),
-		rest.WithPrefix("/api/v1/users"),
+		rest.WithPrefix("/api/user"),
 	)
 }

@@ -1,66 +1,114 @@
 syntax = "v1"
 
-info (
-	title:  "精弘用户中心"
-	desc:   "精弘用户中心 powered by go-zero"
-	author: "MangoGovo"
-	email:  "1749100231@qq.com"
+info(
+    title: "精弘用户中心"
+    desc: "精弘用户中心 powered by go-zero"
+    author: "MangoGovo"
+    email: "1749100231@qq.com"
 )
 
 type (
-	LoginReq {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
-	LoginResp {
-		UserId int64 `json:"userId"`
-	}
-	RegisterReq {
-		StudentId string `json:"studentId"`
-		Password  string `json:"password"`
-		CardId    string `json:"cardId"`
-		Email     string `json:"email"`
-	}
-	RegisterResp  {}
-	BindReq {
-		Type          string `json:"type"`
-		DeviceId      string `json:"deviceId,optional"`
-		YxyUid        string `json:"yxyUid,optional"`
-		ZfPassword    string `json:"zfPassword,optional"`
-		OauthPassword string `json:"oauthPassword,optional"`
-	}
-	BindResp  {}
-	MeResp {
-		UserId int64 `json:"userId"`
-	}
+    BindInfo {
+        Zf bool `json:"zf"`
+        Yxy bool `json:"yxy"`
+        Oauth bool `json:"oauth"`
+    }
+    UserInfo {
+        Id int64 `json:"id"`
+        Username string `json:"username"`
+        StudentId string `json:"studentId"`
+        Bind BindInfo `json:"bind"`
+        UserType string `json:"userType"`
+        Email string `json:"email,optional"`
+        PhoneNum string `json:"phoneNum,optional"`
+        CreateTime string `json:"createTime"`
+    }
+    UserResp {
+        User UserInfo `json:"user"`
+    }
+    CreateStudentReq {
+        StudentId string `json:"studentId"`
+        Password string `json:"password"`
+        CardId string `json:"cardId"`
+        Email string `json:"email,optional"`
+    }
+    CreateStudentResp {
+        UserId int64 `json:"userId"`
+    }
+    LoginReq {
+        Username string `json:"username"`
+        Password string `json:"password"`
+    }
+    BindPasswordReq {
+        Password string `json:"password"`
+    }
+    BindYxyReq {
+        DeviceId string `json:"deviceId"`
+        YxyUid string `json:"yxyUid"`
+    }
+    ResetPasswordReq {
+        IdCard string `json:"iid"`
+        StudentId string `json:"stuid"`
+        Password string `json:"password"`
+    }
+    DeleteAccountReq {
+        IdCard string `json:"iid"`
+        StudentId string `json:"stuid"`
+    }
+    EmptyResp {
+    }
 )
 
-@server (
-	group:  user
-	prefix: /api/v1/users
+@server(
+    group: user
+    prefix: /api/user
 )
 service user-api {
-	@doc "用户登录"
-	@handler Login
-	post /login (LoginReq) returns (LoginResp)
+    @doc "创建学生账号"
+    @handler CreateStudent
+    post /create/student (CreateStudentReq) returns (CreateStudentResp)
 
-	@doc "用户注册"
-	@handler Register
-	post /register (RegisterReq) returns (RegisterResp)
+    @doc "密码登录"
+    @handler LoginByPassword
+    post /login (LoginReq) returns (UserResp)
 }
 
-@server (
-	group:      user
-	prefix:     /api/v1/users
-	middleware: UserAuth
+@server(
+    tags : "用户操作"
+    group: user
+    prefix:     /api/user
+    middleware: UserAuth
 )
 service user-api {
-	@doc "当前登录用户"
-	@handler Me
-	get /me returns (MeResp)
+    @doc "用户信息"
+    @handler Info
+    post /info returns (UserResp)
 
-	@doc "绑定外部系统"
-	@handler Bind
-	post /bind (BindReq) returns (BindResp)
+    @doc "重置密码"
+    @handler Repass
+    post /repass (ResetPasswordReq) returns (EmptyResp)
+
+    @doc "注销账号"
+    @handler Del
+    post /del (DeleteAccountReq) returns (EmptyResp)
 }
 
+@server(
+    tags: "账号绑定"
+    group: bind
+    prefix:     /api/user
+    middleware: UserAuth
+)
+service user-api {
+    @doc "绑定正方密码"
+    @handler BindZf
+    post /bind/zf (BindPasswordReq) returns (EmptyResp)
+
+    @doc "绑定统一认证密码"
+    @handler BindOauth
+    post /bind/oauth (BindPasswordReq) returns (EmptyResp)
+
+    @doc "绑定易校园账号"
+    @handler BindYxy
+    post /bind/yxy (BindYxyReq) returns (EmptyResp)
+}

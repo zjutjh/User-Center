@@ -12,22 +12,25 @@ import (
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
 )
 
-// 密码登录
-func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 创建学生账号
+func CreateStudentHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LoginReq
+		var req types.CreateStudentReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewLoginLogic(r.Context(), svcCtx)
-		resp, err := l.Login(&req)
+		l := user.NewCreateStudentLogic(r.Context(), svcCtx)
+		resp, err := l.CreateStudent(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			svcCtx.Session.SetEncoded(w, resp.Session)
-			httpx.OkJsonCtx(r.Context(), w, resp.User)
+			if err := svcCtx.Session.Set(w, resp.UserId); err != nil {
+				httpx.ErrorCtx(r.Context(), w, err)
+				return
+			}
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }

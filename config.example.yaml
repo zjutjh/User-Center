@@ -24,6 +24,15 @@ UserRPC:
   Mode: dev
   Timeout: 2000
 
+  Session:
+    Name: jh-passport
+    Secret: user-center-change-me
+    Path: /
+    MaxAge: 604800
+    Secure: false
+    HTTPOnly: true
+    SameSite: lax
+
   Mysql:
     Host: 127.0.0.1
     Port: 3306

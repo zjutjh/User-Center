@@ -3,15 +3,27 @@
 
 package types
 
-type BindReq struct {
-	Type          string `json:"type"`
-	DeviceId      string `json:"deviceId,optional"`
-	YxyUid        string `json:"yxyUid,optional"`
-	ZfPassword    string `json:"zfPassword,optional"`
-	OauthPassword string `json:"oauthPassword,optional"`
+type BindInfo struct {
+	Zf    bool `json:"zf"`
+	Yxy   bool `json:"yxy"`
+	Oauth bool `json:"oauth"`
 }
 
-type BindResp struct {
+type BindPasswordReq struct {
+	Password string `json:"password"`
+}
+
+type BindYxyReq struct {
+	DeviceId string `json:"deviceId"`
+	YxyUid   string `json:"yxyUid"`
+}
+
+type DeleteAccountReq struct {
+	IdCard    string `json:"iid"`
+	StudentId string `json:"stuid"`
+}
+
+type EmptyResp struct {
 }
 
 type LoginReq struct {
@@ -19,20 +31,38 @@ type LoginReq struct {
 	Password string `json:"password"`
 }
 
-type LoginResp struct {
-	UserId int64 `json:"userId"`
-}
-
-type MeResp struct {
-	UserId int64 `json:"userId"`
-}
-
-type RegisterReq struct {
+type CreateStudentReq struct {
 	StudentId string `json:"studentId"`
 	Password  string `json:"password"`
 	CardId    string `json:"cardId"`
-	Email     string `json:"email"`
+	Email     string `json:"email,optional"`
 }
 
-type RegisterResp struct {
+type CreateStudentResp struct {
+	UserId int64 `json:"userId"`
+}
+
+type RegisterReq = CreateStudentReq
+
+type RegisterResp = CreateStudentResp
+
+type ResetPasswordReq struct {
+	IdCard    string `json:"iid"`
+	StudentId string `json:"stuid"`
+	Password  string `json:"password"`
+}
+
+type UserInfo struct {
+	Id         int64    `json:"id"`
+	Username   string   `json:"username"`
+	StudentId  string   `json:"studentId"`
+	Bind       BindInfo `json:"bind"`
+	UserType   string   `json:"userType"`
+	Email      string   `json:"email,optional"`
+	PhoneNum   string   `json:"phoneNum,optional"`
+	CreateTime string   `json:"createTime"`
+}
+
+type UserResp struct {
+	User UserInfo `json:"user"`
 }

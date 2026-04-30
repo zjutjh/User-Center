@@ -59,15 +59,29 @@ func NewManager(conf Config) *Manager {
 	}
 }
 
-func (m *Manager) Set(w http.ResponseWriter, userID int64) error {
+func (m *Manager) Encode(userID int64) (string, error) {
 	encoded, err := m.codec.Encode(m.cookie, payload{
 		UserID:    userID,
 		ExpiredAt: time.Now().Add(time.Duration(m.conf.MaxAge) * time.Second).Unix(),
 	})
 	if err != nil {
-		return errorsx.ErrUnknown
+		return "", errorsx.ErrUnknown
 	}
 
+	return encoded, nil
+}
+
+func (m *Manager) Set(w http.ResponseWriter, userID int64) error {
+	encoded, err := m.Encode(userID)
+	if err != nil {
+		return err
+	}
+
+	m.SetEncoded(w, encoded)
+	return nil
+}
+
+func (m *Manager) SetEncoded(w http.ResponseWriter, encoded string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     m.cookie,
 		Value:    encoded,
@@ -78,7 +92,6 @@ func (m *Manager) Set(w http.ResponseWriter, userID int64) error {
 		HttpOnly: m.conf.HTTPOnly,
 		SameSite: parseSameSite(m.conf.SameSite),
 	})
-	return nil
 }
 
 func (m *Manager) Clear(w http.ResponseWriter) {
@@ -100,8 +113,12 @@ func (m *Manager) UserID(r *http.Request) (int64, error) {
 		return 0, errorsx.ErrNotLoggedIn
 	}
 
+	return m.Decode(cookie.Value)
+}
+
+func (m *Manager) Decode(encoded string) (int64, error) {
 	var data payload
-	if err := m.codec.Decode(m.cookie, cookie.Value, &data); err != nil {
+	if err := m.codec.Decode(m.cookie, encoded, &data); err != nil {
 		return 0, errorsx.ErrInvalidCookie
 	}
 	if data.UserID == 0 || data.ExpiredAt <= time.Now().Unix() {

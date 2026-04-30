@@ -3,6 +3,7 @@ package test_test
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -13,8 +14,11 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/zrpc"
 	userrpc "github.com/zjutjh/User-Center/apps/user-rpc/app"
+	daomodel "github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
 	rpcmodel "github.com/zjutjh/User-Center/apps/user-rpc/internal/model"
+	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
+	"github.com/zjutjh/User-Center/common/errorsx"
 )
 
 type rootConfig struct {
@@ -150,6 +154,76 @@ func TestUserCenterServiceGetUserPassword(t *testing.T) {
 		UserId: 1,
 	})
 	t.Logf("获取用户密码响应: %+v，错误: %v", passwordResp, err)
+}
+
+func TestUserCenterServiceBind(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	db, err := rpcmodel.NewDB(userCenterRPCTest.Config.Mysql)
+	require.NoError(t, err)
+	sqlDB, err := db.DB()
+	require.NoError(t, err)
+	t.Cleanup(func() {
+		_ = sqlDB.Close()
+	})
+
+	user := &daomodel.User{
+		StudentID: fmt.Sprintf("bind%d", time.Now().UnixNano()),
+		Password:  "secret123",
+		Email:     "bind-test@zjutjh.com",
+	}
+	require.NoError(t, db.WithContext(ctx).Create(user).Error)
+	t.Cleanup(func() {
+		require.NoError(t, db.WithContext(context.Background()).Where("id = ?", user.ID).Delete(&daomodel.User{}).Error)
+	})
+
+	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+		UserId:   user.ID,
+		Type:     pb.BindType_BIND_TYPE_YXY,
+		DeviceId: "  bind-device-id  ",
+		YxyUid:   "  bind-yxy-uid  ",
+	})
+	require.NoError(t, err)
+
+	passwordResp, err := userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: user.ID,
+	})
+	require.NoError(t, err)
+	require.Equal(t, "bind-device-id", passwordResp.DeviceId)
+	require.Equal(t, "bind-yxy-uid", passwordResp.YxyUid)
+
+	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+		UserId:     user.ID,
+		Type:       pb.BindType_BIND_TYPE_ZF,
+		ZfPassword: "  bind-zf-password  ",
+	})
+	require.NoError(t, err)
+
+	passwordResp, err = userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: user.ID,
+	})
+	require.NoError(t, err)
+	require.Equal(t, "bind-zf-password", passwordResp.ZfPassword)
+
+	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+		UserId:        user.ID,
+		Type:          pb.BindType_BIND_TYPE_OAUTH,
+		OauthPassword: "  bind-oauth-password  ",
+	})
+	require.NoError(t, err)
+
+	passwordResp, err = userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: user.ID,
+	})
+	require.NoError(t, err)
+	require.Equal(t, "bind-oauth-password", passwordResp.OauthPassword)
+
+	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+		UserId: user.ID,
+		Type:   pb.BindType_BIND_TYPE_YXY,
+	})
+	require.Error(t, err)
+	require.Equal(t, errorsx.ErrParameterInvalid, errorsx.FromGRPC(err))
 }
 
 func rpcTestContext(t *testing.T) context.Context {

@@ -23,6 +23,9 @@ const (
 	UserCenterService_Login_FullMethodName           = "/user.UserCenterService/Login"
 	UserCenterService_Bind_FullMethodName            = "/user.UserCenterService/Bind"
 	UserCenterService_GetUserPassword_FullMethodName = "/user.UserCenterService/GetUserPassword"
+	UserCenterService_GetUserInfo_FullMethodName     = "/user.UserCenterService/GetUserInfo"
+	UserCenterService_ResetPassword_FullMethodName   = "/user.UserCenterService/ResetPassword"
+	UserCenterService_DeleteAccount_FullMethodName   = "/user.UserCenterService/DeleteAccount"
 	UserCenterService_HealthyCheck_FullMethodName    = "/user.UserCenterService/HealthyCheck"
 )
 
@@ -34,6 +37,9 @@ type UserCenterServiceClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Bind(ctx context.Context, in *BindRequest, opts ...grpc.CallOption) (*BindResponse, error)
 	GetUserPassword(ctx context.Context, in *GetUserPasswordRequest, opts ...grpc.CallOption) (*GetUserPasswordResponse, error)
+	GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
+	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordResponse, error)
+	DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error)
 	HealthyCheck(ctx context.Context, in *HealthyCheckRequest, opts ...grpc.CallOption) (*HealthyCheckResponse, error)
 }
 
@@ -85,6 +91,36 @@ func (c *userCenterServiceClient) GetUserPassword(ctx context.Context, in *GetUs
 	return out, nil
 }
 
+func (c *userCenterServiceClient) GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserInfoResponse)
+	err := c.cc.Invoke(ctx, UserCenterService_GetUserInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userCenterServiceClient) ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResetPasswordResponse)
+	err := c.cc.Invoke(ctx, UserCenterService_ResetPassword_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userCenterServiceClient) DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteAccountResponse)
+	err := c.cc.Invoke(ctx, UserCenterService_DeleteAccount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userCenterServiceClient) HealthyCheck(ctx context.Context, in *HealthyCheckRequest, opts ...grpc.CallOption) (*HealthyCheckResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HealthyCheckResponse)
@@ -103,6 +139,9 @@ type UserCenterServiceServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Bind(context.Context, *BindRequest) (*BindResponse, error)
 	GetUserPassword(context.Context, *GetUserPasswordRequest) (*GetUserPasswordResponse, error)
+	GetUserInfo(context.Context, *GetUserInfoRequest) (*GetUserInfoResponse, error)
+	ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordResponse, error)
+	DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error)
 	HealthyCheck(context.Context, *HealthyCheckRequest) (*HealthyCheckResponse, error)
 	mustEmbedUnimplementedUserCenterServiceServer()
 }
@@ -125,6 +164,15 @@ func (UnimplementedUserCenterServiceServer) Bind(context.Context, *BindRequest) 
 }
 func (UnimplementedUserCenterServiceServer) GetUserPassword(context.Context, *GetUserPasswordRequest) (*GetUserPasswordResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserPassword not implemented")
+}
+func (UnimplementedUserCenterServiceServer) GetUserInfo(context.Context, *GetUserInfoRequest) (*GetUserInfoResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserInfo not implemented")
+}
+func (UnimplementedUserCenterServiceServer) ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResetPassword not implemented")
+}
+func (UnimplementedUserCenterServiceServer) DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteAccount not implemented")
 }
 func (UnimplementedUserCenterServiceServer) HealthyCheck(context.Context, *HealthyCheckRequest) (*HealthyCheckResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HealthyCheck not implemented")
@@ -222,6 +270,60 @@ func _UserCenterService_GetUserPassword_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserCenterService_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCenterServiceServer).GetUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCenterService_GetUserInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCenterServiceServer).GetUserInfo(ctx, req.(*GetUserInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserCenterService_ResetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCenterServiceServer).ResetPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCenterService_ResetPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCenterServiceServer).ResetPassword(ctx, req.(*ResetPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserCenterService_DeleteAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCenterServiceServer).DeleteAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCenterService_DeleteAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCenterServiceServer).DeleteAccount(ctx, req.(*DeleteAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserCenterService_HealthyCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HealthyCheckRequest)
 	if err := dec(in); err != nil {
@@ -262,6 +364,18 @@ var UserCenterService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserPassword",
 			Handler:    _UserCenterService_GetUserPassword_Handler,
+		},
+		{
+			MethodName: "GetUserInfo",
+			Handler:    _UserCenterService_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "ResetPassword",
+			Handler:    _UserCenterService_ResetPassword_Handler,
+		},
+		{
+			MethodName: "DeleteAccount",
+			Handler:    _UserCenterService_DeleteAccount_Handler,
 		},
 		{
 			MethodName: "HealthyCheck",

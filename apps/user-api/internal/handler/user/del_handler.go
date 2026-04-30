@@ -10,23 +10,23 @@ import (
 	"github.com/zjutjh/User-Center/apps/user-api/internal/logic/user"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
-	"github.com/zjutjh/User-Center/common/errorsx"
 )
 
-// 绑定外部系统
-func BindHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 注销账号
+func DelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.BindReq
+		var req types.DeleteAccountReq
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, errorsx.ErrParameterInvalid)
+			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewBindLogic(r.Context(), svcCtx)
-		resp, err := l.Bind(&req)
+		l := user.NewDelLogic(r.Context(), svcCtx)
+		resp, err := l.Del(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
+			svcCtx.Session.Clear(w)
 			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}

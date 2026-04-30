@@ -5,9 +5,10 @@ package user;
 option go_package = "./pb";
 
 enum BindType {
-    BIND_TYPE_OAUTH = 0;
-    BIND_TYPE_ZF = 1;
-    BIND_TYPE_YXY = 2;
+    BIND_TYPE_UNSPECIFIED = 0;
+    BIND_TYPE_OAUTH = 1;
+    BIND_TYPE_ZF = 2;
+    BIND_TYPE_YXY = 3;
 }
 
 message LoginRequest {
@@ -17,6 +18,7 @@ message LoginRequest {
 
 message LoginResponse {
     int64 userId = 1;
+    string session = 2;
 }
 
 message RegisterRequest {
@@ -53,6 +55,42 @@ message GetUserPasswordResponse {
     string oauth_password = 5;
 }
 
+message GetUserInfoRequest {
+    int64 userId = 1;
+}
+
+message GetUserInfoResponse {
+    int64 user_id = 1;
+    string student_id = 2;
+    string user_type = 3;
+    string email = 4;
+    string phone_num = 5;
+    string device_id = 6;
+    string yxy_uid = 7;
+    string zf_password = 8;
+    string oauth_password = 9;
+    string create_time = 10;
+}
+
+message ResetPasswordRequest {
+    int64 userId = 1;
+    string studentId = 2;
+    string cardId = 3;
+    string password = 4;
+}
+
+message ResetPasswordResponse {
+}
+
+message DeleteAccountRequest {
+    int64 userId = 1;
+    string studentId = 2;
+    string cardId = 3;
+}
+
+message DeleteAccountResponse {
+}
+
 message HealthyCheckRequest {
     string studentId = 1;
 }
@@ -65,5 +103,8 @@ service UserCenterService {
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc Bind(BindRequest) returns (BindResponse);
     rpc GetUserPassword(GetUserPasswordRequest) returns (GetUserPasswordResponse);
+    rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+    rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
     rpc HealthyCheck(HealthyCheckRequest) returns (HealthyCheckResponse);
 }

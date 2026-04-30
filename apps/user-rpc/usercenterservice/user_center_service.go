@@ -16,6 +16,10 @@ import (
 type (
 	BindRequest             = pb.BindRequest
 	BindResponse            = pb.BindResponse
+	DeleteAccountRequest    = pb.DeleteAccountRequest
+	DeleteAccountResponse   = pb.DeleteAccountResponse
+	GetUserInfoRequest      = pb.GetUserInfoRequest
+	GetUserInfoResponse     = pb.GetUserInfoResponse
 	GetUserPasswordRequest  = pb.GetUserPasswordRequest
 	GetUserPasswordResponse = pb.GetUserPasswordResponse
 	HealthyCheckRequest     = pb.HealthyCheckRequest
@@ -24,12 +28,17 @@ type (
 	LoginResponse           = pb.LoginResponse
 	RegisterRequest         = pb.RegisterRequest
 	RegisterResponse        = pb.RegisterResponse
+	ResetPasswordRequest    = pb.ResetPasswordRequest
+	ResetPasswordResponse   = pb.ResetPasswordResponse
 
 	UserCenterService interface {
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 		Bind(ctx context.Context, in *BindRequest, opts ...grpc.CallOption) (*BindResponse, error)
 		GetUserPassword(ctx context.Context, in *GetUserPasswordRequest, opts ...grpc.CallOption) (*GetUserPasswordResponse, error)
+		GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
+		ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordResponse, error)
+		DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error)
 		HealthyCheck(ctx context.Context, in *HealthyCheckRequest, opts ...grpc.CallOption) (*HealthyCheckResponse, error)
 	}
 
@@ -62,6 +71,21 @@ func (m *defaultUserCenterService) Bind(ctx context.Context, in *BindRequest, op
 func (m *defaultUserCenterService) GetUserPassword(ctx context.Context, in *GetUserPasswordRequest, opts ...grpc.CallOption) (*GetUserPasswordResponse, error) {
 	client := pb.NewUserCenterServiceClient(m.cli.Conn())
 	return client.GetUserPassword(ctx, in, opts...)
+}
+
+func (m *defaultUserCenterService) GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error) {
+	client := pb.NewUserCenterServiceClient(m.cli.Conn())
+	return client.GetUserInfo(ctx, in, opts...)
+}
+
+func (m *defaultUserCenterService) ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordResponse, error) {
+	client := pb.NewUserCenterServiceClient(m.cli.Conn())
+	return client.ResetPassword(ctx, in, opts...)
+}
+
+func (m *defaultUserCenterService) DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error) {
+	client := pb.NewUserCenterServiceClient(m.cli.Conn())
+	return client.DeleteAccount(ctx, in, opts...)
 }
 
 func (m *defaultUserCenterService) HealthyCheck(ctx context.Context, in *HealthyCheckRequest, opts ...grpc.CallOption) (*HealthyCheckResponse, error) {

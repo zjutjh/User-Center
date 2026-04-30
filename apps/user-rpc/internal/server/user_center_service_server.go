@@ -43,6 +43,21 @@ func (s *UserCenterServiceServer) GetUserPassword(ctx context.Context, in *pb.Ge
 	return l.GetUserPassword(in)
 }
 
+func (s *UserCenterServiceServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoRequest) (*pb.GetUserInfoResponse, error) {
+	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
+	return l.GetUserInfo(in)
+}
+
+func (s *UserCenterServiceServer) ResetPassword(ctx context.Context, in *pb.ResetPasswordRequest) (*pb.ResetPasswordResponse, error) {
+	l := logic.NewResetPasswordLogic(ctx, s.svcCtx)
+	return l.ResetPassword(in)
+}
+
+func (s *UserCenterServiceServer) DeleteAccount(ctx context.Context, in *pb.DeleteAccountRequest) (*pb.DeleteAccountResponse, error) {
+	l := logic.NewDeleteAccountLogic(ctx, s.svcCtx)
+	return l.DeleteAccount(in)
+}
+
 func (s *UserCenterServiceServer) HealthyCheck(ctx context.Context, in *pb.HealthyCheckRequest) (*pb.HealthyCheckResponse, error) {
 	l := logic.NewHealthyCheckLogic(ctx, s.svcCtx)
 	return l.HealthyCheck(in)
