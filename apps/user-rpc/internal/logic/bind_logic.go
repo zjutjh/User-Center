@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"strings"
 
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
@@ -18,14 +17,6 @@ type BindLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
-}
-
-type bindStrategy func(in *pb.BindRequest) (map[string]any, error)
-
-var bindStrategies = map[pb.BindType]bindStrategy{
-	pb.BindType_BIND_TYPE_YXY:   buildYXYBindUpdates,
-	pb.BindType_BIND_TYPE_ZF:    buildZFBindUpdates,
-	pb.BindType_BIND_TYPE_OAUTH: buildOAuthBindUpdates,
 }
 
 func NewBindLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BindLogic {
@@ -52,9 +43,13 @@ func (l *BindLogic) Bind(in *pb.BindRequest) (*pb.BindResponse, error) {
 		return nil, errorsx.ErrUnknown
 	}
 
-	updates, err := buildBindUpdates(in)
+	updates, err := l.svcCtx.Credential.BuildBindUpdates(in)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, errorsx.ErrParameterInvalid) {
+			return nil, errorsx.ErrParameterInvalid
+		}
+		l.Errorf("构建用户绑定信息失败: %v", err)
+		return nil, errorsx.ErrUnknown
 	}
 
 	if err := l.svcCtx.DB.WithContext(l.ctx).
@@ -66,48 +61,4 @@ func (l *BindLogic) Bind(in *pb.BindRequest) (*pb.BindResponse, error) {
 	}
 
 	return &pb.BindResponse{}, nil
-}
-
-func buildBindUpdates(in *pb.BindRequest) (map[string]any, error) {
-	strategy, ok := bindStrategies[in.Type]
-	if !ok {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
-	return strategy(in)
-}
-
-func buildYXYBindUpdates(in *pb.BindRequest) (map[string]any, error) {
-	deviceID := strings.TrimSpace(in.DeviceId)
-	yxyUID := strings.TrimSpace(in.YxyUid)
-	if deviceID == "" || yxyUID == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
-	return map[string]any{
-		"device_id": deviceID,
-		"yxy_uid":   yxyUID,
-	}, nil
-}
-
-func buildZFBindUpdates(in *pb.BindRequest) (map[string]any, error) {
-	zfPassword := strings.TrimSpace(in.ZfPassword)
-	if zfPassword == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
-	return map[string]any{
-		"zf_password": zfPassword,
-	}, nil
-}
-
-func buildOAuthBindUpdates(in *pb.BindRequest) (map[string]any, error) {
-	oauthPassword := strings.TrimSpace(in.OauthPassword)
-	if oauthPassword == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
-	return map[string]any{
-		"oauth_password": oauthPassword,
-	}, nil
 }
