@@ -15,7 +15,7 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	userrpc "github.com/zjutjh/User-Center/apps/user-rpc/app"
 	daomodel "github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
-	rpcmodel "github.com/zjutjh/User-Center/apps/user-rpc/internal/model"
+	mysqlinfra "github.com/zjutjh/User-Center/apps/user-rpc/internal/infra/mysql"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
 	"github.com/zjutjh/User-Center/common/errorsx"
@@ -159,7 +159,7 @@ func TestUserCenterServiceGetUserPassword(t *testing.T) {
 func TestUserCenterServiceBind(t *testing.T) {
 	ctx := rpcTestContext(t)
 
-	db, err := rpcmodel.NewDB(userCenterRPCTest.Config.Mysql)
+	db, err := mysqlinfra.NewDB(userCenterRPCTest.Config.Mysql)
 	require.NoError(t, err)
 	sqlDB, err := db.DB()
 	require.NoError(t, err)
@@ -234,7 +234,7 @@ func rpcTestContext(t *testing.T) context.Context {
 }
 
 func pingRealMySQL(c userrpc.Config) error {
-	db, err := rpcmodel.NewDB(c.Mysql)
+	db, err := mysqlinfra.NewDB(c.Mysql)
 	if err != nil {
 		return err
 	}
