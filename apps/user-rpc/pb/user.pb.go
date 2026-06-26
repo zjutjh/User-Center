@@ -75,7 +75,7 @@ func (BindType) EnumDescriptor() ([]byte, []int) {
 
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StudentId     string                 `protobuf:"bytes,1,opt,name=studentId,proto3" json:"studentId,omitempty"`
+	StudentId     string                 `protobuf:"bytes,1,opt,name=student_id,json=studentId,proto3" json:"student_id,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -127,7 +127,7 @@ func (x *LoginRequest) GetPassword() string {
 
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Session       string                 `protobuf:"bytes,2,opt,name=session,proto3" json:"session,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -179,9 +179,9 @@ func (x *LoginResponse) GetSession() string {
 
 type RegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StudentId     string                 `protobuf:"bytes,1,opt,name=studentId,proto3" json:"studentId,omitempty"`
+	StudentId     string                 `protobuf:"bytes,1,opt,name=student_id,json=studentId,proto3" json:"student_id,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	CardId        string                 `protobuf:"bytes,3,opt,name=cardId,proto3" json:"cardId,omitempty"`
+	CardId        string                 `protobuf:"bytes,3,opt,name=card_id,json=cardId,proto3" json:"card_id,omitempty"`
 	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -283,7 +283,7 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 
 type BindRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Type          BindType               `protobuf:"varint,2,opt,name=type,proto3,enum=user.BindType" json:"type,omitempty"`
 	DeviceId      string                 `protobuf:"bytes,3,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
 	YxyUid        string                 `protobuf:"bytes,4,opt,name=yxy_uid,json=yxyUid,proto3" json:"yxy_uid,omitempty"`
@@ -403,7 +403,7 @@ func (*BindResponse) Descriptor() ([]byte, []int) {
 
 type GetUserPasswordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -523,7 +523,7 @@ func (x *GetUserPasswordResponse) GetOauthPassword() string {
 
 type GetUserInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -683,9 +683,9 @@ func (x *GetUserInfoResponse) GetCreateTime() string {
 
 type ResetPasswordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
-	StudentId     string                 `protobuf:"bytes,2,opt,name=studentId,proto3" json:"studentId,omitempty"`
-	CardId        string                 `protobuf:"bytes,3,opt,name=cardId,proto3" json:"cardId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	StudentId     string                 `protobuf:"bytes,2,opt,name=student_id,json=studentId,proto3" json:"student_id,omitempty"`
+	CardId        string                 `protobuf:"bytes,3,opt,name=card_id,json=cardId,proto3" json:"card_id,omitempty"`
 	Password      string                 `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -787,9 +787,9 @@ func (*ResetPasswordResponse) Descriptor() ([]byte, []int) {
 
 type DeleteAccountRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
-	StudentId     string                 `protobuf:"bytes,2,opt,name=studentId,proto3" json:"studentId,omitempty"`
-	CardId        string                 `protobuf:"bytes,3,opt,name=cardId,proto3" json:"cardId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	StudentId     string                 `protobuf:"bytes,2,opt,name=student_id,json=studentId,proto3" json:"student_id,omitempty"`
+	CardId        string                 `protobuf:"bytes,3,opt,name=card_id,json=cardId,proto3" json:"card_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -883,7 +883,7 @@ func (*DeleteAccountResponse) Descriptor() ([]byte, []int) {
 
 type HealthyCheckRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StudentId     string                 `protobuf:"bytes,1,opt,name=studentId,proto3" json:"studentId,omitempty"`
+	StudentId     string                 `protobuf:"bytes,1,opt,name=student_id,json=studentId,proto3" json:"student_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -965,30 +965,32 @@ var File_apps_user_rpc_user_proto protoreflect.FileDescriptor
 
 const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\n" +
-	"\x18apps/user-rpc/user.proto\x12\x04user\"H\n" +
-	"\fLoginRequest\x12\x1c\n" +
-	"\tstudentId\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"A\n" +
-	"\rLoginResponse\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\x18\n" +
-	"\asession\x18\x02 \x01(\tR\asession\"y\n" +
-	"\x0fRegisterRequest\x12\x1c\n" +
-	"\tstudentId\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x16\n" +
-	"\x06cardId\x18\x03 \x01(\tR\x06cardId\x12\x14\n" +
+	"\x18apps/user-rpc/user.proto\x12\x04user\"I\n" +
+	"\fLoginRequest\x12\x1d\n" +
+	"\n" +
+	"student_id\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"B\n" +
+	"\rLoginResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x18\n" +
+	"\asession\x18\x02 \x01(\tR\asession\"{\n" +
+	"\x0fRegisterRequest\x12\x1d\n" +
+	"\n" +
+	"student_id\x18\x01 \x01(\tR\tstudentId\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x17\n" +
+	"\acard_id\x18\x03 \x01(\tR\x06cardId\x12\x14\n" +
 	"\x05email\x18\x04 \x01(\tR\x05email\"\x12\n" +
-	"\x10RegisterResponse\"\xc7\x01\n" +
-	"\vBindRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\"\n" +
+	"\x10RegisterResponse\"\xc8\x01\n" +
+	"\vBindRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\"\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x0e.user.BindTypeR\x04type\x12\x1b\n" +
 	"\tdevice_id\x18\x03 \x01(\tR\bdeviceId\x12\x17\n" +
 	"\ayxy_uid\x18\x04 \x01(\tR\x06yxyUid\x12\x1f\n" +
 	"\vzf_password\x18\x05 \x01(\tR\n" +
 	"zfPassword\x12%\n" +
 	"\x0eoauth_password\x18\x06 \x01(\tR\roauthPassword\"\x0e\n" +
-	"\fBindResponse\"0\n" +
-	"\x16GetUserPasswordRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x03R\x06userId\"\xb6\x01\n" +
+	"\fBindResponse\"1\n" +
+	"\x16GetUserPasswordRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"\xb6\x01\n" +
 	"\x17GetUserPasswordResponse\x12\x1d\n" +
 	"\n" +
 	"student_id\x18\x01 \x01(\tR\tstudentId\x12\x1b\n" +
@@ -996,9 +998,9 @@ const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\ayxy_uid\x18\x03 \x01(\tR\x06yxyUid\x12\x1f\n" +
 	"\vzf_password\x18\x04 \x01(\tR\n" +
 	"zfPassword\x12%\n" +
-	"\x0eoauth_password\x18\x05 \x01(\tR\roauthPassword\",\n" +
-	"\x12GetUserInfoRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x03R\x06userId\"\xbc\x02\n" +
+	"\x0eoauth_password\x18\x05 \x01(\tR\roauthPassword\"-\n" +
+	"\x12GetUserInfoRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"\xbc\x02\n" +
 	"\x13GetUserInfoResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
 	"\n" +
@@ -1013,20 +1015,23 @@ const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\x0eoauth_password\x18\t \x01(\tR\roauthPassword\x12\x1f\n" +
 	"\vcreate_time\x18\n" +
 	" \x01(\tR\n" +
-	"createTime\"\x80\x01\n" +
-	"\x14ResetPasswordRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\x1c\n" +
-	"\tstudentId\x18\x02 \x01(\tR\tstudentId\x12\x16\n" +
-	"\x06cardId\x18\x03 \x01(\tR\x06cardId\x12\x1a\n" +
+	"createTime\"\x83\x01\n" +
+	"\x14ResetPasswordRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\n" +
+	"student_id\x18\x02 \x01(\tR\tstudentId\x12\x17\n" +
+	"\acard_id\x18\x03 \x01(\tR\x06cardId\x12\x1a\n" +
 	"\bpassword\x18\x04 \x01(\tR\bpassword\"\x17\n" +
-	"\x15ResetPasswordResponse\"d\n" +
-	"\x14DeleteAccountRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\x1c\n" +
-	"\tstudentId\x18\x02 \x01(\tR\tstudentId\x12\x16\n" +
-	"\x06cardId\x18\x03 \x01(\tR\x06cardId\"\x17\n" +
-	"\x15DeleteAccountResponse\"3\n" +
-	"\x13HealthyCheckRequest\x12\x1c\n" +
-	"\tstudentId\x18\x01 \x01(\tR\tstudentId\"\x16\n" +
+	"\x15ResetPasswordResponse\"g\n" +
+	"\x14DeleteAccountRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\n" +
+	"student_id\x18\x02 \x01(\tR\tstudentId\x12\x17\n" +
+	"\acard_id\x18\x03 \x01(\tR\x06cardId\"\x17\n" +
+	"\x15DeleteAccountResponse\"4\n" +
+	"\x13HealthyCheckRequest\x12\x1d\n" +
+	"\n" +
+	"student_id\x18\x01 \x01(\tR\tstudentId\"\x16\n" +
 	"\x14HealthyCheckResponse*_\n" +
 	"\bBindType\x12\x19\n" +
 	"\x15BIND_TYPE_UNSPECIFIED\x10\x00\x12\x13\n" +

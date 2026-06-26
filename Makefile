@@ -6,6 +6,8 @@ STYLE ?= go_zero
 
 API_DIR := apps/user-api
 API_FILE := $(API_DIR)/user.api
+SWAGGER_DIR := deploy/swagger
+SWAGGER_FILENAME := usercenter
 RPC_DIR := apps/user-rpc
 RPC_PROTO := $(RPC_DIR)/user.proto
 MODULE := github.com/zjutjh/User-Center
@@ -23,11 +25,15 @@ build-rpc: ## Build the user RPC service.
 	go build -o bin/user-rpc ./$(RPC_DIR)
 
 .PHONY: generate
-generate: generate-api generate-rpc ## Generate api and rpc code with goctl.
+generate: generate-api generate-rpc generate-swagger ## Generate api, rpc, and swagger artifacts with goctl.
 
 .PHONY: generate-api
 generate-api: ## Generate HTTP service code from user.api.
 	goctl api go --api $(API_FILE) --dir $(API_DIR) --style $(STYLE)
+
+.PHONY: generate-swagger
+generate-swagger: ## Generate Swagger JSON from user.api.
+	goctl api swagger --api $(API_FILE) --dir $(SWAGGER_DIR) --filename $(SWAGGER_FILENAME)
 
 .PHONY: generate-rpc
 generate-rpc: ## Generate RPC service code from user.proto.

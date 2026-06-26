@@ -10,14 +10,14 @@ type BindInfo struct {
 }
 
 type CreateStudentReq struct {
-	StudentId string `json:"studentId"`
+	StudentId string `json:"student_id"`
 	Password  string `json:"password"`
-	CardId    string `json:"cardId"`
+	CardId    string `json:"card_id"`
 	Email     string `json:"email,optional"`
 }
 
 type CreateStudentResp struct {
-	UserId int64 `json:"userId"`
+	UserId int64 `json:"user_id"`
 }
 
 type DeleteAccountReq struct {
@@ -34,7 +34,7 @@ type LoginReq struct {
 }
 
 type MiniProgramLoginReq struct {
-	AppType string `json:"appType"`
+	AppType string `json:"app_type"`
 	Code    string `json:"code"`
 }
 
@@ -47,12 +47,12 @@ type ResetPasswordReq struct {
 type UserInfo struct {
 	Id         int64    `json:"id"`
 	Username   string   `json:"username"`
-	StudentId  string   `json:"studentId"`
+	StudentId  string   `json:"student_id"`
 	Bind       BindInfo `json:"bind"`
-	UserType   string   `json:"userType"`
+	UserType   string   `json:"user_type"`
 	Email      string   `json:"email,optional"`
-	PhoneNum   string   `json:"phoneNum,optional"`
-	CreateTime string   `json:"createTime"`
+	PhoneNum   string   `json:"phone_num,optional"`
+	CreateTime string   `json:"create_time"`
 }
 
 type UserResp struct {

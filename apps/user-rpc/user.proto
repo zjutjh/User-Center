@@ -12,19 +12,19 @@ enum BindType {
 }
 
 message LoginRequest {
-    string studentId = 1;
+    string student_id = 1;
     string password = 2;
 }
 
 message LoginResponse {
-    int64 userId = 1;
+    int64 user_id = 1;
     string session = 2;
 }
 
 message RegisterRequest {
-    string studentId = 1;
+    string student_id = 1;
     string password = 2;
-    string cardId = 3;
+    string card_id = 3;
     string email = 4;
 }
 
@@ -32,7 +32,7 @@ message RegisterResponse {
 }
 
 message BindRequest {
-    int64 userId = 1;
+    int64 user_id = 1;
     BindType type = 2;
     string device_id = 3;
     string yxy_uid = 4;
@@ -44,7 +44,7 @@ message BindResponse {
 }
 
 message GetUserPasswordRequest {
-    int64 userId = 1;
+    int64 user_id = 1;
 }
 
 message GetUserPasswordResponse {
@@ -56,7 +56,7 @@ message GetUserPasswordResponse {
 }
 
 message GetUserInfoRequest {
-    int64 userId = 1;
+    int64 user_id = 1;
 }
 
 message GetUserInfoResponse {
@@ -73,9 +73,9 @@ message GetUserInfoResponse {
 }
 
 message ResetPasswordRequest {
-    int64 userId = 1;
-    string studentId = 2;
-    string cardId = 3;
+    int64 user_id = 1;
+    string student_id = 2;
+    string card_id = 3;
     string password = 4;
 }
 
@@ -83,16 +83,16 @@ message ResetPasswordResponse {
 }
 
 message DeleteAccountRequest {
-    int64 userId = 1;
-    string studentId = 2;
-    string cardId = 3;
+    int64 user_id = 1;
+    string student_id = 2;
+    string card_id = 3;
 }
 
 message DeleteAccountResponse {
 }
 
 message HealthyCheckRequest {
-    string studentId = 1;
+    string student_id = 1;
 }
 
 message HealthyCheckResponse {

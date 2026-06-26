@@ -21,8 +21,8 @@ type Config struct {
 }
 
 type payload struct {
-	UserID    int64 `json:"userId"`
-	ExpiredAt int64 `json:"expiredAt"`
+	UserID    int64 `json:"user_id"`
+	ExpiredAt int64 `json:"expired_at"`
 }
 
 type Manager struct {
