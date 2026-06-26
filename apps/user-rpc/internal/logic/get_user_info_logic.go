@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -38,6 +39,16 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoRequest) (*pb.GetUserIn
 		return nil, errorsx.ErrUnknown
 	}
 
+	zfPassword := ""
+	if strings.TrimSpace(user.ZfPassword) != "" {
+		zfPassword = "BOUND"
+	}
+
+	oauthPassword := ""
+	if strings.TrimSpace(user.OauthPassword) != "" {
+		oauthPassword = "BOUND"
+	}
+
 	return &pb.GetUserInfoResponse{
 		UserId:        user.ID,
 		StudentId:     user.StudentID,
@@ -46,8 +57,8 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoRequest) (*pb.GetUserIn
 		PhoneNum:      user.PhoneNum,
 		DeviceId:      user.DeviceID,
 		YxyUid:        user.YxyUID,
-		ZfPassword:    user.ZfPassword,
-		OauthPassword: user.OauthPassword,
+		ZfPassword:    zfPassword,
+		OauthPassword: oauthPassword,
 		CreateTime:    user.CreateTime.Format(time.RFC3339),
 	}, nil
 }

@@ -7,7 +7,10 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"strings"
 )
+
+const ciphertextVersionPrefix = "v1:"
 
 type Codec struct {
 	gcm cipher.AEAD
@@ -38,7 +41,7 @@ func (c *Codec) Encrypt(plaintext string) (string, error) {
 	}
 
 	ciphertext := c.gcm.Seal(nonce, nonce, []byte(plaintext), nil)
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	return ciphertextVersionPrefix + base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
 func (c *Codec) Decrypt(ciphertext string) (string, error) {
@@ -46,7 +49,12 @@ func (c *Codec) Decrypt(ciphertext string) (string, error) {
 		return "", nil
 	}
 
-	raw, err := base64.StdEncoding.DecodeString(ciphertext)
+	if !strings.HasPrefix(ciphertext, ciphertextVersionPrefix) {
+		return ciphertext, nil
+	}
+
+	encoded := strings.TrimPrefix(ciphertext, ciphertextVersionPrefix)
+	raw, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
 		return "", err
 	}

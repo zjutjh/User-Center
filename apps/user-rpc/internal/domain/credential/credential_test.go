@@ -1,6 +1,7 @@
 package credential
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -21,6 +22,26 @@ func TestCodecEncryptDecrypt(t *testing.T) {
 	require.NotEqual(t, plaintext, ciphertext)
 
 	decrypted, err := codec.Decrypt(ciphertext)
+	require.NoError(t, err)
+	require.Equal(t, plaintext, decrypted)
+}
+
+func TestCodecEncryptAddsVersionPrefix(t *testing.T) {
+	codec, err := NewCodec(testKey)
+	require.NoError(t, err)
+
+	ciphertext, err := codec.Encrypt("secret-password")
+	require.NoError(t, err)
+
+	require.True(t, strings.HasPrefix(ciphertext, "v1:"))
+}
+
+func TestCodecDecryptLegacyPlaintext(t *testing.T) {
+	codec, err := NewCodec(testKey)
+	require.NoError(t, err)
+
+	plaintext := "legacy-password"
+	decrypted, err := codec.Decrypt(plaintext)
 	require.NoError(t, err)
 	require.Equal(t, plaintext, decrypted)
 }

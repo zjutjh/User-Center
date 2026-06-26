@@ -37,11 +37,23 @@ func (l *GetUserPasswordLogic) GetUserPassword(in *pb.GetUserPasswordRequest) (*
 		return nil, errorsx.ErrUnknown
 	}
 
+	zfPassword, err := l.svcCtx.Credential.DecryptPassword(user.ZfPassword)
+	if err != nil {
+		l.Errorf("解密正方密码失败: %v", err)
+		return nil, errorsx.ErrUnknown
+	}
+
+	oauthPassword, err := l.svcCtx.Credential.DecryptPassword(user.OauthPassword)
+	if err != nil {
+		l.Errorf("解密统一认证密码失败: %v", err)
+		return nil, errorsx.ErrUnknown
+	}
+
 	return &pb.GetUserPasswordResponse{
 		StudentId:     user.StudentID,
 		DeviceId:      user.DeviceID,
 		YxyUid:        user.YxyUID,
-		ZfPassword:    user.ZfPassword,
-		OauthPassword: user.OauthPassword,
+		ZfPassword:    zfPassword,
+		OauthPassword: oauthPassword,
 	}, nil
 }
