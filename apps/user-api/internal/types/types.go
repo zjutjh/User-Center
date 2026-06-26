@@ -9,10 +9,23 @@ type BindInfo struct {
 	Oauth bool `json:"oauth"`
 }
 
+type BindOauthReq struct {
+	OauthPassword string `json:"oauth_password" validate:"required"`
+}
+
+type BindYxyReq struct {
+	DeviceId string `json:"device_id" validate:"required"`
+	YxyUid   string `json:"yxy_uid" validate:"required"`
+}
+
+type BindZfReq struct {
+	ZfPassword string `json:"zf_password" validate:"required"`
+}
+
 type CreateStudentReq struct {
-	StudentId string `json:"student_id"`
-	Password  string `json:"password"`
-	CardId    string `json:"card_id"`
+	StudentId string `json:"student_id" validate:"required"`
+	Password  string `json:"password" validate:"required"`
+	CardId    string `json:"card_id" validate:"required"`
 	Email     string `json:"email,optional"`
 }
 
@@ -21,27 +34,27 @@ type CreateStudentResp struct {
 }
 
 type DeleteAccountReq struct {
-	IdCard    string `json:"iid"`
-	StudentId string `json:"stuid"`
+	IdCard    string `json:"iid" validate:"required"`
+	StudentId string `json:"stuid" validate:"required"`
 }
 
 type EmptyResp struct {
 }
 
 type LoginReq struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 type MiniProgramLoginReq struct {
-	AppType string `json:"app_type"`
-	Code    string `json:"code"`
+	AppType string `json:"app_type" validate:"required"`
+	Code    string `json:"code" validate:"required"`
 }
 
 type ResetPasswordReq struct {
-	IdCard    string `json:"iid"`
-	StudentId string `json:"stuid"`
-	Password  string `json:"password"`
+	IdCard    string `json:"iid" validate:"required"`
+	StudentId string `json:"stuid" validate:"required"`
+	Password  string `json:"password" validate:"required"`
 }
 
 type UserInfo struct {

@@ -36,10 +36,6 @@ func (l *CreateStudentLogic) CreateStudent(req *types.CreateStudentReq) (resp *t
 	cardID := strings.ToUpper(strings.TrimSpace(req.CardId))
 	email := strings.TrimSpace(req.Email)
 
-	if studentID == "" || password == "" || cardID == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
 	if _, err = l.svcCtx.UserRpc.Register(l.ctx, &usercenterservice.RegisterRequest{
 		StudentId: studentID,
 		Password:  password,

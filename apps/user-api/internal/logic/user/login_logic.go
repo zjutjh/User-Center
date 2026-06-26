@@ -38,9 +38,6 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *LoginResult, err error) {
 	studentID := strings.ToUpper(strings.TrimSpace(req.Username))
 	password := strings.TrimSpace(req.Password)
-	if studentID == "" || password == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
 
 	loginResp, err := l.svcCtx.UserRpc.Login(l.ctx, &usercenterservice.LoginRequest{
 		StudentId: studentID,

@@ -7,10 +7,10 @@ import (
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
+	"github.com/zjutjh/User-Center/apps/user-rpc/internal/domain/account"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/common/errorsx"
-	"gorm.io/gorm"
 )
 
 type RegisterLogic struct {
@@ -28,49 +28,42 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	studentID := normalizeStudentID(in.StudentId)
+	studentID := account.NormalizeStudentID(in.StudentId)
 	password := strings.TrimSpace(in.Password)
-	cardID := normalizeCardID(in.CardId)
+	cardID := account.NormalizeCardID(in.CardId)
 	email := strings.TrimSpace(in.Email)
 
-	if studentID == "" || password == "" || cardID == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-	if len(password) < 6 || len(password) > 20 {
-		return nil, errorsx.ErrPasswordLength
+	if err := account.ValidatePasswordLength(password); err != nil {
+		return nil, err
 	}
 
-	existing, err := l.svcCtx.Query.User.WithContext(l.ctx).
-		Where(l.svcCtx.Query.User.StudentID.Eq(studentID)).
-		First()
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	exists, err := l.svcCtx.UserRepo.ExistsByStudentID(l.ctx, studentID)
+	if err != nil {
 		l.Errorf("检查用户是否已存在失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
-	if existing != nil {
-		if existing.Password != hashPassword(password) {
-			return nil, errorsx.ErrWrongAccountOrPassword
-		}
-		return &pb.RegisterResponse{}, nil
+	if exists {
+		return nil, errorsx.ErrUserExisted
 	}
 
-	student, err := l.svcCtx.Query.Student.WithContext(l.ctx).
-		Where(l.svcCtx.Query.Student.StudentID.Eq(studentID)).
-		First()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, errorsx.ErrUserNotExist
-	}
+	student, err := l.svcCtx.StudentRepo.GetStudentByStudentID(l.ctx, studentID)
 	if err != nil {
+		if codeErr, ok := errorsx.As(err); ok {
+			return nil, codeErr
+		}
 		l.Errorf("查询学生信息失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
-	if !strings.EqualFold(student.IDCard, cardID) {
-		return nil, errorsx.ErrUserNotExist
+	if err := account.VerifyStudentIdentity(student, cardID); err != nil {
+		if errors.Is(err, errorsx.ErrParameterInvalid) {
+			return nil, errorsx.ErrUserNotExist
+		}
+		return nil, err
 	}
 
-	if err := l.svcCtx.Query.User.WithContext(l.ctx).Create(&model.User{
+	if err := l.svcCtx.UserRepo.CreateUser(l.ctx, &model.User{
 		StudentID: studentID,
-		Password:  hashPassword(password),
+		Password:  account.HashPassword(password),
 		Email:     email,
 	}); err != nil {
 		l.Errorf("创建用户失败: %v", err)

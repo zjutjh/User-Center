@@ -2,13 +2,11 @@ package logic
 
 import (
 	"context"
-	"errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/common/errorsx"
-	"gorm.io/gorm"
 )
 
 type GetUserPasswordLogic struct {
@@ -26,13 +24,11 @@ func NewGetUserPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetUserPasswordLogic) GetUserPassword(in *pb.GetUserPasswordRequest) (*pb.GetUserPasswordResponse, error) {
-	user, err := l.svcCtx.Query.User.WithContext(l.ctx).
-		Where(l.svcCtx.Query.User.ID.Eq(in.UserId)).
-		First()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, errorsx.ErrUserNotExist
-	}
+	user, err := l.svcCtx.UserRepo.GetUserById(l.ctx, in.UserId)
 	if err != nil {
+		if codeErr, ok := errorsx.As(err); ok {
+			return nil, codeErr
+		}
 		l.Errorf("根据用户 ID 查询用户失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}

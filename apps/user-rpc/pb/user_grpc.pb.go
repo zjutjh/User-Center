@@ -21,7 +21,9 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	UserCenterService_Register_FullMethodName        = "/user.UserCenterService/Register"
 	UserCenterService_Login_FullMethodName           = "/user.UserCenterService/Login"
-	UserCenterService_Bind_FullMethodName            = "/user.UserCenterService/Bind"
+	UserCenterService_BindOauth_FullMethodName       = "/user.UserCenterService/BindOauth"
+	UserCenterService_BindZf_FullMethodName          = "/user.UserCenterService/BindZf"
+	UserCenterService_BindYxy_FullMethodName         = "/user.UserCenterService/BindYxy"
 	UserCenterService_GetUserPassword_FullMethodName = "/user.UserCenterService/GetUserPassword"
 	UserCenterService_GetUserInfo_FullMethodName     = "/user.UserCenterService/GetUserInfo"
 	UserCenterService_ResetPassword_FullMethodName   = "/user.UserCenterService/ResetPassword"
@@ -35,7 +37,9 @@ const (
 type UserCenterServiceClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	Bind(ctx context.Context, in *BindRequest, opts ...grpc.CallOption) (*BindResponse, error)
+	BindOauth(ctx context.Context, in *BindOauthRequest, opts ...grpc.CallOption) (*BindOauthResponse, error)
+	BindZf(ctx context.Context, in *BindZfRequest, opts ...grpc.CallOption) (*BindZfResponse, error)
+	BindYxy(ctx context.Context, in *BindYxyRequest, opts ...grpc.CallOption) (*BindYxyResponse, error)
 	GetUserPassword(ctx context.Context, in *GetUserPasswordRequest, opts ...grpc.CallOption) (*GetUserPasswordResponse, error)
 	GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordResponse, error)
@@ -71,10 +75,30 @@ func (c *userCenterServiceClient) Login(ctx context.Context, in *LoginRequest, o
 	return out, nil
 }
 
-func (c *userCenterServiceClient) Bind(ctx context.Context, in *BindRequest, opts ...grpc.CallOption) (*BindResponse, error) {
+func (c *userCenterServiceClient) BindOauth(ctx context.Context, in *BindOauthRequest, opts ...grpc.CallOption) (*BindOauthResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(BindResponse)
-	err := c.cc.Invoke(ctx, UserCenterService_Bind_FullMethodName, in, out, cOpts...)
+	out := new(BindOauthResponse)
+	err := c.cc.Invoke(ctx, UserCenterService_BindOauth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userCenterServiceClient) BindZf(ctx context.Context, in *BindZfRequest, opts ...grpc.CallOption) (*BindZfResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BindZfResponse)
+	err := c.cc.Invoke(ctx, UserCenterService_BindZf_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userCenterServiceClient) BindYxy(ctx context.Context, in *BindYxyRequest, opts ...grpc.CallOption) (*BindYxyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BindYxyResponse)
+	err := c.cc.Invoke(ctx, UserCenterService_BindYxy_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +161,9 @@ func (c *userCenterServiceClient) HealthyCheck(ctx context.Context, in *HealthyC
 type UserCenterServiceServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
-	Bind(context.Context, *BindRequest) (*BindResponse, error)
+	BindOauth(context.Context, *BindOauthRequest) (*BindOauthResponse, error)
+	BindZf(context.Context, *BindZfRequest) (*BindZfResponse, error)
+	BindYxy(context.Context, *BindYxyRequest) (*BindYxyResponse, error)
 	GetUserPassword(context.Context, *GetUserPasswordRequest) (*GetUserPasswordResponse, error)
 	GetUserInfo(context.Context, *GetUserInfoRequest) (*GetUserInfoResponse, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordResponse, error)
@@ -159,8 +185,14 @@ func (UnimplementedUserCenterServiceServer) Register(context.Context, *RegisterR
 func (UnimplementedUserCenterServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedUserCenterServiceServer) Bind(context.Context, *BindRequest) (*BindResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Bind not implemented")
+func (UnimplementedUserCenterServiceServer) BindOauth(context.Context, *BindOauthRequest) (*BindOauthResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BindOauth not implemented")
+}
+func (UnimplementedUserCenterServiceServer) BindZf(context.Context, *BindZfRequest) (*BindZfResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BindZf not implemented")
+}
+func (UnimplementedUserCenterServiceServer) BindYxy(context.Context, *BindYxyRequest) (*BindYxyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BindYxy not implemented")
 }
 func (UnimplementedUserCenterServiceServer) GetUserPassword(context.Context, *GetUserPasswordRequest) (*GetUserPasswordResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserPassword not implemented")
@@ -234,20 +266,56 @@ func _UserCenterService_Login_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserCenterService_Bind_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BindRequest)
+func _UserCenterService_BindOauth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BindOauthRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserCenterServiceServer).Bind(ctx, in)
+		return srv.(UserCenterServiceServer).BindOauth(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserCenterService_Bind_FullMethodName,
+		FullMethod: UserCenterService_BindOauth_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserCenterServiceServer).Bind(ctx, req.(*BindRequest))
+		return srv.(UserCenterServiceServer).BindOauth(ctx, req.(*BindOauthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserCenterService_BindZf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BindZfRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCenterServiceServer).BindZf(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCenterService_BindZf_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCenterServiceServer).BindZf(ctx, req.(*BindZfRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserCenterService_BindYxy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BindYxyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCenterServiceServer).BindYxy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCenterService_BindYxy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCenterServiceServer).BindYxy(ctx, req.(*BindYxyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -358,8 +426,16 @@ var UserCenterService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserCenterService_Login_Handler,
 		},
 		{
-			MethodName: "Bind",
-			Handler:    _UserCenterService_Bind_Handler,
+			MethodName: "BindOauth",
+			Handler:    _UserCenterService_BindOauth_Handler,
+		},
+		{
+			MethodName: "BindZf",
+			Handler:    _UserCenterService_BindZf_Handler,
+		},
+		{
+			MethodName: "BindYxy",
+			Handler:    _UserCenterService_BindYxy_Handler,
 		},
 		{
 			MethodName: "GetUserPassword",

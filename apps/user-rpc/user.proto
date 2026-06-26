@@ -4,13 +4,6 @@ package user;
 
 option go_package = "./pb";
 
-enum BindType {
-    BIND_TYPE_UNSPECIFIED = 0;
-    BIND_TYPE_OAUTH = 1;
-    BIND_TYPE_ZF = 2;
-    BIND_TYPE_YXY = 3;
-}
-
 message LoginRequest {
     string student_id = 1;
     string password = 2;
@@ -31,16 +24,29 @@ message RegisterRequest {
 message RegisterResponse {
 }
 
-message BindRequest {
+message BindOauthRequest {
     int64 user_id = 1;
-    BindType type = 2;
-    string device_id = 3;
-    string yxy_uid = 4;
-    string zf_password = 5;
-    string oauth_password = 6;
+    string oauth_password = 2;
 }
 
-message BindResponse {
+message BindOauthResponse {
+}
+
+message BindZfRequest {
+    int64 user_id = 1;
+    string zf_password = 2;
+}
+
+message BindZfResponse {
+}
+
+message BindYxyRequest {
+    int64 user_id = 1;
+    string device_id = 2;
+    string yxy_uid = 3;
+}
+
+message BindYxyResponse {
 }
 
 message GetUserPasswordRequest {
@@ -101,7 +107,9 @@ message HealthyCheckResponse {
 service UserCenterService {
     rpc Register(RegisterRequest) returns (RegisterResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
-    rpc Bind(BindRequest) returns (BindResponse);
+    rpc BindOauth(BindOauthRequest) returns (BindOauthResponse);
+    rpc BindZf(BindZfRequest) returns (BindZfResponse);
+    rpc BindYxy(BindYxyRequest) returns (BindYxyResponse);
     rpc GetUserPassword(GetUserPasswordRequest) returns (GetUserPasswordResponse);
     rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
     rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);

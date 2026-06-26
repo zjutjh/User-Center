@@ -14,8 +14,12 @@ import (
 )
 
 type (
-	BindRequest             = pb.BindRequest
-	BindResponse            = pb.BindResponse
+	BindOauthRequest        = pb.BindOauthRequest
+	BindOauthResponse       = pb.BindOauthResponse
+	BindYxyRequest          = pb.BindYxyRequest
+	BindYxyResponse         = pb.BindYxyResponse
+	BindZfRequest           = pb.BindZfRequest
+	BindZfResponse          = pb.BindZfResponse
 	DeleteAccountRequest    = pb.DeleteAccountRequest
 	DeleteAccountResponse   = pb.DeleteAccountResponse
 	GetUserInfoRequest      = pb.GetUserInfoRequest
@@ -34,7 +38,9 @@ type (
 	UserCenterService interface {
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-		Bind(ctx context.Context, in *BindRequest, opts ...grpc.CallOption) (*BindResponse, error)
+		BindOauth(ctx context.Context, in *BindOauthRequest, opts ...grpc.CallOption) (*BindOauthResponse, error)
+		BindZf(ctx context.Context, in *BindZfRequest, opts ...grpc.CallOption) (*BindZfResponse, error)
+		BindYxy(ctx context.Context, in *BindYxyRequest, opts ...grpc.CallOption) (*BindYxyResponse, error)
 		GetUserPassword(ctx context.Context, in *GetUserPasswordRequest, opts ...grpc.CallOption) (*GetUserPasswordResponse, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
 		ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordResponse, error)
@@ -63,9 +69,19 @@ func (m *defaultUserCenterService) Login(ctx context.Context, in *LoginRequest, 
 	return client.Login(ctx, in, opts...)
 }
 
-func (m *defaultUserCenterService) Bind(ctx context.Context, in *BindRequest, opts ...grpc.CallOption) (*BindResponse, error) {
+func (m *defaultUserCenterService) BindOauth(ctx context.Context, in *BindOauthRequest, opts ...grpc.CallOption) (*BindOauthResponse, error) {
 	client := pb.NewUserCenterServiceClient(m.cli.Conn())
-	return client.Bind(ctx, in, opts...)
+	return client.BindOauth(ctx, in, opts...)
+}
+
+func (m *defaultUserCenterService) BindZf(ctx context.Context, in *BindZfRequest, opts ...grpc.CallOption) (*BindZfResponse, error) {
+	client := pb.NewUserCenterServiceClient(m.cli.Conn())
+	return client.BindZf(ctx, in, opts...)
+}
+
+func (m *defaultUserCenterService) BindYxy(ctx context.Context, in *BindYxyRequest, opts ...grpc.CallOption) (*BindYxyResponse, error) {
+	client := pb.NewUserCenterServiceClient(m.cli.Conn())
+	return client.BindYxy(ctx, in, opts...)
 }
 
 func (m *defaultUserCenterService) GetUserPassword(ctx context.Context, in *GetUserPasswordRequest, opts ...grpc.CallOption) (*GetUserPasswordResponse, error) {

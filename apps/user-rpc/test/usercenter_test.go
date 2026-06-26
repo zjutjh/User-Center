@@ -16,7 +16,6 @@ import (
 	userrpc "github.com/zjutjh/User-Center/apps/user-rpc/app"
 	daomodel "github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
 	mysqlinfra "github.com/zjutjh/User-Center/apps/user-rpc/internal/infra/mysql"
-	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
 	"github.com/zjutjh/User-Center/common/errorsx"
 )
@@ -54,6 +53,13 @@ func UserCenterRPCTestMain(m *testing.M) int {
 		return 1
 	}
 	log.Printf("MySQL 连接成功: %s:%d/%s", c.UserRPC.Mysql.Host, c.UserRPC.Mysql.Port, c.UserRPC.Mysql.Database)
+
+	listenOn, err := freeListenOn(c.UserRPC.ListenOn)
+	if err != nil {
+		log.Printf("分配测试 RPC 端口失败: %v", err)
+		return 1
+	}
+	c.UserRPC.ListenOn = listenOn
 
 	server := userrpc.NewServer(c.UserRPC)
 	go server.Start()
@@ -147,6 +153,38 @@ func TestUserCenterServiceRegister(t *testing.T) {
 	t.Logf("注册响应: %+v，错误: %v", registerResp, err)
 }
 
+func TestUserCenterServiceRegisterReturnsUserExisted(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	db, err := mysqlinfra.NewDB(userCenterRPCTest.Config.Mysql)
+	require.NoError(t, err)
+	sqlDB, err := db.DB()
+	require.NoError(t, err)
+	t.Cleanup(func() {
+		_ = sqlDB.Close()
+	})
+
+	studentID := fmt.Sprintf("existing%d", time.Now().UnixNano())
+	user := &daomodel.User{
+		StudentID: studentID,
+		Password:  "secret123",
+		Email:     "existing-test@zjutjh.com",
+	}
+	require.NoError(t, db.WithContext(ctx).Create(user).Error)
+	t.Cleanup(func() {
+		require.NoError(t, db.WithContext(context.Background()).Where("id = ?", user.ID).Delete(&daomodel.User{}).Error)
+	})
+
+	_, err = userCenterRPCTest.Client.Register(ctx, &usercenterservice.RegisterRequest{
+		StudentId: studentID,
+		Password:  "114514",
+		CardId:    "1145141919166666666",
+		Email:     "mjj@zjutjh.com",
+	})
+	require.Error(t, err)
+	require.Equal(t, errorsx.ErrUserExisted, errorsx.FromGRPC(err))
+}
+
 func TestUserCenterServiceGetUserPassword(t *testing.T) {
 	ctx := rpcTestContext(t)
 
@@ -177,9 +215,8 @@ func TestUserCenterServiceBind(t *testing.T) {
 		require.NoError(t, db.WithContext(context.Background()).Where("id = ?", user.ID).Delete(&daomodel.User{}).Error)
 	})
 
-	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+	_, err = userCenterRPCTest.Client.BindYxy(ctx, &usercenterservice.BindYxyRequest{
 		UserId:   user.ID,
-		Type:     pb.BindType_BIND_TYPE_YXY,
 		DeviceId: "  bind-device-id  ",
 		YxyUid:   "  bind-yxy-uid  ",
 	})
@@ -192,9 +229,8 @@ func TestUserCenterServiceBind(t *testing.T) {
 	require.Equal(t, "bind-device-id", passwordResp.DeviceId)
 	require.Equal(t, "bind-yxy-uid", passwordResp.YxyUid)
 
-	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+	_, err = userCenterRPCTest.Client.BindZf(ctx, &usercenterservice.BindZfRequest{
 		UserId:     user.ID,
-		Type:       pb.BindType_BIND_TYPE_ZF,
 		ZfPassword: "  bind-zf-password  ",
 	})
 	require.NoError(t, err)
@@ -205,9 +241,8 @@ func TestUserCenterServiceBind(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "bind-zf-password", passwordResp.ZfPassword)
 
-	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+	_, err = userCenterRPCTest.Client.BindOauth(ctx, &usercenterservice.BindOauthRequest{
 		UserId:        user.ID,
-		Type:          pb.BindType_BIND_TYPE_OAUTH,
 		OauthPassword: "  bind-oauth-password  ",
 	})
 	require.NoError(t, err)
@@ -218,9 +253,8 @@ func TestUserCenterServiceBind(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "bind-oauth-password", passwordResp.OauthPassword)
 
-	_, err = userCenterRPCTest.Client.Bind(ctx, &usercenterservice.BindRequest{
+	_, err = userCenterRPCTest.Client.BindYxy(ctx, &usercenterservice.BindYxyRequest{
 		UserId: user.ID,
-		Type:   pb.BindType_BIND_TYPE_YXY,
 	})
 	require.Error(t, err)
 	require.Equal(t, errorsx.ErrParameterInvalid, errorsx.FromGRPC(err))
@@ -259,4 +293,22 @@ func clientTarget(listenOn string) string {
 		host = "127.0.0.1"
 	}
 	return net.JoinHostPort(host, port)
+}
+
+func freeListenOn(listenOn string) (string, error) {
+	host, _, err := net.SplitHostPort(listenOn)
+	if err != nil {
+		host = "127.0.0.1"
+	}
+	if host == "" || host == "0.0.0.0" || host == "::" {
+		host = "127.0.0.1"
+	}
+
+	listener, err := net.Listen("tcp", net.JoinHostPort(host, "0"))
+	if err != nil {
+		return "", err
+	}
+	defer listener.Close()
+
+	return listener.Addr().String(), nil
 }

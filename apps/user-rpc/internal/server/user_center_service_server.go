@@ -33,9 +33,19 @@ func (s *UserCenterServiceServer) Login(ctx context.Context, in *pb.LoginRequest
 	return l.Login(in)
 }
 
-func (s *UserCenterServiceServer) Bind(ctx context.Context, in *pb.BindRequest) (*pb.BindResponse, error) {
-	l := logic.NewBindLogic(ctx, s.svcCtx)
-	return l.Bind(in)
+func (s *UserCenterServiceServer) BindOauth(ctx context.Context, in *pb.BindOauthRequest) (*pb.BindOauthResponse, error) {
+	l := logic.NewBindOauthLogic(ctx, s.svcCtx)
+	return l.BindOauth(in)
+}
+
+func (s *UserCenterServiceServer) BindZf(ctx context.Context, in *pb.BindZfRequest) (*pb.BindZfResponse, error) {
+	l := logic.NewBindZfLogic(ctx, s.svcCtx)
+	return l.BindZf(in)
+}
+
+func (s *UserCenterServiceServer) BindYxy(ctx context.Context, in *pb.BindYxyRequest) (*pb.BindYxyResponse, error) {
+	l := logic.NewBindYxyLogic(ctx, s.svcCtx)
+	return l.BindYxy(in)
 }
 
 func (s *UserCenterServiceServer) GetUserPassword(ctx context.Context, in *pb.GetUserPasswordRequest) (*pb.GetUserPasswordResponse, error) {

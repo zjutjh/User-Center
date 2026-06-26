@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
+	"github.com/zjutjh/User-Center/apps/user-rpc/internal/domain/account"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/common/errorsx"
@@ -25,14 +25,10 @@ func NewDeleteAccountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 }
 
 func (l *DeleteAccountLogic) DeleteAccount(in *pb.DeleteAccountRequest) (*pb.DeleteAccountResponse, error) {
-	studentID := normalizeStudentID(in.StudentId)
-	cardID := normalizeCardID(in.CardId)
+	studentID := account.NormalizeStudentID(in.StudentId)
+	cardID := account.NormalizeCardID(in.CardId)
 
-	if in.UserId <= 0 || studentID == "" || cardID == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
-	user, err := getUserByID(l.ctx, l.svcCtx, in.UserId)
+	user, err := l.svcCtx.UserRepo.GetUserById(l.ctx, in.UserId)
 	if err != nil {
 		if codeErr, ok := errorsx.As(err); ok {
 			return nil, codeErr
@@ -44,17 +40,19 @@ func (l *DeleteAccountLogic) DeleteAccount(in *pb.DeleteAccountRequest) (*pb.Del
 		return nil, errorsx.ErrParameterInvalid
 	}
 
-	if err := verifyStudentIdentity(l.ctx, l.svcCtx, studentID, cardID); err != nil {
+	student, err := l.svcCtx.StudentRepo.GetStudentByStudentID(l.ctx, studentID)
+	if err != nil {
 		if codeErr, ok := errorsx.As(err); ok {
 			return nil, codeErr
 		}
-		l.Errorf("校验注销用户身份失败: %v", err)
+		l.Errorf("查询学生信息失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
+	if err := account.VerifyStudentIdentity(student, cardID); err != nil {
+		return nil, err
+	}
 
-	if err := l.svcCtx.DB.WithContext(l.ctx).
-		Where("id = ?", in.UserId).
-		Delete(&model.User{}).Error; err != nil {
+	if err := l.svcCtx.UserRepo.DeleteUserByID(l.ctx, in.UserId); err != nil {
 		l.Errorf("删除用户失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}

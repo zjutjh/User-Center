@@ -2,16 +2,13 @@ package logic
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
-	"errors"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zjutjh/User-Center/apps/user-rpc/internal/domain/account"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/common/errorsx"
-	"gorm.io/gorm"
 )
 
 type LoginLogic struct {
@@ -29,24 +26,18 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(in *pb.LoginRequest) (*pb.LoginResponse, error) {
-	studentID := normalizeStudentID(in.StudentId)
+	studentID := account.NormalizeStudentID(in.StudentId)
 	password := strings.TrimSpace(in.Password)
 
-	if studentID == "" || password == "" {
-		return nil, errorsx.ErrWrongAccountOrPassword
-	}
-
-	user, err := l.svcCtx.Query.User.WithContext(l.ctx).
-		Where(l.svcCtx.Query.User.StudentID.Eq(studentID)).
-		First()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, errorsx.ErrUserNotExist
-	}
+	user, err := l.svcCtx.UserRepo.GetUserByStudentId(l.ctx, studentID)
 	if err != nil {
+		if codeErr, ok := errorsx.As(err); ok {
+			return nil, codeErr
+		}
 		l.Errorf("根据学号查询用户失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
-	if user.Password != hashPassword(password) {
+	if !account.VerifyPassword(user.Password, password) {
 		return nil, errorsx.ErrWrongAccountOrPassword
 	}
 
@@ -60,9 +51,4 @@ func (l *LoginLogic) Login(in *pb.LoginRequest) (*pb.LoginResponse, error) {
 		UserId:  user.ID,
 		Session: session,
 	}, nil
-}
-
-func hashPassword(password string) string {
-	sum := sha256.Sum256([]byte(password))
-	return hex.EncodeToString(sum[:])
 }

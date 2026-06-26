@@ -15,6 +15,142 @@
   },
   "basePath": "/",
   "paths": {
+    "/api/user/bind/oauth": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "https"
+        ],
+        "tags": [
+          "用户操作"
+        ],
+        "summary": "绑定统一认证密码",
+        "operationId": "userBindOauth",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "oauth_password"
+              ],
+              "properties": {
+                "oauth_password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/user/bind/yxy": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "https"
+        ],
+        "tags": [
+          "用户操作"
+        ],
+        "summary": "绑定易校园信息",
+        "operationId": "userBindYxy",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "device_id",
+                "yxy_uid"
+              ],
+              "properties": {
+                "device_id": {
+                  "type": "string"
+                },
+                "yxy_uid": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/user/bind/zf": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "https"
+        ],
+        "tags": [
+          "用户操作"
+        ],
+        "summary": "绑定正方密码",
+        "operationId": "userBindZf",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "zf_password"
+              ],
+              "properties": {
+                "zf_password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
     "/api/user/create/student": {
       "post": {
         "consumes": [
@@ -75,7 +211,7 @@
         }
       }
     },
-    "/api/user/del": {
+    "/api/user/delete": {
       "post": {
         "consumes": [
           "application/json"
@@ -510,7 +646,7 @@
         }
       }
     },
-    "/api/user/repass": {
+    "/api/user/reset_password": {
       "post": {
         "consumes": [
           "application/json"
@@ -563,9 +699,9 @@
       }
     }
   },
-  "x-date": "2026-06-26 22:55:27",
+  "x-date": "2026-06-27 02:43:59",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",
-  "x-goctl-version": "1.8.5"
+  "x-goctl-version": "1.10.1"
 }

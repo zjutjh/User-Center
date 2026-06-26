@@ -2,10 +2,10 @@ package logic
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zjutjh/User-Center/apps/user-rpc/internal/domain/account"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/common/errorsx"
@@ -26,27 +26,13 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoRequest) (*pb.GetUserInfoResponse, error) {
-	if in.UserId <= 0 {
-		return nil, errorsx.ErrParameterInvalid
-	}
-
-	user, err := getUserByID(l.ctx, l.svcCtx, in.UserId)
+	user, err := l.svcCtx.UserRepo.GetUserById(l.ctx, in.UserId)
 	if err != nil {
 		if codeErr, ok := errorsx.As(err); ok {
 			return nil, codeErr
 		}
 		l.Errorf("根据用户 ID 查询用户信息失败: %v", err)
 		return nil, errorsx.ErrUnknown
-	}
-
-	zfPassword := ""
-	if strings.TrimSpace(user.ZfPassword) != "" {
-		zfPassword = "BOUND"
-	}
-
-	oauthPassword := ""
-	if strings.TrimSpace(user.OauthPassword) != "" {
-		oauthPassword = "BOUND"
 	}
 
 	return &pb.GetUserInfoResponse{
@@ -57,8 +43,8 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoRequest) (*pb.GetUserIn
 		PhoneNum:      user.PhoneNum,
 		DeviceId:      user.DeviceID,
 		YxyUid:        user.YxyUID,
-		ZfPassword:    zfPassword,
-		OauthPassword: oauthPassword,
+		ZfPassword:    account.BoundMarker(user.ZfPassword),
+		OauthPassword: account.BoundMarker(user.OauthPassword),
 		CreateTime:    user.CreateTime.Format(time.RFC3339),
 	}, nil
 }

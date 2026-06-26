@@ -55,9 +55,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.UserAuth},
 			[]rest.Route{
 				{
+					// 绑定统一认证密码
+					Method:  http.MethodPost,
+					Path:    "/bind/oauth",
+					Handler: user.BindOauthHandler(serverCtx),
+				},
+				{
+					// 绑定易校园信息
+					Method:  http.MethodPost,
+					Path:    "/bind/yxy",
+					Handler: user.BindYxyHandler(serverCtx),
+				},
+				{
+					// 绑定正方密码
+					Method:  http.MethodPost,
+					Path:    "/bind/zf",
+					Handler: user.BindZfHandler(serverCtx),
+				},
+				{
 					// 注销账号
 					Method:  http.MethodPost,
-					Path:    "/del",
+					Path:    "/delete",
 					Handler: user.DelHandler(serverCtx),
 				},
 				{
@@ -69,7 +87,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					// 重置密码
 					Method:  http.MethodPost,
-					Path:    "/repass",
+					Path:    "/reset_password",
 					Handler: user.RepassHandler(serverCtx),
 				},
 			}...,

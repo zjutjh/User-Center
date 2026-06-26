@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
+	"github.com/zjutjh/User-Center/apps/user-rpc/internal/domain/account"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 	"github.com/zjutjh/User-Center/common/errorsx"
@@ -25,18 +25,15 @@ func NewResetPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Res
 }
 
 func (l *ResetPasswordLogic) ResetPassword(in *pb.ResetPasswordRequest) (*pb.ResetPasswordResponse, error) {
-	studentID := normalizeStudentID(in.StudentId)
-	cardID := normalizeCardID(in.CardId)
+	studentID := account.NormalizeStudentID(in.StudentId)
+	cardID := account.NormalizeCardID(in.CardId)
 	password := in.Password
 
-	if in.UserId <= 0 || studentID == "" || cardID == "" || password == "" {
-		return nil, errorsx.ErrParameterInvalid
-	}
-	if len(password) < 6 || len(password) > 20 {
-		return nil, errorsx.ErrPasswordLength
+	if err := account.ValidatePasswordLength(password); err != nil {
+		return nil, err
 	}
 
-	user, err := getUserByID(l.ctx, l.svcCtx, in.UserId)
+	user, err := l.svcCtx.UserRepo.GetUserById(l.ctx, in.UserId)
 	if err != nil {
 		if codeErr, ok := errorsx.As(err); ok {
 			return nil, codeErr
@@ -48,18 +45,19 @@ func (l *ResetPasswordLogic) ResetPassword(in *pb.ResetPasswordRequest) (*pb.Res
 		return nil, errorsx.ErrParameterInvalid
 	}
 
-	if err := verifyStudentIdentity(l.ctx, l.svcCtx, studentID, cardID); err != nil {
+	student, err := l.svcCtx.StudentRepo.GetStudentByStudentID(l.ctx, studentID)
+	if err != nil {
 		if codeErr, ok := errorsx.As(err); ok {
 			return nil, codeErr
 		}
-		l.Errorf("校验学生身份失败: %v", err)
+		l.Errorf("查询学生信息失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}
+	if err := account.VerifyStudentIdentity(student, cardID); err != nil {
+		return nil, err
+	}
 
-	if err := l.svcCtx.DB.WithContext(l.ctx).
-		Model(&model.User{}).
-		Where("id = ?", in.UserId).
-		Update("password", hashPassword(password)).Error; err != nil {
+	if err := l.svcCtx.UserRepo.UpdatePasswordByID(l.ctx, in.UserId, account.HashPassword(password)); err != nil {
 		l.Errorf("重置用户密码失败: %v", err)
 		return nil, errorsx.ErrUnknown
 	}

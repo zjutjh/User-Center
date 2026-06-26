@@ -2,10 +2,12 @@ package repo
 
 import (
 	"context"
+	"errors"
 
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
 	"github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/query"
 	"github.com/zjutjh/User-Center/common/errorsx"
+	"gorm.io/gorm"
 )
 
 type StudentRepo struct {
@@ -20,7 +22,10 @@ func (r *StudentRepo) GetStudentByStudentID(ctx context.Context, studentID strin
 	q := r.query.Student
 	student, err := q.WithContext(ctx).Where(q.StudentID.Eq(studentID)).First()
 	if err != nil {
-		return nil, errorsx.ErrUserNotExist
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errorsx.ErrUserNotExist
+		}
+		return nil, err
 	}
 	return student, nil
 }

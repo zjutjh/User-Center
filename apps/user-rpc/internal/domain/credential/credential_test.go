@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/zjutjh/User-Center/apps/user-rpc/pb"
 )
 
 const testKey = "1234567890abcdef"
@@ -46,19 +45,14 @@ func TestCodecDecryptLegacyPlaintext(t *testing.T) {
 	require.Equal(t, plaintext, decrypted)
 }
 
-func TestServiceBuildBindUpdatesEncryptsOAuthPassword(t *testing.T) {
+func TestServicePrepareOauthBindEncryptsPassword(t *testing.T) {
 	service, err := NewService(testKey)
 	require.NoError(t, err)
 
 	plaintext := "secret-password"
-	updates, err := service.BuildBindUpdates(&pb.BindRequest{
-		Type:          pb.BindType_BIND_TYPE_OAUTH,
-		OauthPassword: plaintext,
-	})
+	ciphertext, err := service.PrepareOauthBind(plaintext)
 	require.NoError(t, err)
 
-	ciphertext, ok := updates["oauth_password"].(string)
-	require.True(t, ok)
 	require.NotEmpty(t, ciphertext)
 	require.NotEqual(t, plaintext, ciphertext)
 
@@ -67,19 +61,13 @@ func TestServiceBuildBindUpdatesEncryptsOAuthPassword(t *testing.T) {
 	require.Equal(t, plaintext, decrypted)
 }
 
-func TestServiceBuildBindUpdatesYXYReturnsIdentifiers(t *testing.T) {
+func TestServicePrepareYxyBindReturnsTrimmedIdentifiers(t *testing.T) {
 	service, err := NewService(testKey)
 	require.NoError(t, err)
 
-	updates, err := service.BuildBindUpdates(&pb.BindRequest{
-		Type:     pb.BindType_BIND_TYPE_YXY,
-		DeviceId: "device-id",
-		YxyUid:   "yxy-uid",
-	})
+	deviceID, yxyUID, err := service.PrepareYxyBind("  device-id  ", "  yxy-uid  ")
 	require.NoError(t, err)
 
-	require.Equal(t, map[string]any{
-		"device_id": "device-id",
-		"yxy_uid":   "yxy-uid",
-	}, updates)
+	require.Equal(t, "device-id", deviceID)
+	require.Equal(t, "yxy-uid", yxyUID)
 }

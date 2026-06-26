@@ -5,6 +5,7 @@ import (
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"github.com/zjutjh/User-Center/common/errorsx"
+	"github.com/zjutjh/User-Center/common/validatorx"
 )
 
 type Response struct {
@@ -14,6 +15,7 @@ type Response struct {
 }
 
 func InstallHTTPHandlers() {
+	httpx.SetValidator(validatorx.HTTPValidator{})
 	httpx.SetOkHandler(func(_ context.Context, v any) any {
 		return Success(v)
 	})
