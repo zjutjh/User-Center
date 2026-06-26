@@ -6,8 +6,13 @@ import (
 	"github.com/zjutjh/User-Center/common/sessionx"
 )
 
+type CredentialConf struct {
+	SecretKey string
+}
+
 type Config struct {
 	zrpc.RpcServerConf
-	Mysql   dbx.MysqlConf
-	Session sessionx.Config
+	Mysql      dbx.MysqlConf
+	Session    sessionx.Config
+	Credential CredentialConf
 }

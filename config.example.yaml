@@ -33,6 +33,9 @@ UserRPC:
     HTTPOnly: true
     SameSite: lax
 
+  Credential:
+    SecretKey: 0123456789abcdef0123456789abcdef
+
   Mysql:
     Host: 127.0.0.1
     Port: 3306
