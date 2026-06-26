@@ -1,32 +1,31 @@
 // Code scaffolded by goctl. Safe to edit.
 // goctl 1.10.1
 
-package login
+package account
 
 import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zjutjh/User-Center/apps/user-api/internal/logic/login"
+	"github.com/zjutjh/User-Center/apps/user-api/internal/logic/account"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
 )
 
-// 账号密码登录
-func LoginByPasswordHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 注销账号
+func DelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LoginReq
+		var req types.DeleteAccountReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := login.NewLoginByPasswordLogic(r.Context(), svcCtx)
-		resp, err := l.LoginByPassword(&req)
+		l := account.NewDelLogic(r.Context(), svcCtx)
+		resp, err := l.Del(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			svcCtx.Session.SetEncoded(w, l.Session())
 			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}

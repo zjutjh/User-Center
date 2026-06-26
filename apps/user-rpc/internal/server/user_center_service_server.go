@@ -33,6 +33,21 @@ func (s *UserCenterServiceServer) Login(ctx context.Context, in *pb.LoginRequest
 	return l.Login(in)
 }
 
+func (s *UserCenterServiceServer) ResetPassword(ctx context.Context, in *pb.ResetPasswordRequest) (*pb.ResetPasswordResponse, error) {
+	l := logic.NewResetPasswordLogic(ctx, s.svcCtx)
+	return l.ResetPassword(in)
+}
+
+func (s *UserCenterServiceServer) DeleteAccount(ctx context.Context, in *pb.DeleteAccountRequest) (*pb.DeleteAccountResponse, error) {
+	l := logic.NewDeleteAccountLogic(ctx, s.svcCtx)
+	return l.DeleteAccount(in)
+}
+
+func (s *UserCenterServiceServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoRequest) (*pb.GetUserInfoResponse, error) {
+	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
+	return l.GetUserInfo(in)
+}
+
 func (s *UserCenterServiceServer) BindOauth(ctx context.Context, in *pb.BindOauthRequest) (*pb.BindOauthResponse, error) {
 	l := logic.NewBindOauthLogic(ctx, s.svcCtx)
 	return l.BindOauth(in)
@@ -51,24 +66,4 @@ func (s *UserCenterServiceServer) BindYxy(ctx context.Context, in *pb.BindYxyReq
 func (s *UserCenterServiceServer) GetUserPassword(ctx context.Context, in *pb.GetUserPasswordRequest) (*pb.GetUserPasswordResponse, error) {
 	l := logic.NewGetUserPasswordLogic(ctx, s.svcCtx)
 	return l.GetUserPassword(in)
-}
-
-func (s *UserCenterServiceServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoRequest) (*pb.GetUserInfoResponse, error) {
-	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
-	return l.GetUserInfo(in)
-}
-
-func (s *UserCenterServiceServer) ResetPassword(ctx context.Context, in *pb.ResetPasswordRequest) (*pb.ResetPasswordResponse, error) {
-	l := logic.NewResetPasswordLogic(ctx, s.svcCtx)
-	return l.ResetPassword(in)
-}
-
-func (s *UserCenterServiceServer) DeleteAccount(ctx context.Context, in *pb.DeleteAccountRequest) (*pb.DeleteAccountResponse, error) {
-	l := logic.NewDeleteAccountLogic(ctx, s.svcCtx)
-	return l.DeleteAccount(in)
-}
-
-func (s *UserCenterServiceServer) HealthyCheck(ctx context.Context, in *pb.HealthyCheckRequest) (*pb.HealthyCheckResponse, error) {
-	l := logic.NewHealthyCheckLogic(ctx, s.svcCtx)
-	return l.HealthyCheck(in)
 }

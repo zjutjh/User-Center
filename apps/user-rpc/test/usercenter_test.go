@@ -18,6 +18,7 @@ import (
 	mysqlinfra "github.com/zjutjh/User-Center/apps/user-rpc/internal/infra/mysql"
 	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
 	"github.com/zjutjh/User-Center/common/errorsx"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type rootConfig struct {
@@ -108,7 +109,8 @@ func (e *userCenterRPCTestEnv) waitReady() error {
 	defer ticker.Stop()
 
 	for {
-		_, err := e.Client.HealthyCheck(ctx, &usercenterservice.HealthyCheckRequest{})
+		healthClient := grpc_health_v1.NewHealthClient(e.rpcClient.Conn())
+		_, err := healthClient.Check(ctx, &grpc_health_v1.HealthCheckRequest{})
 		if err == nil {
 			return nil
 		}
@@ -119,16 +121,6 @@ func (e *userCenterRPCTestEnv) waitReady() error {
 		case <-ticker.C:
 		}
 	}
-}
-
-func TestUserCenterServiceHealthyCheck(t *testing.T) {
-	ctx := rpcTestContext(t)
-
-	healthyResp, err := userCenterRPCTest.Client.HealthyCheck(ctx, &usercenterservice.HealthyCheckRequest{
-		StudentId: "20230001",
-	})
-	require.NoError(t, err)
-	t.Logf("健康检查响应: %+v，错误: %v", healthyResp, err)
 }
 
 func TestUserCenterServiceLogin(t *testing.T) {

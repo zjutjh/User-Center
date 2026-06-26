@@ -9,8 +9,6 @@ import (
 
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
-	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
-	"github.com/zjutjh/User-Center/common/errorsx"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -36,26 +34,18 @@ func (l *CreateStudentLogic) CreateStudent(req *types.CreateStudentReq) (resp *t
 	cardID := strings.ToUpper(strings.TrimSpace(req.CardId))
 	email := strings.TrimSpace(req.Email)
 
-	if _, err = l.svcCtx.UserRpc.Register(l.ctx, &usercenterservice.RegisterRequest{
-		StudentId: studentID,
-		Password:  password,
-		CardId:    cardID,
-		Email:     email,
-	}); err != nil {
+	if err = l.svcCtx.User.Register(l.ctx, studentID, password, cardID, email); err != nil {
 		l.Errorf("调用用户 RPC 注册接口失败: %v", err)
-		return nil, errorsx.FromGRPC(err)
+		return nil, err
 	}
 
-	loginResp, err := l.svcCtx.UserRpc.Login(l.ctx, &usercenterservice.LoginRequest{
-		StudentId: studentID,
-		Password:  password,
-	})
+	userID, _, err := l.svcCtx.User.Login(l.ctx, studentID, password)
 	if err != nil {
 		l.Errorf("注册成功后自动登录失败: %v", err)
-		return nil, errorsx.FromGRPC(err)
+		return nil, err
 	}
 
 	return &types.CreateStudentResp{
-		UserId: loginResp.UserId,
+		UserId: userID,
 	}, nil
 }

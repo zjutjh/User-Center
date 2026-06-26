@@ -6,7 +6,9 @@ package handler
 import (
 	"net/http"
 
-	login "github.com/zjutjh/User-Center/apps/user-api/internal/handler/login"
+	account "github.com/zjutjh/User-Center/apps/user-api/internal/handler/account"
+	auth "github.com/zjutjh/User-Center/apps/user-api/internal/handler/auth"
+	bind "github.com/zjutjh/User-Center/apps/user-api/internal/handler/bind"
 	user "github.com/zjutjh/User-Center/apps/user-api/internal/handler/user"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 
@@ -15,27 +17,81 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.UserAuth},
+			[]rest.Route{
+				{
+					// 注销账号
+					Method:  http.MethodPost,
+					Path:    "/delete",
+					Handler: account.DelHandler(serverCtx),
+				},
+				{
+					// 用户信息
+					Method:  http.MethodPost,
+					Path:    "/info",
+					Handler: account.InfoHandler(serverCtx),
+				},
+				{
+					// 重置密码
+					Method:  http.MethodPost,
+					Path:    "/reset_password",
+					Handler: account.RepassHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/user"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.UserAuth},
+			[]rest.Route{
+				{
+					// 绑定统一认证密码
+					Method:  http.MethodPost,
+					Path:    "/oauth",
+					Handler: bind.BindOauthHandler(serverCtx),
+				},
+				{
+					// 绑定易校园信息
+					Method:  http.MethodPost,
+					Path:    "/yxy",
+					Handler: bind.BindYxyHandler(serverCtx),
+				},
+				{
+					// 绑定正方密码
+					Method:  http.MethodPost,
+					Path:    "/zf",
+					Handler: bind.BindZfHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/user/bind"),
+	)
+
+	server.AddRoutes(
 		[]rest.Route{
 			{
 				// 小程序登录
 				Method:  http.MethodPost,
-				Path:    "/login/mini-program",
-				Handler: login.LoginByMiniProgramHandler(serverCtx),
+				Path:    "/mini-program",
+				Handler: auth.MiniProgramHandler(serverCtx),
 			},
 			{
 				// 统一登录
 				Method:  http.MethodPost,
-				Path:    "/login/oauth",
-				Handler: login.LoginByOauthHandler(serverCtx),
+				Path:    "/oauth",
+				Handler: auth.OauthHandler(serverCtx),
 			},
 			{
 				// 账号密码登录
 				Method:  http.MethodPost,
-				Path:    "/login/password",
-				Handler: login.LoginByPasswordHandler(serverCtx),
+				Path:    "/password",
+				Handler: auth.PasswordHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/api/user"),
+		rest.WithPrefix("/api/user/auth"),
 	)
 
 	server.AddRoutes(
@@ -47,51 +103,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.CreateStudentHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/api/user"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.UserAuth},
-			[]rest.Route{
-				{
-					// 绑定统一认证密码
-					Method:  http.MethodPost,
-					Path:    "/bind/oauth",
-					Handler: user.BindOauthHandler(serverCtx),
-				},
-				{
-					// 绑定易校园信息
-					Method:  http.MethodPost,
-					Path:    "/bind/yxy",
-					Handler: user.BindYxyHandler(serverCtx),
-				},
-				{
-					// 绑定正方密码
-					Method:  http.MethodPost,
-					Path:    "/bind/zf",
-					Handler: user.BindZfHandler(serverCtx),
-				},
-				{
-					// 注销账号
-					Method:  http.MethodPost,
-					Path:    "/delete",
-					Handler: user.DelHandler(serverCtx),
-				},
-				{
-					// 用户信息
-					Method:  http.MethodPost,
-					Path:    "/info",
-					Handler: user.InfoHandler(serverCtx),
-				},
-				{
-					// 重置密码
-					Method:  http.MethodPost,
-					Path:    "/reset_password",
-					Handler: user.RepassHandler(serverCtx),
-				},
-			}...,
-		),
 		rest.WithPrefix("/api/user"),
 	)
 }

@@ -84,26 +84,26 @@ service user-api {
 
 @server (
 	tags:   "用户登录"
-	group:  login
-	prefix: /api/user
+	group:  auth
+	prefix: /api/user/auth
 )
 service user-api {
 	@doc "账号密码登录"
-	@handler LoginByPassword
-	post /login/password (LoginReq) returns (UserResp)
+	@handler Password
+	post /password (LoginReq) returns (UserResp)
 
 	@doc "统一登录"
-	@handler LoginByOauth
-	post /login/oauth (LoginReq) returns (UserResp)
+	@handler Oauth
+	post /oauth (LoginReq) returns (UserResp)
 
 	@doc "小程序登录"
-	@handler LoginByMiniProgram
-	post /login/mini-program (MiniProgramLoginReq) returns (UserResp)
+	@handler MiniProgram
+	post /mini-program (MiniProgramLoginReq) returns (UserResp)
 }
 
 @server (
 	tags:       "用户操作"
-	group:      user
+	group:      account
 	prefix:     /api/user
 	middleware: UserAuth
 )
@@ -112,18 +112,6 @@ service user-api {
 	@handler Info
 	post /info returns (UserResp)
 
-	@doc "绑定统一认证密码"
-	@handler BindOauth
-	post /bind/oauth (BindOauthReq) returns (EmptyResp)
-
-	@doc "绑定正方密码"
-	@handler BindZf
-	post /bind/zf (BindZfReq) returns (EmptyResp)
-
-	@doc "绑定易校园信息"
-	@handler BindYxy
-	post /bind/yxy (BindYxyReq) returns (EmptyResp)
-
 	@doc "重置密码"
 	@handler Repass
 	post /reset_password (ResetPasswordReq) returns (EmptyResp)
@@ -131,5 +119,25 @@ service user-api {
 	@doc "注销账号"
 	@handler Del
 	post /delete (DeleteAccountReq) returns (EmptyResp)
+}
+
+@server (
+	tags:       "绑定操作"
+	group:      bind
+	prefix:     /api/user/bind
+	middleware: UserAuth
+)
+service user-api {
+	@doc "绑定统一认证密码"
+	@handler BindOauth
+	post /oauth (BindOauthReq) returns (EmptyResp)
+
+	@doc "绑定正方密码"
+	@handler BindZf
+	post /zf (BindZfReq) returns (EmptyResp)
+
+	@doc "绑定易校园信息"
+	@handler BindYxy
+	post /yxy (BindYxyReq) returns (EmptyResp)
 }
 

@@ -1,28 +1,28 @@
 // Code scaffolded by goctl. Safe to edit.
 // goctl 1.10.1
 
-package user
+package bind
 
 import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zjutjh/User-Center/apps/user-api/internal/logic/user"
+	"github.com/zjutjh/User-Center/apps/user-api/internal/logic/bind"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
 )
 
-// 重置密码
-func RepassHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 绑定正方密码
+func BindZfHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.ResetPasswordReq
+		var req types.BindZfReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewRepassLogic(r.Context(), svcCtx)
-		resp, err := l.Repass(&req)
+		l := bind.NewBindZfLogic(r.Context(), svcCtx)
+		resp, err := l.BindZf(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

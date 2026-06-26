@@ -1,14 +1,14 @@
 // Code scaffolded by goctl. Safe to edit.
 // goctl 1.10.1
 
-package user
+package account
 
 import (
 	"context"
 
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
-	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
+	"github.com/zjutjh/User-Center/common/ctxdata"
 	"github.com/zjutjh/User-Center/common/errorsx"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,19 +30,14 @@ func NewDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelLogic {
 }
 
 func (l *DelLogic) Del(req *types.DeleteAccountReq) (resp *types.EmptyResp, err error) {
-	userID, err := currentUserID(l.ctx)
-	if err != nil {
-		return nil, err
+	userID, ok := ctxdata.UserID(l.ctx)
+	if !ok || userID == 0 {
+		return nil, errorsx.ErrNotLoggedIn
 	}
 
-	_, err = l.svcCtx.UserRpc.DeleteAccount(l.ctx, &usercenterservice.DeleteAccountRequest{
-		UserId:    userID,
-		StudentId: req.StudentId,
-		CardId:    req.IdCard,
-	})
-	if err != nil {
+	if err := l.svcCtx.User.DeleteAccount(l.ctx, userID, req.StudentId, req.IdCard); err != nil {
 		l.Errorf("调用用户 RPC 注销账号接口失败: %v", err)
-		return nil, errorsx.FromGRPC(err)
+		return nil, err
 	}
 
 	return &types.EmptyResp{}, nil

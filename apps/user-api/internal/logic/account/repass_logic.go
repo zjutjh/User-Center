@@ -1,14 +1,14 @@
 // Code scaffolded by goctl. Safe to edit.
 // goctl 1.10.1
 
-package user
+package account
 
 import (
 	"context"
 
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/types"
-	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
+	"github.com/zjutjh/User-Center/common/ctxdata"
 	"github.com/zjutjh/User-Center/common/errorsx"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,20 +30,14 @@ func NewRepassLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RepassLogi
 }
 
 func (l *RepassLogic) Repass(req *types.ResetPasswordReq) (resp *types.EmptyResp, err error) {
-	userID, err := currentUserID(l.ctx)
-	if err != nil {
-		return nil, err
+	userID, ok := ctxdata.UserID(l.ctx)
+	if !ok || userID == 0 {
+		return nil, errorsx.ErrNotLoggedIn
 	}
 
-	_, err = l.svcCtx.UserRpc.ResetPassword(l.ctx, &usercenterservice.ResetPasswordRequest{
-		UserId:    userID,
-		StudentId: req.StudentId,
-		CardId:    req.IdCard,
-		Password:  req.Password,
-	})
-	if err != nil {
+	if err := l.svcCtx.User.ResetPassword(l.ctx, userID, req.StudentId, req.IdCard, req.Password); err != nil {
 		l.Errorf("调用用户 RPC 重置密码接口失败: %v", err)
-		return nil, errorsx.FromGRPC(err)
+		return nil, err
 	}
 
 	return &types.EmptyResp{}, nil

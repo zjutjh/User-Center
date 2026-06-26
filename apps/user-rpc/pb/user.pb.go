@@ -1137,18 +1137,17 @@ const file_apps_user_rpc_user_proto_rawDesc = "" +
 	"\x13HealthyCheckRequest\x12\x1d\n" +
 	"\n" +
 	"student_id\x18\x01 \x01(\tR\tstudentId\"\x16\n" +
-	"\x14HealthyCheckResponse2\x9a\x05\n" +
+	"\x14HealthyCheckResponse2\xd3\x04\n" +
 	"\x11UserCenterService\x129\n" +
 	"\bRegister\x12\x15.user.RegisterRequest\x1a\x16.user.RegisterResponse\x120\n" +
-	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponse\x12<\n" +
+	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponse\x12H\n" +
+	"\rResetPassword\x12\x1a.user.ResetPasswordRequest\x1a\x1b.user.ResetPasswordResponse\x12H\n" +
+	"\rDeleteAccount\x12\x1a.user.DeleteAccountRequest\x1a\x1b.user.DeleteAccountResponse\x12B\n" +
+	"\vGetUserInfo\x12\x18.user.GetUserInfoRequest\x1a\x19.user.GetUserInfoResponse\x12<\n" +
 	"\tBindOauth\x12\x16.user.BindOauthRequest\x1a\x17.user.BindOauthResponse\x123\n" +
 	"\x06BindZf\x12\x13.user.BindZfRequest\x1a\x14.user.BindZfResponse\x126\n" +
 	"\aBindYxy\x12\x14.user.BindYxyRequest\x1a\x15.user.BindYxyResponse\x12N\n" +
-	"\x0fGetUserPassword\x12\x1c.user.GetUserPasswordRequest\x1a\x1d.user.GetUserPasswordResponse\x12B\n" +
-	"\vGetUserInfo\x12\x18.user.GetUserInfoRequest\x1a\x19.user.GetUserInfoResponse\x12H\n" +
-	"\rResetPassword\x12\x1a.user.ResetPasswordRequest\x1a\x1b.user.ResetPasswordResponse\x12H\n" +
-	"\rDeleteAccount\x12\x1a.user.DeleteAccountRequest\x1a\x1b.user.DeleteAccountResponse\x12E\n" +
-	"\fHealthyCheck\x12\x19.user.HealthyCheckRequest\x1a\x1a.user.HealthyCheckResponseB\x06Z\x04./pbb\x06proto3"
+	"\x0fGetUserPassword\x12\x1c.user.GetUserPasswordRequest\x1a\x1d.user.GetUserPasswordResponseB\x06Z\x04./pbb\x06proto3"
 
 var (
 	file_apps_user_rpc_user_proto_rawDescOnce sync.Once
@@ -1188,26 +1187,24 @@ var file_apps_user_rpc_user_proto_goTypes = []any{
 var file_apps_user_rpc_user_proto_depIdxs = []int32{
 	2,  // 0: user.UserCenterService.Register:input_type -> user.RegisterRequest
 	0,  // 1: user.UserCenterService.Login:input_type -> user.LoginRequest
-	4,  // 2: user.UserCenterService.BindOauth:input_type -> user.BindOauthRequest
-	6,  // 3: user.UserCenterService.BindZf:input_type -> user.BindZfRequest
-	8,  // 4: user.UserCenterService.BindYxy:input_type -> user.BindYxyRequest
-	10, // 5: user.UserCenterService.GetUserPassword:input_type -> user.GetUserPasswordRequest
-	12, // 6: user.UserCenterService.GetUserInfo:input_type -> user.GetUserInfoRequest
-	14, // 7: user.UserCenterService.ResetPassword:input_type -> user.ResetPasswordRequest
-	16, // 8: user.UserCenterService.DeleteAccount:input_type -> user.DeleteAccountRequest
-	18, // 9: user.UserCenterService.HealthyCheck:input_type -> user.HealthyCheckRequest
-	3,  // 10: user.UserCenterService.Register:output_type -> user.RegisterResponse
-	1,  // 11: user.UserCenterService.Login:output_type -> user.LoginResponse
-	5,  // 12: user.UserCenterService.BindOauth:output_type -> user.BindOauthResponse
-	7,  // 13: user.UserCenterService.BindZf:output_type -> user.BindZfResponse
-	9,  // 14: user.UserCenterService.BindYxy:output_type -> user.BindYxyResponse
-	11, // 15: user.UserCenterService.GetUserPassword:output_type -> user.GetUserPasswordResponse
-	13, // 16: user.UserCenterService.GetUserInfo:output_type -> user.GetUserInfoResponse
-	15, // 17: user.UserCenterService.ResetPassword:output_type -> user.ResetPasswordResponse
-	17, // 18: user.UserCenterService.DeleteAccount:output_type -> user.DeleteAccountResponse
-	19, // 19: user.UserCenterService.HealthyCheck:output_type -> user.HealthyCheckResponse
-	10, // [10:20] is the sub-list for method output_type
-	0,  // [0:10] is the sub-list for method input_type
+	14, // 2: user.UserCenterService.ResetPassword:input_type -> user.ResetPasswordRequest
+	16, // 3: user.UserCenterService.DeleteAccount:input_type -> user.DeleteAccountRequest
+	12, // 4: user.UserCenterService.GetUserInfo:input_type -> user.GetUserInfoRequest
+	4,  // 5: user.UserCenterService.BindOauth:input_type -> user.BindOauthRequest
+	6,  // 6: user.UserCenterService.BindZf:input_type -> user.BindZfRequest
+	8,  // 7: user.UserCenterService.BindYxy:input_type -> user.BindYxyRequest
+	10, // 8: user.UserCenterService.GetUserPassword:input_type -> user.GetUserPasswordRequest
+	3,  // 9: user.UserCenterService.Register:output_type -> user.RegisterResponse
+	1,  // 10: user.UserCenterService.Login:output_type -> user.LoginResponse
+	15, // 11: user.UserCenterService.ResetPassword:output_type -> user.ResetPasswordResponse
+	17, // 12: user.UserCenterService.DeleteAccount:output_type -> user.DeleteAccountResponse
+	13, // 13: user.UserCenterService.GetUserInfo:output_type -> user.GetUserInfoResponse
+	5,  // 14: user.UserCenterService.BindOauth:output_type -> user.BindOauthResponse
+	7,  // 15: user.UserCenterService.BindZf:output_type -> user.BindZfResponse
+	9,  // 16: user.UserCenterService.BindYxy:output_type -> user.BindYxyResponse
+	11, // 17: user.UserCenterService.GetUserPassword:output_type -> user.GetUserPasswordResponse
+	9,  // [9:18] is the sub-list for method output_type
+	0,  // [0:9] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name

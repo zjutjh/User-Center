@@ -107,12 +107,13 @@ message HealthyCheckResponse {
 service UserCenterService {
     rpc Register(RegisterRequest) returns (RegisterResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
+
+    rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
+    rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+
     rpc BindOauth(BindOauthRequest) returns (BindOauthResponse);
     rpc BindZf(BindZfRequest) returns (BindZfResponse);
     rpc BindYxy(BindYxyRequest) returns (BindYxyResponse);
     rpc GetUserPassword(GetUserPasswordRequest) returns (GetUserPasswordResponse);
-    rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
-    rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
-    rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
-    rpc HealthyCheck(HealthyCheckRequest) returns (HealthyCheckResponse);
 }

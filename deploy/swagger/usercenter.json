@@ -27,10 +27,10 @@
           "https"
         ],
         "tags": [
-          "用户操作"
+          "绑定操作"
         ],
         "summary": "绑定统一认证密码",
-        "operationId": "userBindOauth",
+        "operationId": "bindBindOauth",
         "parameters": [
           {
             "name": "body",
@@ -71,10 +71,10 @@
           "https"
         ],
         "tags": [
-          "用户操作"
+          "绑定操作"
         ],
         "summary": "绑定易校园信息",
-        "operationId": "userBindYxy",
+        "operationId": "bindBindYxy",
         "parameters": [
           {
             "name": "body",
@@ -119,10 +119,10 @@
           "https"
         ],
         "tags": [
-          "用户操作"
+          "绑定操作"
         ],
         "summary": "绑定正方密码",
-        "operationId": "userBindZf",
+        "operationId": "bindBindZf",
         "parameters": [
           {
             "name": "body",
@@ -226,7 +226,7 @@
           "用户操作"
         ],
         "summary": "注销账号",
-        "operationId": "userDel",
+        "operationId": "accountDel",
         "parameters": [
           {
             "name": "body",
@@ -271,7 +271,7 @@
           "用户操作"
         ],
         "summary": "用户信息",
-        "operationId": "userInfo",
+        "operationId": "accountInfo",
         "responses": {
           "200": {
             "description": "",
@@ -661,7 +661,7 @@
           "用户操作"
         ],
         "summary": "重置密码",
-        "operationId": "userRepass",
+        "operationId": "accountRepass",
         "parameters": [
           {
             "name": "body",
@@ -699,7 +699,7 @@
       }
     }
   },
-  "x-date": "2026-06-27 02:43:59",
+  "x-date": "2026-06-27 02:47:46",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",
