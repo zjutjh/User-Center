@@ -1,0 +1,19 @@
+version: "0.1"
+database:
+  dsn: "root:123456@tcp(127.0.0.1:3306)/user-center?charset=utf8mb4&parseTime=True&loc=Local"
+  db: "mysql"
+  tables:
+    - user
+    - student
+    - college
+    - mini_program_user
+  onlyModel: false
+  outPath: "./apps/user-rpc/internal/dao/query"
+  outFile: ""
+  withUnitTest: false
+  modelPkgName: ""
+  fieldNullable: false
+  fieldCoverable: false
+  fieldWithIndexTag: false
+  fieldWithTypeTag: false
+  fieldSignable: false

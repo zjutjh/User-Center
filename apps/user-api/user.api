@@ -1,0 +1,143 @@
+syntax = "v1"
+
+info (
+	title:  "精弘用户中心"
+	desc:   "精弘用户中心 powered by go-zero"
+	author: "MangoGovo"
+	email:  "1749100231@qq.com"
+)
+
+type (
+	BindInfo {
+		Zf    bool `json:"zf"`
+		Yxy   bool `json:"yxy"`
+		Oauth bool `json:"oauth"`
+	}
+	UserInfo {
+		Id         int64    `json:"id"`
+		Username   string   `json:"username"`
+		StudentId  string   `json:"student_id"`
+		Bind       BindInfo `json:"bind"`
+		UserType   string   `json:"user_type"`
+		Email      string   `json:"email,optional"`
+		PhoneNum   string   `json:"phone_num,optional"`
+		CreateTime string   `json:"create_time"`
+	}
+)
+
+type (
+	CreateStudentReq {
+		StudentId string `json:"student_id" validate:"required"`
+		Password  string `json:"password" validate:"required"`
+		CardId    string `json:"card_id" validate:"required"`
+		Email     string `json:"email,optional"`
+	}
+	LoginReq {
+		Username string `json:"username" validate:"required"`
+		Password string `json:"password" validate:"required"`
+	}
+	MiniProgramLoginReq {
+		AppType string `json:"app_type" validate:"required"`
+		Code    string `json:"code" validate:"required"`
+	}
+	BindOauthReq {
+		OauthPassword string `json:"oauth_password" validate:"required"`
+	}
+	BindZfReq {
+		ZfPassword string `json:"zf_password" validate:"required"`
+	}
+	BindYxyReq {
+		DeviceId string `json:"device_id" validate:"required"`
+		YxyUid   string `json:"yxy_uid" validate:"required"`
+	}
+	ResetPasswordReq {
+		IdCard    string `json:"iid" validate:"required"`
+		StudentId string `json:"stuid" validate:"required"`
+		Password  string `json:"password" validate:"required"`
+	}
+	DeleteAccountReq {
+		IdCard    string `json:"iid" validate:"required"`
+		StudentId string `json:"stuid" validate:"required"`
+	}
+)
+
+type (
+	EmptyResp  {}
+	CreateStudentResp {
+		UserId int64 `json:"user_id"`
+	}
+	UserResp {
+		User UserInfo `json:"user"`
+	}
+)
+
+@server (
+	tags:   "用户注册"
+	group:  user
+	prefix: /api/user
+)
+service user-api {
+	@doc "创建学生账号"
+	@handler CreateStudent
+	post /create/student (CreateStudentReq) returns (CreateStudentResp)
+}
+
+@server (
+	tags:   "用户登录"
+	group:  auth
+	prefix: /api/user/auth
+)
+service user-api {
+	@doc "账号密码登录"
+	@handler Password
+	post /password (LoginReq) returns (UserResp)
+
+	@doc "统一登录"
+	@handler Oauth
+	post /oauth (LoginReq) returns (UserResp)
+
+	@doc "小程序登录"
+	@handler MiniProgram
+	post /mini-program (MiniProgramLoginReq) returns (UserResp)
+}
+
+@server (
+	tags:       "用户操作"
+	group:      account
+	prefix:     /api/user
+	middleware: UserAuth
+)
+service user-api {
+	@doc "用户信息"
+	@handler Info
+	post /info returns (UserResp)
+
+	@doc "重置密码"
+	@handler Repass
+	post /reset_password (ResetPasswordReq) returns (EmptyResp)
+
+	@doc "注销账号"
+	@handler Del
+	post /delete (DeleteAccountReq) returns (EmptyResp)
+}
+
+@server (
+	tags:       "绑定操作"
+	group:      bind
+	prefix:     /api/user/bind
+	middleware: UserAuth
+)
+service user-api {
+	@doc "绑定统一认证密码"
+	@handler BindOauth
+	post /oauth (BindOauthReq) returns (EmptyResp)
+
+	@doc "绑定正方密码"
+	@handler BindZf
+	post /zf (BindZfReq) returns (EmptyResp)
+
+	@doc "绑定易校园信息"
+	@handler BindYxy
+	post /yxy (BindYxyReq) returns (EmptyResp)
+}
+

@@ -1,0 +1,47 @@
+UserAPI:
+  Name: user-api
+  Host: 0.0.0.0
+  Port: 8080
+  Mode: dev
+
+  UserRpc:
+    Target: 127.0.0.1:8081
+    NonBlock: true
+    Timeout: 3000
+
+  Session:
+    Name: jh-passport
+    Secret: user-center-change-me
+    Path: /
+    MaxAge: 604800
+    Secure: false
+    HTTPOnly: true
+    SameSite: lax
+
+UserRPC:
+  Name: user.rpc
+  ListenOn: 0.0.0.0:8081
+  Mode: dev
+  Timeout: 2000
+
+  Session:
+    Name: jh-passport
+    Secret: user-center-change-me
+    Path: /
+    MaxAge: 604800
+    Secure: false
+    HTTPOnly: true
+    SameSite: lax
+
+  Credential:
+    SecretKey: 0123456789abcdef0123456789abcdef
+
+  Mysql:
+    Host: 127.0.0.1
+    Port: 3306
+    Username: root
+    Password: 123456
+    Database: user-center
+    Charset: utf8mb4
+    ParseTime: true
+    Loc: Asia/Shanghai

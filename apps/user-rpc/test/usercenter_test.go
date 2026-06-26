@@ -1,0 +1,306 @@
+package test_test
+
+import (
+	"context"
+	"flag"
+	"fmt"
+	"log"
+	"net"
+	"os"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/require"
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/zrpc"
+	userrpc "github.com/zjutjh/User-Center/apps/user-rpc/app"
+	daomodel "github.com/zjutjh/User-Center/apps/user-rpc/internal/dao/model"
+	mysqlinfra "github.com/zjutjh/User-Center/apps/user-rpc/internal/infra/mysql"
+	"github.com/zjutjh/User-Center/apps/user-rpc/usercenterservice"
+	"github.com/zjutjh/User-Center/common/errorsx"
+	"google.golang.org/grpc/health/grpc_health_v1"
+)
+
+type rootConfig struct {
+	UserRPC userrpc.Config
+}
+
+type userCenterRPCTestEnv struct {
+	Config    userrpc.Config
+	Client    usercenterservice.UserCenterService
+	rpcClient zrpc.Client
+	server    *zrpc.RpcServer
+}
+
+var userCenterRPCTest *userCenterRPCTestEnv
+
+var configFile = flag.String("f", "../../../config.yaml", "配置文件路径")
+
+func TestMain(m *testing.M) {
+	os.Exit(UserCenterRPCTestMain(m))
+}
+
+func UserCenterRPCTestMain(m *testing.M) int {
+	flag.Parse()
+
+	var c rootConfig
+	if err := conf.Load(*configFile, &c); err != nil {
+		log.Printf("加载配置失败: %v", err)
+		return 1
+	}
+
+	if err := pingRealMySQL(c.UserRPC); err != nil {
+		log.Printf("Ping MySQL 失败: %v", err)
+		return 1
+	}
+	log.Printf("MySQL 连接成功: %s:%d/%s", c.UserRPC.Mysql.Host, c.UserRPC.Mysql.Port, c.UserRPC.Mysql.Database)
+
+	listenOn, err := freeListenOn(c.UserRPC.ListenOn)
+	if err != nil {
+		log.Printf("分配测试 RPC 端口失败: %v", err)
+		return 1
+	}
+	c.UserRPC.ListenOn = listenOn
+
+	server := userrpc.NewServer(c.UserRPC)
+	go server.Start()
+
+	target := clientTarget(c.UserRPC.ListenOn)
+	log.Printf("测试进程正在启动 RPC 服务: %s", target)
+
+	rpcClient := zrpc.MustNewClient(zrpc.RpcClientConf{
+		Target:   target,
+		NonBlock: false,
+		Timeout:  3000,
+	})
+
+	userCenterRPCTest = &userCenterRPCTestEnv{
+		Config:    c.UserRPC,
+		Client:    usercenterservice.NewUserCenterService(rpcClient),
+		rpcClient: rpcClient,
+		server:    server,
+	}
+	if err := userCenterRPCTest.waitReady(); err != nil {
+		log.Printf("等待 RPC 服务就绪失败: %v", err)
+		userCenterRPCTest.cleanup()
+		return 1
+	}
+	log.Printf("RPC 服务启动成功: %s", target)
+
+	code := m.Run()
+	userCenterRPCTest.cleanup()
+	return code
+}
+
+func (e *userCenterRPCTestEnv) cleanup() {
+	if e.rpcClient != nil {
+		_ = e.rpcClient.Conn().Close()
+	}
+	if e.server != nil {
+		e.server.Stop()
+	}
+}
+
+func (e *userCenterRPCTestEnv) waitReady() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		healthClient := grpc_health_v1.NewHealthClient(e.rpcClient.Conn())
+		_, err := healthClient.Check(ctx, &grpc_health_v1.HealthCheckRequest{})
+		if err == nil {
+			return nil
+		}
+
+		select {
+		case <-ctx.Done():
+			return err
+		case <-ticker.C:
+		}
+	}
+}
+
+func TestUserCenterServiceLogin(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	loginResp, err := userCenterRPCTest.Client.Login(ctx, &usercenterservice.LoginRequest{
+		StudentId: "302024114514",
+		Password:  "secret123",
+	})
+	t.Logf("登录响应: %+v，错误: %v", loginResp, err)
+}
+
+func TestUserCenterServiceRegister(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	registerResp, err := userCenterRPCTest.Client.Register(ctx, &usercenterservice.RegisterRequest{
+		StudentId: "302024114514",
+		Password:  "114514",
+		CardId:    "1145141919166666666",
+		Email:     "mjj@zjutjh.com",
+	})
+	t.Logf("注册响应: %+v，错误: %v", registerResp, err)
+}
+
+func TestUserCenterServiceRegisterReturnsUserExisted(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	db, err := mysqlinfra.NewDB(userCenterRPCTest.Config.Mysql)
+	require.NoError(t, err)
+	sqlDB, err := db.DB()
+	require.NoError(t, err)
+	t.Cleanup(func() {
+		_ = sqlDB.Close()
+	})
+
+	studentID := fmt.Sprintf("existing%d", time.Now().UnixNano())
+	user := &daomodel.User{
+		StudentID: studentID,
+		Password:  "secret123",
+		Email:     "existing-test@zjutjh.com",
+	}
+	require.NoError(t, db.WithContext(ctx).Create(user).Error)
+	t.Cleanup(func() {
+		require.NoError(t, db.WithContext(context.Background()).Where("id = ?", user.ID).Delete(&daomodel.User{}).Error)
+	})
+
+	_, err = userCenterRPCTest.Client.Register(ctx, &usercenterservice.RegisterRequest{
+		StudentId: studentID,
+		Password:  "114514",
+		CardId:    "1145141919166666666",
+		Email:     "mjj@zjutjh.com",
+	})
+	require.Error(t, err)
+	require.Equal(t, errorsx.ErrUserExisted, errorsx.FromGRPC(err))
+}
+
+func TestUserCenterServiceGetUserPassword(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	passwordResp, err := userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: 1,
+	})
+	t.Logf("获取用户密码响应: %+v，错误: %v", passwordResp, err)
+}
+
+func TestUserCenterServiceBind(t *testing.T) {
+	ctx := rpcTestContext(t)
+
+	db, err := mysqlinfra.NewDB(userCenterRPCTest.Config.Mysql)
+	require.NoError(t, err)
+	sqlDB, err := db.DB()
+	require.NoError(t, err)
+	t.Cleanup(func() {
+		_ = sqlDB.Close()
+	})
+
+	user := &daomodel.User{
+		StudentID: fmt.Sprintf("bind%d", time.Now().UnixNano()),
+		Password:  "secret123",
+		Email:     "bind-test@zjutjh.com",
+	}
+	require.NoError(t, db.WithContext(ctx).Create(user).Error)
+	t.Cleanup(func() {
+		require.NoError(t, db.WithContext(context.Background()).Where("id = ?", user.ID).Delete(&daomodel.User{}).Error)
+	})
+
+	_, err = userCenterRPCTest.Client.BindYxy(ctx, &usercenterservice.BindYxyRequest{
+		UserId:   user.ID,
+		DeviceId: "  bind-device-id  ",
+		YxyUid:   "  bind-yxy-uid  ",
+	})
+	require.NoError(t, err)
+
+	passwordResp, err := userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: user.ID,
+	})
+	require.NoError(t, err)
+	require.Equal(t, "bind-device-id", passwordResp.DeviceId)
+	require.Equal(t, "bind-yxy-uid", passwordResp.YxyUid)
+
+	_, err = userCenterRPCTest.Client.BindZf(ctx, &usercenterservice.BindZfRequest{
+		UserId:     user.ID,
+		ZfPassword: "  bind-zf-password  ",
+	})
+	require.NoError(t, err)
+
+	passwordResp, err = userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: user.ID,
+	})
+	require.NoError(t, err)
+	require.Equal(t, "bind-zf-password", passwordResp.ZfPassword)
+
+	_, err = userCenterRPCTest.Client.BindOauth(ctx, &usercenterservice.BindOauthRequest{
+		UserId:        user.ID,
+		OauthPassword: "  bind-oauth-password  ",
+	})
+	require.NoError(t, err)
+
+	passwordResp, err = userCenterRPCTest.Client.GetUserPassword(ctx, &usercenterservice.GetUserPasswordRequest{
+		UserId: user.ID,
+	})
+	require.NoError(t, err)
+	require.Equal(t, "bind-oauth-password", passwordResp.OauthPassword)
+
+	_, err = userCenterRPCTest.Client.BindYxy(ctx, &usercenterservice.BindYxyRequest{
+		UserId: user.ID,
+	})
+	require.Error(t, err)
+	require.Equal(t, errorsx.ErrParameterInvalid, errorsx.FromGRPC(err))
+}
+
+func rpcTestContext(t *testing.T) context.Context {
+	t.Helper()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	t.Cleanup(cancel)
+	return ctx
+}
+
+func pingRealMySQL(c userrpc.Config) error {
+	db, err := mysqlinfra.NewDB(c.Mysql)
+	if err != nil {
+		return err
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		return err
+	}
+	defer sqlDB.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	return sqlDB.PingContext(ctx)
+}
+
+func clientTarget(listenOn string) string {
+	host, port, err := net.SplitHostPort(listenOn)
+	if err != nil {
+		return listenOn
+	}
+	if host == "" || host == "0.0.0.0" || host == "::" {
+		host = "127.0.0.1"
+	}
+	return net.JoinHostPort(host, port)
+}
+
+func freeListenOn(listenOn string) (string, error) {
+	host, _, err := net.SplitHostPort(listenOn)
+	if err != nil {
+		host = "127.0.0.1"
+	}
+	if host == "" || host == "0.0.0.0" || host == "::" {
+		host = "127.0.0.1"
+	}
+
+	listener, err := net.Listen("tcp", net.JoinHostPort(host, "0"))
+	if err != nil {
+		return "", err
+	}
+	defer listener.Close()
+
+	return listener.Addr().String(), nil
+}
