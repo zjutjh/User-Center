@@ -46,7 +46,7 @@ go build ./...
 更新 DAO 生成代码：
 
 ```bash
-go run ./cmd/gen
+make generate-model
 ```
 
 ## Notes

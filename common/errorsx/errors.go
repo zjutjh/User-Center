@@ -3,7 +3,6 @@ package errorsx
 import (
 	"errors"
 	"fmt"
-	"net/http"
 )
 
 const (
@@ -71,22 +70,8 @@ func CodeOf(err error) (int64, string) {
 	return ErrUnknown.Code, ErrUnknown.Message
 }
 
-func HTTPStatus(err error) int {
-	target, ok := As(err)
-	if !ok {
-		return http.StatusInternalServerError
-	}
-
-	switch target.Code {
-	case CodeParameterInvalid:
-		return http.StatusBadRequest
-	case CodeNotLoggedIn:
-		return http.StatusUnauthorized
-	case CodeUnknown, CodeThirdService:
-		return http.StatusInternalServerError
-	default:
-		return http.StatusOK
-	}
+func HTTPStatus(error) int {
+	return 200
 }
 
 func FromCode(code int64) *CodeError {

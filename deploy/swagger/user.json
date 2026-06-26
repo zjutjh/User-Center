@@ -15,142 +15,6 @@
   },
   "basePath": "/",
   "paths": {
-    "/api/user/bind/oauth": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "https"
-        ],
-        "tags": [
-          "账号绑定"
-        ],
-        "summary": "绑定统一认证密码",
-        "operationId": "bindBindOauth",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "required": [
-                "password"
-              ],
-              "properties": {
-                "password": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
-    "/api/user/bind/yxy": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "https"
-        ],
-        "tags": [
-          "账号绑定"
-        ],
-        "summary": "绑定易校园账号",
-        "operationId": "bindBindYxy",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "required": [
-                "deviceId",
-                "yxyUid"
-              ],
-              "properties": {
-                "deviceId": {
-                  "type": "string"
-                },
-                "yxyUid": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
-    "/api/user/bind/zf": {
-      "post": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "schemes": [
-          "https"
-        ],
-        "tags": [
-          "账号绑定"
-        ],
-        "summary": "绑定正方密码",
-        "operationId": "bindBindZf",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "required": [
-                "password"
-              ],
-              "properties": {
-                "password": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
     "/api/user/create/student": {
       "post": {
         "consumes": [
@@ -161,6 +25,9 @@
         ],
         "schemes": [
           "https"
+        ],
+        "tags": [
+          "用户注册"
         ],
         "summary": "创建学生账号",
         "operationId": "userCreateStudent",
@@ -334,7 +201,7 @@
         }
       }
     },
-    "/api/user/login": {
+    "/api/user/login/mini-program": {
       "post": {
         "consumes": [
           "application/json"
@@ -345,8 +212,217 @@
         "schemes": [
           "https"
         ],
-        "summary": "密码登录",
-        "operationId": "userLoginByPassword",
+        "tags": [
+          "用户登录"
+        ],
+        "summary": "小程序登录",
+        "operationId": "loginLoginByMiniProgram",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "appType",
+                "code"
+              ],
+              "properties": {
+                "appType": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "username",
+                    "studentId",
+                    "bind",
+                    "userType",
+                    "createTime"
+                  ],
+                  "properties": {
+                    "bind": {
+                      "type": "object",
+                      "required": [
+                        "zf",
+                        "yxy",
+                        "oauth"
+                      ],
+                      "properties": {
+                        "oauth": {
+                          "type": "boolean"
+                        },
+                        "yxy": {
+                          "type": "boolean"
+                        },
+                        "zf": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "createTime": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "phoneNum": {
+                      "type": "string"
+                    },
+                    "studentId": {
+                      "type": "string"
+                    },
+                    "userType": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/login/oauth": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "https"
+        ],
+        "tags": [
+          "用户登录"
+        ],
+        "summary": "统一登录",
+        "operationId": "loginLoginByOauth",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "password": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "username",
+                    "studentId",
+                    "bind",
+                    "userType",
+                    "createTime"
+                  ],
+                  "properties": {
+                    "bind": {
+                      "type": "object",
+                      "required": [
+                        "zf",
+                        "yxy",
+                        "oauth"
+                      ],
+                      "properties": {
+                        "oauth": {
+                          "type": "boolean"
+                        },
+                        "yxy": {
+                          "type": "boolean"
+                        },
+                        "zf": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "createTime": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "phoneNum": {
+                      "type": "string"
+                    },
+                    "studentId": {
+                      "type": "string"
+                    },
+                    "userType": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/login/password": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "https"
+        ],
+        "tags": [
+          "用户登录"
+        ],
+        "summary": "账号密码登录",
+        "operationId": "loginLoginByPassword",
         "parameters": [
           {
             "name": "body",
@@ -487,7 +563,7 @@
       }
     }
   },
-  "x-date": "2026-04-30 14:23:23",
+  "x-date": "2026-04-30 14:54:12",
   "x-description": "This is a goctl generated swagger file.",
   "x-github": "https://github.com/zeromicro/go-zero",
   "x-go-zero-doc": "https://go-zero.dev/",

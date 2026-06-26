@@ -6,7 +6,7 @@ package handler
 import (
 	"net/http"
 
-	bind "github.com/zjutjh/User-Center/apps/user-api/internal/handler/bind"
+	login "github.com/zjutjh/User-Center/apps/user-api/internal/handler/login"
 	user "github.com/zjutjh/User-Center/apps/user-api/internal/handler/user"
 	"github.com/zjutjh/User-Center/apps/user-api/internal/svc"
 
@@ -15,29 +15,26 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.UserAuth},
-			[]rest.Route{
-				{
-					// 绑定统一认证密码
-					Method:  http.MethodPost,
-					Path:    "/bind/oauth",
-					Handler: bind.BindOauthHandler(serverCtx),
-				},
-				{
-					// 绑定易校园账号
-					Method:  http.MethodPost,
-					Path:    "/bind/yxy",
-					Handler: bind.BindYxyHandler(serverCtx),
-				},
-				{
-					// 绑定正方密码
-					Method:  http.MethodPost,
-					Path:    "/bind/zf",
-					Handler: bind.BindZfHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				// 小程序登录
+				Method:  http.MethodPost,
+				Path:    "/login/mini-program",
+				Handler: login.LoginByMiniProgramHandler(serverCtx),
+			},
+			{
+				// 统一登录
+				Method:  http.MethodPost,
+				Path:    "/login/oauth",
+				Handler: login.LoginByOauthHandler(serverCtx),
+			},
+			{
+				// 账号密码登录
+				Method:  http.MethodPost,
+				Path:    "/login/password",
+				Handler: login.LoginByPasswordHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/api/user"),
 	)
 
@@ -48,12 +45,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/create/student",
 				Handler: user.CreateStudentHandler(serverCtx),
-			},
-			{
-				// 密码登录
-				Method:  http.MethodPost,
-				Path:    "/login",
-				Handler: user.LoginByPasswordHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/api/user"),

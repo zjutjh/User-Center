@@ -18,6 +18,7 @@ func InstallHTTPHandlers() {
 		return Success(v)
 	})
 	httpx.SetErrorHandlerCtx(func(_ context.Context, err error) (int, any) {
+		err = errorsx.NormalizeHTTPError(err)
 		code, msg := errorsx.CodeOf(err)
 		return errorsx.HTTPStatus(err), Response{
 			Code: code,

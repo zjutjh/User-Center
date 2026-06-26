@@ -9,13 +9,15 @@ type BindInfo struct {
 	Oauth bool `json:"oauth"`
 }
 
-type BindPasswordReq struct {
-	Password string `json:"password"`
+type CreateStudentReq struct {
+	StudentId string `json:"studentId"`
+	Password  string `json:"password"`
+	CardId    string `json:"cardId"`
+	Email     string `json:"email,optional"`
 }
 
-type BindYxyReq struct {
-	DeviceId string `json:"deviceId"`
-	YxyUid   string `json:"yxyUid"`
+type CreateStudentResp struct {
+	UserId int64 `json:"userId"`
 }
 
 type DeleteAccountReq struct {
@@ -31,20 +33,10 @@ type LoginReq struct {
 	Password string `json:"password"`
 }
 
-type CreateStudentReq struct {
-	StudentId string `json:"studentId"`
-	Password  string `json:"password"`
-	CardId    string `json:"cardId"`
-	Email     string `json:"email,optional"`
+type MiniProgramLoginReq struct {
+	AppType string `json:"appType"`
+	Code    string `json:"code"`
 }
-
-type CreateStudentResp struct {
-	UserId int64 `json:"userId"`
-}
-
-type RegisterReq = CreateStudentReq
-
-type RegisterResp = CreateStudentResp
 
 type ResetPasswordReq struct {
 	IdCard    string `json:"iid"`
