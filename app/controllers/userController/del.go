@@ -23,7 +23,7 @@ func DelAccount(c *gin.Context) {
 		_ = c.AbortWithError(200, apiExpection.ParamError)
 		return
 	}
-	if !studentService.CheckStudentBYSIDAndIID(postForm.StudentID, postForm.IDCard) {
+	if !studentService.CheckStudentBYSIDAndIIDLast6(postForm.StudentID, postForm.IDCard) {
 		utility.JsonResponse(400, "身份证与学号不匹配", nil, c)
 		return
 	}

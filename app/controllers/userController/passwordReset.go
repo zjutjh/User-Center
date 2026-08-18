@@ -30,7 +30,7 @@ func RePass(c *gin.Context) {
 		return
 	}
 
-	if !studentService.CheckStudentBYSIDAndIID(data.StudentId, data.IDCard) {
+	if !studentService.CheckStudentBYSIDAndIIDLast6(data.StudentId, data.IDCard) {
 		utility.JsonResponse(400, "身份证与学号不匹配", nil, c)
 		return
 	}

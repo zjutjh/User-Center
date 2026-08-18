@@ -27,7 +27,7 @@ func Activite(c *gin.Context) {
 		utility.JsonResponse(401, "密码长度必须在6~20位之间", nil, c)
 		return
 	}
-	flag := studentService.CheckStudentBYSIDAndIID(data.StudentId, data.Iid)
+	flag := studentService.CheckStudentBYSIDAndIIDLast6(data.StudentId, data.Iid)
 	if !flag {
 		utility.JsonResponse(400, "该学号和身份证不存在或者不匹配，请重新输入", nil, c)
 		return
