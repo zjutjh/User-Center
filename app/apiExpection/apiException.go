@@ -20,6 +20,7 @@ var (
 	WrongPassword     = NewError(http.StatusOK, 409, "统一系统密码错误")
 	NotActivatedError = NewError(http.StatusOK, 411, "统一系统账号未激活")
 	WrongAccount      = NewError(http.StatusOK, 412, "统一系统账号错误")
+	UpdateSame        = NewError(http.StatusOK, 413, "密码不能与原密码一致")
 )
 
 func OtherError(message string) *Error {
