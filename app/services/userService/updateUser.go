@@ -1,6 +1,7 @@
 package userService
 
 import (
+	"usercenter/app/apiExpection"
 	"usercenter/app/model"
 	"usercenter/app/utility"
 	"usercenter/config/database"
@@ -28,7 +29,7 @@ func UpdateUserPasswordByStudentId(studentId, password string) error {
 	}
 	pass := utility.Encryrpt(password)
 	if user.Password == pass {
-		return nil
+		return apiExpection.UpdateSame
 	}
 	result := database.DB.Model(&model.User{}).
 		Where("student_id = ?", studentId).

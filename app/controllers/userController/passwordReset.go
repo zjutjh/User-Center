@@ -2,6 +2,7 @@ package userController
 
 import (
 	"errors"
+	"usercenter/app/apiExpection"
 	"usercenter/app/services/studentService"
 	"usercenter/app/services/userService"
 	"usercenter/app/utility"
@@ -38,6 +39,10 @@ func RePass(c *gin.Context) {
 	if err = userService.UpdateUserPasswordByStudentId(data.StudentId, data.Password); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			utility.JsonResponse(404, "用户不存在", nil, c)
+			return
+		}
+		if errors.Is(err, apiExpection.UpdateSame) {
+			utility.JsonResponse(apiExpection.UpdateSame.Code, apiExpection.UpdateSame.Msg, nil, c)
 			return
 		}
 		utility.JsonResponseInternalServerError(c)
